@@ -206,6 +206,7 @@ import WABASetup from "./pages/WABASetup";
 import AppointmentsManager from "./pages/AppointmentsManager";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import TemplateWorkflow from "./pages/TemplateWorkflow";
+import IndustryPage from "./pages/IndustryPage";
 
 // SEO Articles
 import ArticlesListing from "./pages/ArticlesListing";
@@ -269,6 +270,7 @@ function App() {
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/features" element={<Features />} />
+                <Route path="/industry/:slug" element={<IndustryPage />} />
                 <Route path="/testimonials/:id" element={<TestimonialDetail />} />
                 <Route path="/contact" element={<Contact />} />
                 

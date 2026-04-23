@@ -1,170 +1,208 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MessageSquare, ArrowRight, Star, Stethoscope, PartyPopper, Sprout, Scissors, GraduationCap, Building, Phone, CheckCircle, Zap, Brain, Shield, Clock, Users, ChevronRight, Send, Sparkles, Globe } from 'lucide-react';
-import MemoraAILogo from '../../components/MemoraAILogo';
+import {
+  MessageSquare, ArrowRight, Shield, Clock, Brain, Zap, Users, ChevronRight,
+  Phone, CheckCircle, Star, BarChart3, Sparkles, Globe, Bot, Send,
+  Calendar, Megaphone, TrendingUp, Heart, Building, Stethoscope,
+  Scissors, GraduationCap, PartyPopper, Sprout, Code, ShoppingCart,
+  Scale, Car, Dumbbell, Store, HardHat, Banknote, Utensils, Mic,
+  Play, Check, X
+} from 'lucide-react';
 
+const API = process.env.REACT_APP_BACKEND_URL;
 const WHATSAPP_NUMBER = "916309356590";
 
-const CATEGORIES = [
-  { slug: "real_estate", name: "Real Estate", icon: Building, color: "bg-blue-500", msg: "Hi, I am interested in Real Estate services. Please share details.", desc: "Property sales, site visits, plot management" },
-  { slug: "astrology", name: "Astrology", icon: Star, color: "bg-purple-500", msg: "Hi, I am interested in Astrology consultation services.", desc: "Horoscope, Kundli, marriage matching" },
-  { slug: "doctor_clinic", name: "Doctor / Clinic", icon: Stethoscope, color: "bg-emerald-500", msg: "Hi, I want to book a Doctor consultation.", desc: "Appointments, checkups, lab tests" },
-  { slug: "function_hall", name: "Function Hall", icon: PartyPopper, color: "bg-amber-500", msg: "Hi, I want to book a Function Hall for an event.", desc: "Weddings, parties, corporate events" },
-  { slug: "pesticides", name: "Pesticides / Fertilizer", icon: Sprout, color: "bg-lime-600", msg: "Hi, I need Pesticides and Fertilizer for my crops.", desc: "Crop protection, soil testing, B2B2C" },
-  { slug: "beauty_salon", name: "Beauty Salon", icon: Scissors, color: "bg-pink-500", msg: "Hi, I want to book a Beauty Salon appointment.", desc: "Haircut, facial, bridal makeup" },
-  { slug: "coaching", name: "Coaching Centers", icon: GraduationCap, color: "bg-indigo-500", msg: "Hi, I am interested in Coaching classes. Please share details.", desc: "Entrance exams, tuitions, skill courses" },
-];
+const ICON_MAP = {
+  building: Building, stethoscope: Stethoscope, star: Star, scissors: Scissors,
+  dumbbell: Dumbbell, car: Car, 'party-popper': PartyPopper, utensils: Utensils,
+  'graduation-cap': GraduationCap, scale: Scale, banknote: Banknote,
+  'shopping-cart': ShoppingCart, store: Store, 'hard-hat': HardHat,
+  sprout: Sprout, code: Code,
+};
 
-const FEATURES = [
-  { icon: Brain, title: "AI Memory Engine", desc: "Remembers every customer interaction. Personalized responses using RAG-based long-term memory." },
-  { icon: MessageSquare, title: "WhatsApp Automation", desc: "24/7 intelligent WhatsApp chatbot. Auto-replies, follow-ups, and lead capture." },
-  { icon: Zap, title: "Hot Sales Detection", desc: "AI detects buying intent in real-time. Instant alerts when a customer is ready to convert." },
-  { icon: Shield, title: "Self-Service WABA", desc: "Set up your WhatsApp Business API yourself. No developer needed." },
-  { icon: Clock, title: "Smart Scheduling", desc: "Appointment booking and reminders via WhatsApp. Category-specific workflows." },
-  { icon: Users, title: "Multi-Tenant SaaS", desc: "Each business gets isolated data, custom branding, and category-specific AI." },
-];
-
-function openWhatsApp(message) {
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  window.open(url, '_blank');
+function openWhatsApp(msg) {
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 const Home = () => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [industries, setIndustries] = useState([]);
+  const [visibleSections, setVisibleSections] = useState({});
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    fetch(`${API}/api/memoraai/industries/public`).then(r => r.json()).then(d => setIndustries(d.industries || [])).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) setVisibleSections(p => ({ ...p, [e.target.id]: true }));
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('[data-animate]').forEach(el => observerRef.current.observe(el));
+    return () => observerRef.current?.disconnect();
+  }, [industries]);
+
+  const anim = (id) => visibleSections[id] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-yellow-50 to-white" data-testid="home-page">
-      {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-sm" data-testid="navbar">
+    <div className="min-h-screen bg-[#0a0e27] text-white overflow-hidden" data-testid="home-page">
+      {/* ─── NAVBAR ─── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0e27]/80 backdrop-blur-xl border-b border-white/5" data-testid="navbar">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-          <Link to="/" className="flex-shrink-0">
-            <MemoraAILogo size="sm" showCaption={true} showBrand={true} />
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
+              <Brain className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-lg font-bold">Memora<span className="text-violet-400">AI</span></span>
           </Link>
-          <div className="hidden md:flex items-center gap-6">
-            <a href="#industries" className="text-sm text-gray-600 hover:text-amber-600 font-medium">Industries</a>
-            <a href="#features" className="text-sm text-gray-600 hover:text-amber-600 font-medium">Features</a>
-            <a href="#how-it-works" className="text-sm text-gray-600 hover:text-amber-600 font-medium">How It Works</a>
-            <Link to="/login" className="text-sm text-amber-700 font-semibold hover:text-amber-800">Login</Link>
-            <button onClick={() => openWhatsApp("Hi, I want to know about MemoraAI WhatsApp Automation.")}
-              className="bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-5 py-2 rounded-full text-sm font-semibold hover:from-amber-600 hover:to-yellow-600 shadow-md hover:shadow-lg transition-all flex items-center gap-2" data-testid="nav-whatsapp-btn">
-              <MessageSquare className="w-4 h-4" /> Connect on WhatsApp
+          <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
+            <a href="#industries" className="hover:text-white transition-colors">Industries</a>
+            <a href="#features" className="hover:text-white transition-colors">Features</a>
+            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+            <Link to="/login" className="hover:text-white transition-colors">Login</Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => openWhatsApp("Hi, I want to see MemoraAI demo.")}
+              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-[#25D366] text-white text-sm font-semibold hover:bg-[#20bd5a] transition-all shadow-lg shadow-[#25D366]/20" data-testid="nav-whatsapp-btn">
+              <MessageSquare className="w-4 h-4" /> Talk to MemoraAI
+            </button>
+            <button onClick={() => navigate('/register')}
+              className="px-4 py-2 rounded-full bg-gradient-to-r from-violet-600 to-blue-600 text-white text-sm font-semibold hover:from-violet-700 hover:to-blue-700 transition-all shadow-lg shadow-violet-600/20" data-testid="nav-demo-btn">
+              Start Free Demo
             </button>
           </div>
-          <button onClick={() => openWhatsApp("Hi, I want to know about MemoraAI.")}
-            className="md:hidden bg-amber-500 text-white p-2 rounded-full" data-testid="mobile-whatsapp-btn">
-            <MessageSquare className="w-5 h-5" />
-          </button>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="pt-28 pb-16 md:pt-36 md:pb-24 px-4" data-testid="hero-section">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
-            <Sparkles className="w-4 h-4" /> AI-Powered WhatsApp Automation for Every Business
-          </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-            Turn WhatsApp Into Your
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-yellow-500"> Smartest Sales Agent</span>
-          </h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-            MemoraAI remembers every customer, automates follow-ups, books appointments, and closes deals — all through WhatsApp. For any business category.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onClick={() => openWhatsApp("Hi, I want to try MemoraAI for my business.")}
-              className="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:from-green-600 hover:to-green-700 shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3" data-testid="hero-whatsapp-btn">
-              <MessageSquare className="w-6 h-6" /> Start Chatting on WhatsApp
-            </button>
-            <button onClick={() => navigate('/register')}
-              className="border-2 border-amber-500 text-amber-700 px-8 py-4 rounded-full text-lg font-bold hover:bg-amber-50 transition-all flex items-center justify-center gap-2" data-testid="hero-register-btn">
-              Start Free Trial <ArrowRight className="w-5 h-5" />
-            </button>
+      {/* ─── HERO ─── */}
+      <section className="pt-28 pb-20 md:pt-36 md:pb-28 px-4 relative" data-testid="hero-section">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-600/15 rounded-full blur-[100px]" />
+          <div className="absolute top-40 right-10 w-60 h-60 bg-[#25D366]/10 rounded-full blur-[80px]" />
+        </div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 text-violet-300 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+                <Sparkles className="w-4 h-4" /> AI-Powered WhatsApp Automation
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+                Your WhatsApp Now <br/>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-blue-400 to-[#25D366]">Thinks, Remembers</span>
+                <br/>& <span className="text-[#25D366]">Sells.</span>
+              </h1>
+              <p className="text-lg text-gray-400 max-w-xl mb-8 leading-relaxed">
+                MemoraAI turns your WhatsApp into a memory-powered AI assistant that handles leads, follow-ups, bookings, support and repeat sales — automatically.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button onClick={() => navigate('/register')}
+                  className="group px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-blue-600 text-white text-lg font-bold hover:from-violet-700 hover:to-blue-700 transition-all shadow-2xl shadow-violet-600/30 flex items-center justify-center gap-3" data-testid="hero-demo-btn">
+                  Start Free Demo <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <a href="#industries"
+                  className="px-8 py-4 rounded-2xl border border-white/10 text-white text-lg font-semibold hover:bg-white/5 transition-all flex items-center justify-center gap-2 backdrop-blur-sm" data-testid="hero-industries-btn">
+                  See Industry Demos
+                </a>
+              </div>
+              {/* Counters */}
+              <div className="flex gap-8 mt-10">
+                {[
+                  { value: "5,000+", label: "Leads Automated" },
+                  { value: "92%", label: "Faster Replies" },
+                  { value: "38%", label: "Higher Conversion" },
+                ].map((c, i) => (
+                  <div key={i}>
+                    <p className="text-2xl font-bold text-white">{c.value}</p>
+                    <p className="text-xs text-gray-500">{c.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* WhatsApp Mockup */}
+            <div className="hidden lg:block">
+              <WhatsAppMockup
+                businessName="RealApex Properties"
+                messages={[
+                  { from: "customer", text: "Hi, I asked about plots last week." },
+                  { from: "bot", text: "Welcome back Rajesh garu! You asked about 150 sq yd plots in Shadnagar. Two new options came today. Would you like details?" },
+                  { from: "customer", text: "Yes, send details please." },
+                ]}
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Supported Industries */}
-      <section id="industries" className="py-16 px-4 bg-white" data-testid="industries-section">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Supported Industries</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Select your business category. MemoraAI adapts its AI, services, and templates for your industry.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {CATEGORIES.map(cat => {
-              const Icon = cat.icon;
-              const isSelected = selectedCategory === cat.slug;
-              return (
-                <div key={cat.slug}
-                  className={`relative rounded-2xl border-2 p-5 cursor-pointer transition-all hover:shadow-xl group ${isSelected ? 'border-amber-500 bg-amber-50 shadow-lg' : 'border-gray-100 bg-white hover:border-amber-200'}`}
-                  onClick={() => setSelectedCategory(isSelected ? null : cat.slug)}
-                  data-testid={`industry-card-${cat.slug}`}>
-                  <div className={`w-12 h-12 rounded-xl ${cat.color} flex items-center justify-center mb-3 shadow-md`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">{cat.name}</h3>
-                  <p className="text-sm text-gray-500 mb-4">{cat.desc}</p>
-                  <div className="flex gap-2">
-                    <button onClick={(e) => { e.stopPropagation(); openWhatsApp(cat.msg); }}
-                      className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1 transition-colors" data-testid={`whatsapp-${cat.slug}`}>
-                      <MessageSquare className="w-3 h-3" /> WhatsApp
-                    </button>
-                    <button onClick={(e) => { e.stopPropagation(); openWhatsApp(`Hi, small enquiry about ${cat.name} services.`); }}
-                      className="flex-1 border border-gray-200 hover:border-amber-400 text-gray-600 hover:text-amber-700 text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1 transition-colors" data-testid={`enquiry-${cat.slug}`}>
-                      <Send className="w-3 h-3" /> Quick Enquiry
-                    </button>
-                  </div>
-                  {isSelected && (
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center">
-                      <CheckCircle className="w-4 h-4 text-white" />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section id="features" className="py-16 px-4 bg-gradient-to-b from-amber-50 to-white" data-testid="features-section">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Why MemoraAI?</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Enterprise-grade WhatsApp automation with AI memory. Built for Indian businesses.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {FEATURES.map((f, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-amber-200 hover:shadow-lg transition-all" data-testid={`feature-card-${i}`}>
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-400 flex items-center justify-center mb-4 shadow-md">
-                  <f.icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+      {/* ─── TRUST SECTION ─── */}
+      <section id="trust" className="py-16 px-4 border-t border-white/5" data-animate data-testid="trust-section">
+        <div className={`max-w-6xl mx-auto transition-all duration-700 ${anim('trust')}`}>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {[
+              { icon: Shield, label: "Official WhatsApp API" },
+              { icon: CheckCircle, label: "Verified Business Profile" },
+              { icon: Brain, label: "Human-like Smart Replies" },
+              { icon: Clock, label: "24/7 Auto Follow-up" },
+              { icon: Globe, label: "Multi-language Support" },
+              { icon: Users, label: "Lead Capture + CRM" },
+            ].map((t, i) => (
+              <div key={i} className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-violet-500/30 transition-all">
+                <t.icon className="w-6 h-6 text-violet-400" />
+                <span className="text-xs text-gray-400 text-center font-medium">{t.label}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section id="how-it-works" className="py-16 px-4 bg-white" data-testid="how-it-works-section">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Get Started in 3 Steps</h2>
+      {/* ─── INDUSTRIES ─── */}
+      <section id="industries" className="py-20 px-4" data-animate data-testid="industries-section">
+        <div className={`max-w-7xl mx-auto transition-all duration-700 ${anim('industries')}`}>
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-blue-400">Every Business</span> That Uses WhatsApp</h2>
+            <p className="text-gray-500 max-w-xl mx-auto">Select your industry to see how MemoraAI transforms your customer communication.</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {industries.map((ind, i) => {
+              const Icon = ICON_MAP[ind.icon] || Star;
+              return (
+                <button key={ind.slug} onClick={() => navigate(`/industry/${ind.slug}`)}
+                  className="group text-left p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-violet-500/40 hover:bg-violet-500/5 transition-all" data-testid={`industry-${ind.slug}`}>
+                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500/20 to-blue-500/20 flex items-center justify-center mb-3 group-hover:from-violet-500/30 group-hover:to-blue-500/30 transition-all">
+                    <Icon className="w-5 h-5 text-violet-400" />
+                  </div>
+                  <h3 className="font-semibold text-white text-sm mb-1">{ind.title}</h3>
+                  <p className="text-[11px] text-gray-500 mb-3 line-clamp-1">{ind.hero_sub?.slice(0, 60)}...</p>
+                  <span className="text-[11px] text-violet-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                    View Demo <ChevronRight className="w-3 h-3" />
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── HOW IT WORKS ─── */}
+      <section id="how-it-works" className="py-20 px-4 bg-gradient-to-b from-transparent to-violet-950/20" data-animate data-testid="how-it-works">
+        <div className={`max-w-4xl mx-auto transition-all duration-700 ${anim('how-it-works')}`}>
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Get Started in <span className="text-[#25D366]">3 Simple Steps</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { step: "1", title: "Choose Your Category", desc: "Select your business type. AI auto-configures services, templates, and responses." },
-              { step: "2", title: "Connect WhatsApp", desc: "Self-service WABA setup. Enter your token and phone number. We handle the rest." },
-              { step: "3", title: "Start Selling", desc: "AI handles leads, bookings, follow-ups. You focus on your business." },
+              { step: "1", icon: MessageSquare, title: "Connect WhatsApp API", desc: "Link your official WhatsApp Business number. Takes 5 minutes." },
+              { step: "2", icon: Brain, title: "Upload Business Info", desc: "Add your services, FAQs, and pricing. AI learns everything." },
+              { step: "3", icon: Zap, title: "Start Selling", desc: "MemoraAI handles leads, bookings, and follow-ups automatically." },
             ].map((s, i) => (
-              <div key={i} className="text-center" data-testid={`step-${s.step}`}>
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-yellow-400 flex items-center justify-center mx-auto mb-4 text-white text-2xl font-bold shadow-lg">
-                  {s.step}
+              <div key={i} className="text-center group" data-testid={`step-${s.step}`}>
+                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-violet-600 to-blue-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-violet-600/30 group-hover:scale-110 transition-transform">
+                  <s.icon className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{s.title}</h3>
+                <div className="text-xs text-violet-400 font-bold mb-2">STEP {s.step}</div>
+                <h3 className="text-lg font-bold mb-2">{s.title}</h3>
                 <p className="text-sm text-gray-500">{s.desc}</p>
               </div>
             ))}
@@ -172,101 +210,205 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Related Business Pages */}
-      <section className="py-16 px-4 bg-gradient-to-b from-amber-50 to-yellow-50" data-testid="business-pages-section">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">Related Business Pages</h2>
-            <p className="text-gray-500">Explore MemoraAI solutions by industry</p>
+      {/* ─── FEATURES ─── */}
+      <section id="features" className="py-20 px-4" data-animate data-testid="features-section">
+        <div className={`max-w-6xl mx-auto transition-all duration-700 ${anim('features')}`}>
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Everything You Need to <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-[#25D366]">Win on WhatsApp</span></h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {CATEGORIES.map(cat => {
-              const Icon = cat.icon;
-              return (
-                <div key={cat.slug}
-                  onClick={() => openWhatsApp(cat.msg)}
-                  className="bg-white rounded-xl p-4 border border-gray-100 hover:border-amber-300 hover:shadow-md cursor-pointer transition-all group" data-testid={`biz-page-${cat.slug}`}>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className={`w-8 h-8 rounded-lg ${cat.color} flex items-center justify-center`}>
-                      <Icon className="w-4 h-4 text-white" />
-                    </div>
-                    <h4 className="font-semibold text-gray-900 text-sm">{cat.name}</h4>
-                  </div>
-                  <p className="text-xs text-gray-400 mb-3">{cat.desc}</p>
-                  <span className="text-xs text-amber-600 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                    Connect on WhatsApp <ChevronRight className="w-3 h-3" />
-                  </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              { icon: Brain, title: "Memory Engine", desc: "Remembers every customer detail — names, preferences, past requests, family info." },
+              { icon: Heart, title: "Emotional AI Replies", desc: "Detects tone, urgency, and sentiment. Responds with empathy, not robotic scripts." },
+              { icon: TrendingUp, title: "Lead Qualification", desc: "Auto-scores leads by buying intent, budget, and engagement level." },
+              { icon: Clock, title: "Auto Follow-up", desc: "Never forget a lead. Smart follow-ups based on customer history and timing." },
+              { icon: Calendar, title: "Appointment Booking", desc: "Customers book directly via WhatsApp. Auto-reminders before appointments." },
+              { icon: Megaphone, title: "Smart Campaigns", desc: "Broadcast to segments based on behavior, not just contact lists." },
+              { icon: Mic, title: "Voice + Text Support", desc: "Process voice messages and reply intelligently. Multilingual." },
+              { icon: Users, title: "Multi-Agent Dashboard", desc: "Multiple staff members handle chats with unified customer memory." },
+              { icon: BarChart3, title: "Analytics", desc: "Track conversion rates, response times, revenue per lead, and more." },
+              { icon: Bot, title: "Self-Learning AI", desc: "Gets smarter with every conversation. Adapts to your business style." },
+            ].map((f, i) => (
+              <div key={i} className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-violet-500/30 hover:bg-violet-500/5 transition-all group" data-testid={`feature-${i}`}>
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500/20 to-blue-500/20 flex items-center justify-center mb-4 group-hover:from-violet-500/30 group-hover:to-blue-500/30 transition-all">
+                  <f.icon className="w-5 h-5 text-violet-400" />
                 </div>
-              );
-            })}
+                <h3 className="font-semibold text-white mb-2">{f.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 px-4" data-testid="cta-section">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Ready to Automate Your Business?</h2>
-          <p className="text-gray-500 mb-8 text-lg">Join hundreds of businesses using MemoraAI to grow through WhatsApp.</p>
+      {/* ─── PRICING ─── */}
+      <section id="pricing" className="py-20 px-4 bg-gradient-to-b from-transparent to-violet-950/20" data-animate data-testid="pricing-section">
+        <div className={`max-w-5xl mx-auto transition-all duration-700 ${anim('pricing')}`}>
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Simple, Transparent Pricing</h2>
+            <p className="text-gray-500">Start free. Scale as you grow.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              { name: "Starter", price: "Free", period: "14 days", features: ["100 messages/day", "1 agent", "Basic memory", "WhatsApp API", "Email support"], cta: "Start Free" },
+              { name: "Growth", price: "Rs.2,999", period: "/month", features: ["1,000 messages/day", "3 agents", "Full memory engine", "Auto follow-ups", "Analytics dashboard"], cta: "Start Trial", popular: true },
+              { name: "Premium", price: "Rs.7,999", period: "/month", features: ["Unlimited messages", "10 agents", "Custom AI persona", "API integrations", "Priority support"], cta: "Contact Sales" },
+              { name: "Enterprise", price: "Custom", period: "", features: ["Multi-location", "Dedicated AI training", "Custom integrations", "SLA guarantee", "Account manager"], cta: "Book Call" },
+            ].map((plan, i) => (
+              <div key={i} className={`p-6 rounded-2xl border ${plan.popular ? 'bg-gradient-to-b from-violet-600/10 to-blue-600/10 border-violet-500/40 shadow-xl shadow-violet-600/10' : 'bg-white/[0.03] border-white/5'} relative`} data-testid={`plan-${plan.name.toLowerCase()}`}>
+                {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-violet-600 to-blue-600 rounded-full text-xs font-bold">Most Popular</div>}
+                <h3 className="font-bold text-lg mb-1">{plan.name}</h3>
+                <div className="flex items-baseline gap-1 mb-4">
+                  <span className="text-3xl font-extrabold">{plan.price}</span>
+                  <span className="text-sm text-gray-500">{plan.period}</span>
+                </div>
+                <ul className="space-y-2 mb-6">
+                  {plan.features.map((f, j) => (
+                    <li key={j} className="flex items-center gap-2 text-sm text-gray-400">
+                      <Check className="w-4 h-4 text-[#25D366] flex-shrink-0" /> {f}
+                    </li>
+                  ))}
+                </ul>
+                <button onClick={() => navigate('/register')}
+                  className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${plan.popular ? 'bg-gradient-to-r from-violet-600 to-blue-600 text-white hover:from-violet-700 hover:to-blue-700 shadow-lg shadow-violet-600/20' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'}`}>
+                  {plan.cta}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FINAL CTA ─── */}
+      <section className="py-24 px-4 relative" data-testid="final-cta">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-1/3 w-96 h-96 bg-violet-600/15 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-1/3 w-80 h-80 bg-[#25D366]/10 rounded-full blur-[100px]" />
+        </div>
+        <div className="max-w-3xl mx-auto text-center relative z-10">
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
+            Your Competitor <span className="text-gray-500">Replies.</span><br/>
+            You <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-[#25D366]">Remember.</span>
+          </h2>
+          <p className="text-lg text-gray-400 mb-8">Start using MemoraAI today. Your customers will notice the difference.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onClick={() => openWhatsApp("Hi, I want to start using MemoraAI for my business.")}
-              className="bg-gradient-to-r from-green-500 to-green-600 text-white px-10 py-4 rounded-full text-lg font-bold hover:from-green-600 hover:to-green-700 shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3" data-testid="cta-whatsapp-btn">
-              <MessageSquare className="w-6 h-6" /> Connect with WhatsApp
-            </button>
             <button onClick={() => navigate('/register')}
-              className="border-2 border-amber-500 text-amber-700 px-10 py-4 rounded-full text-lg font-bold hover:bg-amber-50 transition-all" data-testid="cta-trial-btn">
-              Start Free Trial
+              className="group px-10 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-blue-600 text-white text-lg font-bold hover:from-violet-700 hover:to-blue-700 transition-all shadow-2xl shadow-violet-600/30 flex items-center justify-center gap-3" data-testid="cta-demo-btn">
+              Start Free Demo <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button onClick={() => openWhatsApp("Hi, I want to book a MemoraAI setup call.")}
+              className="px-10 py-4 rounded-2xl bg-[#25D366] text-white text-lg font-bold hover:bg-[#20bd5a] transition-all shadow-lg shadow-[#25D366]/20 flex items-center justify-center gap-3" data-testid="cta-call-btn">
+              <Phone className="w-5 h-5" /> Book Setup Call
             </button>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4" data-testid="footer">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <MemoraAILogo size="md" showCaption={true} showBrand={true} className="brightness-0 invert mb-3" />
-              <p className="text-gray-400 text-sm">AI-powered WhatsApp Business Automation for every industry. Built by Eloniot Software Solutions.</p>
+      {/* ─── FOOTER ─── */}
+      <footer className="border-t border-white/5 py-12 px-4" data-testid="footer">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-sm text-gray-500">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center"><Brain className="w-4 h-4 text-white" /></div>
+              <span className="font-bold text-white">MemoraAI</span>
             </div>
-            <div>
-              <h4 className="font-semibold mb-3 text-amber-400">Industries</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                {CATEGORIES.slice(0, 4).map(c => <li key={c.slug} className="hover:text-white cursor-pointer" onClick={() => openWhatsApp(c.msg)}>{c.name}</li>)}
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3 text-amber-400">More Industries</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                {CATEGORIES.slice(4).map(c => <li key={c.slug} className="hover:text-white cursor-pointer" onClick={() => openWhatsApp(c.msg)}>{c.name}</li>)}
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3 text-amber-400">Quick Links</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link to="/login" className="hover:text-white">Login</Link></li>
-                <li><Link to="/register" className="hover:text-white">Register</Link></li>
-                <li><Link to="/privacy-policy" className="hover:text-white">Privacy Policy</Link></li>
-                <li><Link to="/terms-conditions" className="hover:text-white">Terms & Conditions</Link></li>
-              </ul>
-            </div>
+            <p className="text-xs text-gray-600 leading-relaxed">WhatsApp That Remembers Every Customer. Built by Eloniot Software Solutions.</p>
           </div>
-          <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-            <p>2025-2026 MemoraAI by Eloniot Software Solutions. All rights reserved.</p>
-            <p className="flex items-center gap-1 mt-2 md:mt-0">
-              <Globe className="w-3 h-3" /> Powered by MemoraAI
-            </p>
+          <div>
+            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider">Product</h4>
+            <ul className="space-y-2"><li><a href="#features" className="hover:text-white transition-colors">Features</a></li><li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li><li><a href="#industries" className="hover:text-white transition-colors">Industries</a></li><li><Link to="/register" className="hover:text-white transition-colors">Free Demo</Link></li></ul>
           </div>
+          <div>
+            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider">Industries</h4>
+            <ul className="space-y-2">{industries.slice(0, 5).map(i => <li key={i.slug}><Link to={`/industry/${i.slug}`} className="hover:text-white transition-colors">{i.title}</Link></li>)}</ul>
+          </div>
+          <div>
+            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider">Legal</h4>
+            <ul className="space-y-2"><li><Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link></li><li><Link to="/terms-conditions" className="hover:text-white transition-colors">Terms</Link></li><li><Link to="/login" className="hover:text-white transition-colors">Login</Link></li></ul>
+          </div>
+        </div>
+        <div className="max-w-6xl mx-auto mt-8 pt-6 border-t border-white/5 text-center text-xs text-gray-600">
+          2025-2026 MemoraAI by Eloniot Software Solutions. All rights reserved.
         </div>
       </footer>
 
-      {/* Floating WhatsApp Button */}
+      {/* ─── FLOATING WHATSAPP ─── */}
       <button onClick={() => openWhatsApp("Hi, I want to know about MemoraAI.")}
-        className="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all animate-bounce" data-testid="floating-whatsapp" style={{animationDuration: '3s'}}>
-        <MessageSquare className="w-7 h-7" />
+        className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20bd5a] text-white p-4 rounded-full shadow-2xl shadow-[#25D366]/30 hover:scale-110 transition-all" data-testid="floating-whatsapp">
+        <MessageSquare className="w-6 h-6" />
       </button>
     </div>
   );
 };
+
+
+/* ═══════════════ WhatsApp Mockup ═══════════════ */
+export function WhatsAppMockup({ businessName, messages = [], compact = false }) {
+  const [visibleMsgs, setVisibleMsgs] = useState([]);
+  const [typing, setTyping] = useState(false);
+
+  useEffect(() => {
+    if (!messages.length) return;
+    let idx = 0;
+    const show = () => {
+      if (idx < messages.length) {
+        const msg = messages[idx];
+        if (msg.from === 'bot') {
+          setTyping(true);
+          setTimeout(() => {
+            setTyping(false);
+            setVisibleMsgs(p => [...p, msg]);
+            idx++;
+            setTimeout(show, 800);
+          }, 1200);
+        } else {
+          setVisibleMsgs(p => [...p, msg]);
+          idx++;
+          setTimeout(show, 600);
+        }
+      }
+    };
+    const t = setTimeout(show, 500);
+    return () => clearTimeout(t);
+  }, []);
+
+  const h = compact ? 'max-h-[340px]' : 'max-h-[420px]';
+
+  return (
+    <div className={`w-full max-w-[340px] mx-auto rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-violet-600/10 bg-[#0b1120]`} data-testid="whatsapp-mockup">
+      {/* Header */}
+      <div className="bg-[#075E54] px-4 py-3 flex items-center gap-3">
+        <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white text-xs font-bold">{(businessName || 'B')[0]}</div>
+        <div className="flex-1">
+          <div className="flex items-center gap-1">
+            <span className="text-white text-sm font-semibold">{businessName || 'Business'}</span>
+            <CheckCircle className="w-3.5 h-3.5 text-blue-400" />
+          </div>
+          <span className="text-[10px] text-green-200">online</span>
+        </div>
+      </div>
+      {/* Chat */}
+      <div className={`${h} overflow-y-auto p-3 space-y-2`} style={{ background: "url('data:image/svg+xml,%3Csvg width=\"20\" height=\"20\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Crect width=\"20\" height=\"20\" fill=\"%230b1120\"/%3E%3Ccircle cx=\"10\" cy=\"10\" r=\"0.5\" fill=\"%23ffffff08\"/%3E%3C/svg%3E')" }}>
+        {visibleMsgs.map((m, i) => (
+          <div key={i} className={`flex ${m.from === 'customer' ? 'justify-end' : 'justify-start'}`}>
+            <div className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm ${m.from === 'customer' ? 'bg-[#005C4B] text-white rounded-br-sm' : 'bg-[#1a2236] text-gray-200 rounded-bl-sm border border-white/5'}`}>
+              {m.text}
+              <div className="text-[9px] text-gray-500 text-right mt-1">{new Date().getHours()}:{String(new Date().getMinutes()).padStart(2,'0')}</div>
+            </div>
+          </div>
+        ))}
+        {typing && (
+          <div className="flex justify-start">
+            <div className="bg-[#1a2236] border border-white/5 px-4 py-2.5 rounded-2xl rounded-bl-sm flex gap-1">
+              <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay:'0ms'}} />
+              <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay:'150ms'}} />
+              <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay:'300ms'}} />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default Home;

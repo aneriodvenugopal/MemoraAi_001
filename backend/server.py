@@ -13,7 +13,7 @@ import uuid
 # Import routes
 from routes import auth, tenants, currencies, categories, projects, properties, leads, bookings, commissions, analytics, notifications, users, scheduler, customer, layouts, layouts_library, in_app_notifications, referrals, translations, content, advisory, admin_content, share_referral, resale, saas_admin, chatbot, public_pages, marketplace, incomelands, incomelands_auth, google_auth, calendar_integration, workforce, project_dashboard, marketing_dashboard, payment_schemes, customer_payments, staff_hierarchy, commission_management, property_categories, currency_management, usage_tracking, coupons, bank_accounts, vendors, payment_transfer, articles, project_staff, role_assignments, roles, financial, ai_agents, sms, document_locker, festival_greetings, site_visits, booking_queue, customers_management, resale_release_mgmt, emi_payments, receipts, vendor_management, referral_wallet, complaints, commission_analytics, stripe_payments, stripe_webhook, email, subscriptions, certified_property, pdf, files, customer_portal, project_pricing, voters, payu, marketing_agents, push_notifications, tutorai, realapex_demos, agentapex, whatsapp_webhook
 # MemoraAI new routes
-from routes import memoraai_categories, memoraai_sales, memoraai_waba, memoraai_memory, memoraai_dashboard, memoraai_analytics, memoraai_appointments, memoraai_templates
+from routes import memoraai_categories, memoraai_sales, memoraai_waba, memoraai_memory, memoraai_dashboard, memoraai_analytics, memoraai_appointments, memoraai_templates, memoraai_industries
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -211,6 +211,7 @@ api_router.include_router(memoraai_dashboard.router)   # Category Dashboard Stat
 api_router.include_router(memoraai_analytics.router)   # Category Analytics & Reports
 api_router.include_router(memoraai_appointments.router) # Appointment/Booking Management
 api_router.include_router(memoraai_templates.router)   # WhatsApp Template Workflow
+api_router.include_router(memoraai_industries.router)  # Industry Pages
 
 # Phase 1 — Accounting & Money Tracking
 from routes import payment_receive, payment_out
