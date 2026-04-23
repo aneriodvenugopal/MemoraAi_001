@@ -1,53 +1,45 @@
 # MemoraAI - Product Requirements Document
 
 ## Overview
-Multi-Category WhatsApp Business Automation SaaS with AI Memory. Forked from RealApex SaaS.
+Multi-Category WhatsApp Business Automation SaaS with AI Memory. Yellow-themed, WhatsApp-first design.
 
 ## Architecture
 - **Backend**: FastAPI (Python) port 8001 | **Frontend**: React (CRA) port 3000
 - **Database**: MongoDB (`memoraai`) | **AI**: Emergent LLM Key (Gemini + GPT-4o-mini)
-- **WhatsApp**: Meta WABA Cloud API | **Auth**: OTP + Password
+- **WhatsApp**: Meta WABA Cloud API | Number: 916309356590 (Eloniot Software Solutions)
+- **Auth**: OTP + Password
 
-## Implemented Features (Phases 0-4, 2026-04-23)
+## Implemented Features (Phases 0-5)
 
-### Phase 0: Fork
-- Full codebase from RealApex SaaS, fresh DB, seeds
+### Phase 0-4 (Previous)
+- Fork, multi-category (7 categories, 42 services), category-aware AI, memory, hot sales, WABA, analytics, appointments, template workflow
 
-### Phase 1: Multi-Category Core
-- 7 categories (Real Estate, Astrology, Doctor/Clinic, Function Hall, Pesticides, Beauty Salon, Coaching)
-- 42 pre-defined services, Category Setup UI, Services CRUD
-- Hot Sales Mode, Abrupt Sales Detection, WABA Self-Service, Business Memory AI
+### Phase 5: Visual Redesign (2026-04-23)
+- **Yellow/amber theme**: Glassmorphism CSS vars updated from cyan/teal to amber/yellow
+- **New landing page**: Hero ("Turn WhatsApp Into Your Smartest Sales Agent"), Supported Industries (7 categories), Features (6 cards), How It Works (3 steps), Related Business Pages, CTA, Footer
+- **WhatsApp CTAs**: Every page has "Connect with WhatsApp" button opening wa.me with category-specific pre-filled messages
+- **Industry cards**: WhatsApp + Quick Enquiry buttons per category
+- **Floating WhatsApp**: Persistent green button bottom-right
+- **MemoraAI logo**: Updated to amber/yellow neural network SVG
+- **Login/Dashboard**: Amber gradients, yellow backgrounds
+- **Real estate content removed**: Landing page is industry-agnostic WhatsApp automation focused
 
-### Phase 2: Rebranding + AI Integration
-- Full MemoraAI branding, Memory AI -> WhatsApp webhook
-- Category-aware WhatsApp AI with dynamic prompts
-
-### Phase 3: Dashboard Widgets + RAG + Cleanup
-- Category-specific KPI widgets (7 category configs)
-- Enhanced RAG memory (token-based semantic search, Jaccard similarity)
-- Complete RealApex cleanup
-
-### Phase 4: Analytics + Appointments + Templates
-- **Analytics Dashboard**: KPIs (appointments, revenue, customers, retention), daily trend chart, popular services bar chart, service performance table, WhatsApp engagement metrics, period filters (today/week/month)
-- **Appointment Management**: Full CRUD, today's summary, status workflow (scheduled -> completed/cancelled/no-show), service-linked booking with auto-price, multi-source (manual/WhatsApp/online/call), filter by status/date/service
-- **Template Workflow**: Create/edit drafts, auto-generate 6 category-specific templates, submit to Meta, internal approve/reject flow, status pipeline (draft -> pending_review -> submitted -> approved/rejected)
-
-## Key API Endpoints
-- `/api/memoraai/appointments` - Appointment CRUD + status actions
-- `/api/memoraai/analytics/overview` - Category analytics
-- `/api/memoraai/analytics/services-breakdown` - Service performance
-- `/api/memoraai/templates` - Template workflow CRUD
-- `/api/memoraai/templates/auto-generate` - AI template generation
-- `/api/memoraai/dashboard/category-stats` - Dashboard widgets
-- `/api/memoraai/memory/search` - Semantic memory search
-- `/api/memoraai/categories/*` | `/api/memoraai/services` | `/api/memoraai/sales/*` | `/api/memoraai/waba/*`
+## WhatsApp Pre-filled Messages
+- Hero: "Hi, I want to try MemoraAI for my business."
+- Real Estate: "Hi, I am interested in Real Estate services."
+- Astrology: "Hi, I am interested in Astrology consultation services."
+- Doctor: "Hi, I want to book a Doctor consultation."
+- Function Hall: "Hi, I want to book a Function Hall for an event."
+- Pesticides: "Hi, I need Pesticides and Fertilizer for my crops."
+- Beauty Salon: "Hi, I want to book a Beauty Salon appointment."
+- Coaching: "Hi, I am interested in Coaching classes."
 
 ## Backlog
 ### P1
 1. WhatsApp-initiated booking (customer books via chat)
-2. Appointment reminder notifications (auto-send before appointments)
-3. Payment collection integration per appointment
+2. Appointment reminder auto-send
+3. Payment integration per appointment
 ### P2
-4. Hybrid B2B2C for Pesticides/Fertilizer
-5. Multi-language templates per category
-6. Staff schedule/availability management
+4. Hybrid B2B2C for Pesticides
+5. Staff schedule management
+6. Multi-language templates
