@@ -1104,6 +1104,25 @@ STYLE (MANDATORY):
             if active_rules:
                 rules_text = "\n".join([f"- {r.get('rule','')}" for r in active_rules])
                 customer_memory = f"{customer_memory}\n\n[BUSINESS RULES - MUST FOLLOW]\n{rules_text}"
+            
+            # Detect emotional tone for response style
+            from routes.memoraai_engine import EMOTION_KEYWORDS
+            msg_lower = message.lower()
+            detected_emotions = {}
+            for emo, keywords in EMOTION_KEYWORDS.items():
+                matches = [kw for kw in keywords if kw in msg_lower]
+                if matches:
+                    detected_emotions[emo] = len(matches)
+            if detected_emotions:
+                primary_emo = max(detected_emotions, key=detected_emotions.get)
+                tone_guide = {
+                    "angry": "Customer seems upset. Be extra empathetic, apologize sincerely, offer immediate solution.",
+                    "urgent": "Customer needs urgent help. Be quick, direct, skip pleasantries, offer immediate action.",
+                    "happy": "Customer is happy! Match their enthusiasm, express gratitude, suggest next steps.",
+                    "confused": "Customer is confused. Be patient, explain simply, use examples.",
+                    "bargaining": "Customer wants better price. Acknowledge their concern, show value, offer alternatives.",
+                }
+                customer_memory = f"{customer_memory}\n\n[EMOTIONAL TONE DETECTED: {primary_emo.upper()}]\n{tone_guide.get(primary_emo, '')}"
         except Exception as cat_err:
             logger.warning(f"Category context load error (non-blocking): {cat_err}")
 

@@ -484,6 +484,7 @@ function MoreTab({ navigate, catName, templates }) {
 
   const sections = [
     { icon: Building, label: 'Business Information', sub: catName, onClick: () => navigate('/category-setup') },
+    { icon: MessageSquare, label: 'Team Inbox', sub: 'Live conversations + handover', onClick: () => navigate('/team-inbox') },
     { icon: MessageSquare, label: 'WhatsApp Setup', sub: 'WABA Configuration', onClick: () => navigate('/waba-setup') },
     { icon: FileText, label: 'Content Library', sub: 'Brochures, images, videos', onClick: () => navigate('/content-library') },
     { icon: FileText, label: 'Templates', sub: `${templates.length} templates`, onClick: () => navigate('/memoraai-templates') },

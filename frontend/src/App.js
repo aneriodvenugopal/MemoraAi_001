@@ -210,6 +210,8 @@ import IndustryPage from "./pages/IndustryPage";
 import AdminIndustries from "./pages/AdminIndustries";
 import MemoraContentLibrary from "./pages/ContentLibrary";
 import BusinessRules from "./pages/BusinessRules";
+import TeamInbox from "./pages/TeamInbox";
+import SaaSAdminDashboard from "./pages/SaaSAdminDashboard";
 
 // SEO Articles
 import ArticlesListing from "./pages/ArticlesListing";
@@ -1133,6 +1135,22 @@ function App() {
                 element={
                   <PrivateRoute>
                     <BusinessRules />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/team-inbox"
+                element={
+                  <PrivateRoute>
+                    <TeamInbox />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/saas-admin"
+                element={
+                  <PrivateRoute>
+                    <SaaSAdminDashboard />
                   </PrivateRoute>
                 }
               />

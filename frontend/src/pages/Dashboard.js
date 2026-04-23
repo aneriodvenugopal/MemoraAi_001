@@ -9,6 +9,7 @@ import PageInfoModal from '../components/PageInfoModal';
 import MemoraAILogo from '../components/MemoraAILogo';
 import CategoryDashboardWidgets from '../components/CategoryDashboardWidgets';
 import MobileOwnerDashboard from './MobileOwnerDashboard';
+import SaaSAdminDashboard from './SaaSAdminDashboard';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -39,6 +40,11 @@ const Dashboard = () => {
   // For tenant_admin, use the mobile owner dashboard directly (it has its own layout)
   if (user?.role === 'tenant_admin') {
     return <MobileOwnerDashboard />;
+  }
+
+  // For super_admin, use the SaaS admin dashboard
+  if (user?.role === 'super_admin') {
+    return <SaaSAdminDashboard />;
   }
 
   return (
