@@ -53,7 +53,7 @@ async def send_otp(login: UserLogin, request: Request):
     if user:
         # Update user with OTP
         await db.users.update_one(
-            {'phone': phone},
+            {'$or': [{'phone': phone}, {'phone': phone_digits}, {'phone': phone_digits[-10:]}]},
             {'$set': {
                 'otp': otp,
                 'otp_expires_at': otp_expires_at.isoformat()

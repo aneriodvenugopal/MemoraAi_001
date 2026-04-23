@@ -1096,6 +1096,14 @@ STYLE (MANDATORY):
             from services.memory_ai_service import BusinessMemoryAI
             memory_ai = BusinessMemoryAI(self.db)
             customer_memory = await memory_ai.build_rag_context(tenant_id, phone, message)
+            
+            # Load business rules
+            active_rules = await self.db.memoraai_rules.find(
+                {"tenant_id": tenant_id, "is_active": True}, {"_id": 0}
+            ).to_list(20)
+            if active_rules:
+                rules_text = "\n".join([f"- {r.get('rule','')}" for r in active_rules])
+                customer_memory = f"{customer_memory}\n\n[BUSINESS RULES - MUST FOLLOW]\n{rules_text}"
         except Exception as cat_err:
             logger.warning(f"Category context load error (non-blocking): {cat_err}")
 

@@ -209,6 +209,7 @@ import TemplateWorkflow from "./pages/TemplateWorkflow";
 import IndustryPage from "./pages/IndustryPage";
 import AdminIndustries from "./pages/AdminIndustries";
 import MemoraContentLibrary from "./pages/ContentLibrary";
+import BusinessRules from "./pages/BusinessRules";
 
 // SEO Articles
 import ArticlesListing from "./pages/ArticlesListing";
@@ -1124,6 +1125,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <MemoraContentLibrary />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/business-rules"
+                element={
+                  <PrivateRoute>
+                    <BusinessRules />
                   </PrivateRoute>
                 }
               />

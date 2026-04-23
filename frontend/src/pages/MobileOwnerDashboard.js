@@ -5,7 +5,7 @@ import {
   Home, MessageSquare, CalendarDays, BarChart3, MoreHorizontal,
   Upload, Bell, Calendar, Megaphone, Eye, ShoppingBag,
   TrendingUp, ArrowUpRight, ArrowDownRight, Bot, ChevronRight,
-  Star, Settings, Users, Phone, Clock, Flame, Brain, Globe,
+  Star, Settings, Users, Phone, Clock, Flame, Brain, Globe, Shield,
   FileText, Sparkles, Send, Scissors, Stethoscope, Building,
   PartyPopper, Sprout, GraduationCap, CircleCheck, CircleX,
   AlertTriangle, Search, Plus, Filter, X
@@ -491,6 +491,7 @@ function MoreTab({ navigate, catName, templates }) {
     { icon: Globe, label: 'Industry Pages', sub: 'Manage landing pages', onClick: () => navigate('/admin-industries') },
     { icon: Flame, label: 'Hot Sales Mode', sub: 'Manual entry & AI alerts', onClick: () => navigate('/hot-sales') },
     { icon: Brain, label: 'AI Memory', sub: 'RAG-based customer memory', onClick: () => navigate('/memoraai-appointments') },
+    { icon: Shield, label: 'Business Rules', sub: 'Control AI behavior', onClick: () => navigate('/business-rules') },
     { icon: Users, label: 'Staff & Permissions', onClick: () => navigate('/settings/role-assignments') },
     { icon: Settings, label: 'Settings', onClick: () => navigate('/settings') },
   ];
