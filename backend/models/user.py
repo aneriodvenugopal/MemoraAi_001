@@ -24,8 +24,12 @@ class UserCreate(BaseModel):
     phone: str
     email: Optional[EmailStr] = None
     name: str
-    role_id: str
+    role_id: Optional[str] = None
     tenant_id: Optional[str] = None
+    password: Optional[str] = None
+    company_name: Optional[str] = None
+    category: Optional[str] = None
+    city: Optional[str] = None
 
 class UserLogin(BaseModel):
     phone: str

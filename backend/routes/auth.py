@@ -306,7 +306,7 @@ async def login_with_password(data: dict, request: Request):
 
 @router.post("/register")
 async def register(user_create: UserCreate, request: Request):
-    """Register a new user"""
+    """Register a new user (business owner registration for MemoraAI SaaS)"""
     db = get_db(request)
     
     # Check if user already exists
@@ -314,25 +314,81 @@ async def register(user_create: UserCreate, request: Request):
     if existing_user:
         raise HTTPException(status_code=400, detail="User with this phone already exists")
     
-    # Check if role exists
-    role = await db.roles.find_one({'id': user_create.role_id}, {"_id": 0})
-    if not role:
+    # Auto-resolve role_id if not provided or invalid
+    role_id = getattr(user_create, 'role_id', None)
+    if not role_id or role_id == '':
+        # Default to tenant_admin for public registration
+        role_doc = await db.roles.find_one({'slug': 'tenant_admin'}, {"_id": 0})
+        role_id = role_doc['id'] if role_doc else None
+    else:
+        role_doc = await db.roles.find_one({'id': role_id}, {"_id": 0})
+    
+    if not role_id:
         raise HTTPException(status_code=400, detail="Invalid role")
     
-    # Create user
-    user = User(**user_create.model_dump())
-    user_doc = serialize_doc(user.model_dump())
+    role_slug = role_doc.get('slug', 'tenant_admin') if role_doc else 'tenant_admin'
     
-    await db.users.insert_one(user_doc)
+    # Handle password
+    import bcrypt
+    password = getattr(user_create, 'password', None) or 'changeme123'
+    password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    # Create tenant for business owners
+    tenant_id = None
+    if role_slug == 'tenant_admin':
+        company_name = getattr(user_create, 'company_name', None) or user_create.name
+        category = getattr(user_create, 'category', None) or ''
+        city = getattr(user_create, 'city', None) or ''
+        
+        tenant_doc = {
+            "id": str(uuid.uuid4()),
+            "name": company_name,
+            "company_name": company_name,
+            "business_category": category,
+            "city": city,
+            "owner_name": user_create.name,
+            "owner_phone": user_create.phone,
+            "owner_email": getattr(user_create, 'email', None) or '',
+            "is_active": True,
+            "subscription_status": "trial",
+            "onboarding_step": "registered",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        await db.tenants.insert_one(tenant_doc)
+        tenant_id = tenant_doc["id"]
+    
+    # Create user
+    user_data = {
+        "id": str(uuid.uuid4()),
+        "name": user_create.name,
+        "phone": user_create.phone,
+        "email": getattr(user_create, 'email', None),
+        "role_id": role_id,
+        "role": role_slug,
+        "tenant_id": tenant_id,
+        "password_hash": password_hash,
+        "is_active": True,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.users.insert_one(user_data)
+    user_data.pop("_id", None)
+    
+    # Generate token for immediate login
+    token = AuthService.create_access_token(user_data["id"], role_slug, tenant_id)
     
     return {
-        "message": "User registered successfully",
+        "message": "Registration successful",
+        "access_token": token,
+        "token_type": "bearer",
         "user": {
-            "id": user.id,
-            "name": user.name,
-            "phone": user.phone,
-            "email": user.email
-        }
+            "id": user_data["id"],
+            "name": user_create.name,
+            "phone": user_create.phone,
+            "email": getattr(user_create, 'email', None),
+            "role": role_slug,
+            "tenant_id": tenant_id,
+        },
+        "onboarding_step": "registered",
     }
 
 @router.get("/me")
