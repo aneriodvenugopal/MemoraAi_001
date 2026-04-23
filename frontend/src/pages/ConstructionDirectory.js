@@ -214,7 +214,7 @@ const ConstructionDirectory = () => {
                       Call Now
                     </a>
                     <a
-                      href={`https://wa.me/91${worker.phone}?text=Hi ${worker.name}, I found your profile on RealApex. I need a ${worker.skill} in ${worker.location}.`}
+                      href={`https://wa.me/91${worker.phone}?text=Hi ${worker.name}, I found your profile on MemoraAI. I need a ${worker.skill} in ${worker.location}.`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-all"
@@ -237,7 +237,7 @@ const ConstructionDirectory = () => {
             Add your skilled workers to this FREE directory and get more projects
           </p>
           <a
-            href="https://wa.me/919948303060?text=I want to list construction workers on RealApex directory"
+            href="https://wa.me/919948303060?text=I want to list construction workers on MemoraAI directory"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all"

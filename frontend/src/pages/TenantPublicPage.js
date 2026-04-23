@@ -523,7 +523,7 @@ const TenantPublicPage = () => {
             
             <div className="mt-4 md:mt-0">
               <span className="text-gray-400 text-sm">Powered by </span>
-              <Link to="/saas" className="text-blue-400 hover:text-blue-300">RealApex</Link>
+              <Link to="/saas" className="text-blue-400 hover:text-blue-300">MemoraAI</Link>
             </div>
           </div>
         </div>

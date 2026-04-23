@@ -1,6 +1,6 @@
 /**
  * SEO Component
- * Provides comprehensive SEO optimization for RealApex public pages
+ * Provides comprehensive SEO optimization for MemoraAI public pages
  * 
  * Features:
  * - Dynamic meta tags (title, description, keywords)
@@ -25,7 +25,7 @@ const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://realapex.in';
  * @param {object} structuredData - JSON-LD structured data
  */
 export const SEOHead = ({
-  title = 'RealApex - Real Estate ERP Solution',
+  title = 'MemoraAI - Real Estate ERP Solution',
   description = 'Comprehensive Real Estate ERP platform for property management, sales tracking, and business automation in India.',
   keywords = 'real estate, ERP, property management, CRM, India, plots, apartments, villas',
   image = '/og-image.png',
@@ -54,7 +54,7 @@ export const SEOHead = ({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={fullImage} />
-      <meta property="og:site_name" content="RealApex" />
+      <meta property="og:site_name" content="MemoraAI" />
       <meta property="og:locale" content="en_IN" />
       
       {/* Twitter Card */}

@@ -515,7 +515,7 @@ function ProjectLandingPage() {
           <p className="text-gray-400">
             © {new Date().getFullYear()} {project.name} by {tenant?.company_name}. All rights reserved.
           </p>
-          <p className="text-gray-500 text-sm mt-2">Powered by RealApex</p>
+          <p className="text-gray-500 text-sm mt-2">Powered by MemoraAI</p>
         </div>
       </footer>
 

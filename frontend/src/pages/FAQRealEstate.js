@@ -30,10 +30,10 @@ const FAQRealEstate = () => {
 
   const faqs = [
     {
-      question: "How does RealApex help avoid lead leakage and improve conversions?",
+      question: "How does MemoraAI help avoid lead leakage and improve conversions?",
       answer: (
         <div className="space-y-3">
-          <p>RealApex's Anti-Leakage System ensures zero lead loss through:</p>
+          <p>MemoraAI's Anti-Leakage System ensures zero lead loss through:</p>
           <ul className="list-disc ml-6 space-y-2">
             <li><strong>Automatic Lead Capture:</strong> Every inquiry is automatically logged with source tracking</li>
             <li><strong>Smart Assignment:</strong> Leads instantly assigned to team members based on rules</li>
@@ -49,7 +49,7 @@ const FAQRealEstate = () => {
       question: "What automation features help speed up real estate operations?",
       answer: (
         <div className="space-y-3">
-          <p>RealApex automates time-consuming tasks:</p>
+          <p>MemoraAI automates time-consuming tasks:</p>
           <ul className="list-disc ml-6 space-y-2">
             <li><strong>Payment Automation:</strong> Auto-generate receipts, invoices, and payment reminders</li>
             <li><strong>SMS/Email/WhatsApp:</strong> Automated communication for bookings, payments, updates</li>
@@ -153,7 +153,7 @@ const FAQRealEstate = () => {
       )
     },
     {
-      question: "Does RealApex support video calling for virtual site visits?",
+      question: "Does MemoraAI support video calling for virtual site visits?",
       answer: (
         <div className="space-y-3">
           <p>Yes! Video calling capabilities:</p>
@@ -170,7 +170,7 @@ const FAQRealEstate = () => {
       )
     },
     {
-      question: "How does RealApex calculate commissions and manage agent payments?",
+      question: "How does MemoraAI calculate commissions and manage agent payments?",
       answer: (
         <div className="space-y-3">
           <p>Transparent commission management:</p>
@@ -188,7 +188,7 @@ const FAQRealEstate = () => {
       )
     },
     {
-      question: "What makes RealApex 40X faster than traditional real estate operations?",
+      question: "What makes MemoraAI 40X faster than traditional real estate operations?",
       answer: (
         <div className="space-y-3">
           <p>Speed comes from complete automation:</p>
@@ -221,14 +221,14 @@ const FAQRealEstate = () => {
             FAQ for Real Estate Companies
           </h1>
           <p className="text-xl text-gray-600">
-            Learn how RealApex transforms your business with automation, eliminates leakage, and accelerates growth
+            Learn how MemoraAI transforms your business with automation, eliminates leakage, and accelerates growth
           </p>
         </div>
 
         <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-8 mb-12 text-white">
           <h2 className="text-2xl font-bold mb-4">🚀 Transform Your Real Estate Business</h2>
           <p className="text-lg opacity-90 mb-4">
-            RealApex helps you automate operations, eliminate revenue leakage, and grow 40X faster with:
+            MemoraAI helps you automate operations, eliminate revenue leakage, and grow 40X faster with:
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div>✓ 0% Lead Leakage</div>
@@ -260,7 +260,7 @@ const FAQRealEstate = () => {
             Ready to Automate Your Real Estate Business?
           </h3>
           <p className="text-gray-700 mb-6">
-            Join 500+ real estate companies using RealApex to eliminate leakage and grow faster
+            Join 500+ real estate companies using MemoraAI to eliminate leakage and grow faster
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

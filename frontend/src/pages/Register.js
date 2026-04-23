@@ -165,7 +165,7 @@ const Register = () => {
               Create Account
             </CardTitle>
             <CardDescription className="text-base mt-2">
-              Join RealApex today
+              Join MemoraAI today
             </CardDescription>
           </div>
         </CardHeader>

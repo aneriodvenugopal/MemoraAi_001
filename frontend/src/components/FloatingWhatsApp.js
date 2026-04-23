@@ -8,7 +8,7 @@ const FloatingWhatsApp = () => {
   // Check if on homepage
   const isHomePage = location.pathname === '/';
   
-  // On homepage (no RealApex Assistant), position WhatsApp higher for visibility
+  // On homepage (no MemoraAI Assistant), position WhatsApp higher for visibility
   const positionClass = isHomePage ? 'bottom-28' : 'bottom-6';
   
   return (

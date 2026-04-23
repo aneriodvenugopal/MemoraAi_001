@@ -555,7 +555,7 @@ function TenantLandingPage() {
               © {new Date().getFullYear()} {tenant.company_name}. All rights reserved.
             </p>
             <p className="text-gray-500 text-sm mt-2">
-              Powered by RealApex
+              Powered by MemoraAI
             </p>
           </div>
         </div>

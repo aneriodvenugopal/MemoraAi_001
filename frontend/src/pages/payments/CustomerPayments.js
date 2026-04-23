@@ -175,7 +175,7 @@ const CustomerPayments = () => {
             key: orderResponse.data.key_id,
             amount: orderResponse.data.amount * 100, // Amount in paise
             currency: orderResponse.data.currency,
-            name: 'RealApex',
+            name: 'MemoraAI',
             description: 'Property Payment',
             order_id: orderResponse.data.order_id,
             handler: async function (response) {

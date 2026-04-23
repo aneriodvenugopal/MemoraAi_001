@@ -129,7 +129,7 @@ const SEOArticle = () => {
   return (
     <>
       <Helmet>
-        <title>{article.topic} | RealApex</title>
+        <title>{article.topic} | MemoraAI</title>
         <meta name="description" content={article.content?.substring(0, 160)} />
         <meta property="og:title" content={article.topic} />
         <meta property="og:description" content={article.content?.substring(0, 160)} />
@@ -216,7 +216,7 @@ const SEOArticle = () => {
         {/* Footer */}
         <footer className="bg-gray-900 text-gray-400 py-8 mt-16">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <p>&copy; {new Date().getFullYear()} RealApex. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} MemoraAI. All rights reserved.</p>
           </div>
         </footer>
       </div>

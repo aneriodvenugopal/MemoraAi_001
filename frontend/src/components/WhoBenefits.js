@@ -197,7 +197,7 @@ const WhoBenefits = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Who Benefits from RealApex?
+            Who Benefits from MemoraAI?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             A complete ecosystem that benefits everyone - from business owners to customers
@@ -263,7 +263,7 @@ const WhoBenefits = () => {
             {/* CTA */}
             <div className="mt-8 text-center">
               <a
-                href="https://wa.me/919948303060?text=I want to learn more about how RealApex benefits everyone in my organization!"
+                href="https://wa.me/919948303060?text=I want to learn more about how MemoraAI benefits everyone in my organization!"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`inline-block ${colors.bg} ${colors.hover} text-white px-8 py-4 rounded-xl font-bold text-lg transition-all transform hover:scale-105 shadow-xl`}

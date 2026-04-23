@@ -225,7 +225,7 @@ const Features = () => {
             Complete Real Estate Ecosystem
           </h2>
           <p className="text-xl text-gray-200 text-center mb-12">
-            RealApex isn't just software – it's a complete ecosystem for real estate success
+            MemoraAI isn't just software – it's a complete ecosystem for real estate success
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -258,7 +258,7 @@ const Features = () => {
         {/* CTA Section */}
         <div className="mt-16 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
-            Ready to Experience RealApex?
+            Ready to Experience MemoraAI?
           </h2>
           <p className="text-xl text-gray-300 mb-8">
             Start your free trial today – no credit card required
@@ -285,7 +285,7 @@ const Features = () => {
       <footer className="bg-gray-900/50 py-8 border-t border-white/10 mt-16">
         <div className="container mx-auto px-6 text-center">
           <p className="text-gray-400">
-            © 2025 RealApex. All rights reserved. | 10+ Years in Real Estate Excellence
+            © 2025 MemoraAI. All rights reserved. | 10+ Years in Real Estate Excellence
           </p>
         </div>
       </footer>

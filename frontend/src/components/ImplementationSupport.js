@@ -216,7 +216,7 @@ const ImplementationSupport = () => {
                   <Video className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Watch RealApex in Action</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Watch MemoraAI in Action</h3>
                   <p className="text-gray-700">2-minute video demo showing key features</p>
                 </div>
               </div>

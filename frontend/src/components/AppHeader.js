@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import NotificationCenter from './notifications/NotificationCenter';
+import MemoraAILogo from './MemoraAILogo';
 
 const ROLE_LABELS = {
   super_admin: 'Super Admin',
@@ -61,12 +62,7 @@ const AppHeader = ({ title, showBackToDashboard = true }) => {
           {/* Left side - Logo & Title */}
           <div className="flex items-center gap-4">
             <Link to="/dashboard" className="flex items-center gap-2" data-testid="header-logo">
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-md">
-                <Home className="w-5 h-5 text-white" />
-              </div>
-              <div className="hidden sm:block">
-                <span className="text-lg font-bold text-gray-900">RealApex</span>
-              </div>
+              <MemoraAILogo size="xs" showCaption={false} showBrand={true} />
             </Link>
             
             {title && (

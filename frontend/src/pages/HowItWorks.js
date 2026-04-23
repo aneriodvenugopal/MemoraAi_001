@@ -13,7 +13,7 @@ const HowItWorks = () => {
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h1 className="text-5xl font-bold text-gray-900 mb-4">
-              How RealApex Works
+              How MemoraAI Works
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               A Complete Real Estate Ecosystem - From Lead to Customer to Resale
@@ -30,9 +30,9 @@ const HowItWorks = () => {
             
             {/* Partnership Badge */}
             <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-8 text-white mb-8 text-center">
-              <h2 className="text-3xl font-bold mb-4">RealApex + IncomeLands Partnership</h2>
+              <h2 className="text-3xl font-bold mb-4">MemoraAI + IncomeLands Partnership</h2>
               <p className="text-lg opacity-90">
-                RealApex is the <strong>Technical Partner</strong> powering IncomeLands' complete ecosystem
+                MemoraAI is the <strong>Technical Partner</strong> powering IncomeLands' complete ecosystem
               </p>
             </div>
 
@@ -76,7 +76,7 @@ const HowItWorks = () => {
                 
                 <div className="mt-4 bg-red-50 p-4 rounded-lg">
                   <p className="text-sm text-red-800">
-                    ✅ Every lead from every channel automatically captured in RealApex<br/>
+                    ✅ Every lead from every channel automatically captured in MemoraAI<br/>
                     ✅ Source tracking - know which platform brought the customer<br/>
                     ✅ Zero manual entry - complete automation
                   </p>
@@ -218,7 +218,7 @@ const HowItWorks = () => {
           {/* Right Side - Demo Request Form */}
           <div className="lg:col-span-2">
             <DemoRequestForm 
-              demoType="Complete RealApex Ecosystem"
+              demoType="Complete MemoraAI Ecosystem"
               description="See live how the complete ecosystem works - from YouTube ads to customer conversion to resale. 30-minute personalized demo."
             />
             

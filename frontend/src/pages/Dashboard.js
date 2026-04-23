@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LogOut, Building2, Users, BarChart3, FileText, UserCog, Home, Layers, MessageSquare, MapPin, Wallet, Shield, Tags, FolderTree, Settings, Bot, DollarSign, CreditCard, TrendingUp, Banknote, Mail, Receipt, Star, Stethoscope, Scissors, Flame, Brain, Phone } from 'lucide-react';
 import NotificationCenter from '../components/notifications/NotificationCenter';
 import PageInfoModal from '../components/PageInfoModal';
-import RealApexLogo from '../components/RealApexLogo';
+import MemoraAILogo from '../components/MemoraAILogo';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -47,7 +47,7 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <RealApexLogo size="sm" showCaption={true} showBrand={true} />
+              <MemoraAILogo size="sm" showCaption={true} showBrand={true} />
               <div className="hidden sm:block border-l pl-4 border-gray-200">
                 <p className="text-xs text-gray-500">Welcome, {user?.name}</p>
               </div>
@@ -720,7 +720,7 @@ const DefaultDashboard = () => {
       <h2 className="text-3xl font-bold text-gray-900">Dashboard</h2>
       <Card className="glass-card">
         <CardHeader>
-          <CardTitle className="text-ocean-primary">Welcome to RealApex</CardTitle>
+          <CardTitle className="text-ocean-primary">Welcome to MemoraAI</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-gray-500">Your dashboard is being set up...</p>

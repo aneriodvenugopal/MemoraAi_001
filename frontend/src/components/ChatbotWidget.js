@@ -27,7 +27,7 @@ const ChatbotWidget = ({ tenantId, projectId, projectName }) => {
         role: 'assistant',
         content: projectName 
           ? `Hello! 👋 I'm here to help you with **${projectName}**.\n\n**How can I assist you? (Type number)**\n\n1️⃣ Property Details & Availability\n2️⃣ Pricing & Payment Plans\n3️⃣ Location & Amenities\n4️⃣ Schedule Site Visit\n5️⃣ Talk to Sales Team\n\nType: 1, 2, 3, 4, or 5`
-          : `Hello! 👋 Welcome to RealApex!\n\n**How can I help you? (Type number)**\n\n1️⃣ Browse Properties\n2️⃣ Get Property Advisory\n3️⃣ Learn About Platform\n4️⃣ Schedule Expert Call\n5️⃣ Contact Sales\n\nType: 1, 2, 3, 4, or 5`,
+          : `Hello! 👋 Welcome to MemoraAI!\n\n**How can I help you? (Type number)**\n\n1️⃣ Browse Properties\n2️⃣ Get Property Advisory\n3️⃣ Learn About Platform\n4️⃣ Schedule Expert Call\n5️⃣ Contact Sales\n\nType: 1, 2, 3, 4, or 5`,
         timestamp: new Date().toISOString()
       };
       setMessages([welcomeMsg]);
@@ -138,7 +138,7 @@ const ChatbotWidget = ({ tenantId, projectId, projectName }) => {
             <MessageCircle className="text-blue-600" size={20} />
           </div>
           <div>
-            <h3 className="font-bold text-lg">RealApex Assistant</h3>
+            <h3 className="font-bold text-lg">MemoraAI Assistant</h3>
             <p className="text-xs text-blue-100">
               {projectName ? `About ${projectName}` : 'Always here to help!'}
             </p>

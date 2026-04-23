@@ -28,7 +28,7 @@ const AvatarAssistant = () => {
   // Feature explanations in multiple languages
   const features = {
     welcome: {
-      english: "Hello! I'm your RealApex Software Speaking Guide! We help real estate companies grow 40X faster with multi-project management, visual property layouts, payment automation, expert advisory, and workforce solutions. Search for any feature or ask me anything!",
+      english: "Hello! I'm your MemoraAI Speaking Guide! We help real estate companies grow 40X faster with multi-project management, visual property layouts, payment automation, expert advisory, and workforce solutions. Search for any feature or ask me anything!",
       telugu: "నమస్కారం! నేను మీ రెటో ఇఆర్‌పీ సాఫ్ట్‌వేర్ స్పీకింగ్ గైడ్! మేము రియల్ ఎస్టేట్ కంపెనీలకు మల్టీ-ప్రాజెక్ట్ మేనేజ్‌మెంట్, విజువల్ ప్రాపర్టీ లేఅవుట్స్, పేమెంట్ ఆటోమేషన్, ఎక్స్‌పర్ట్ అడ్వైజరీతో 40X వేగంగా పెరగడానికి సహాయం చేస్తాము!",
       hindi: "नमस्ते! मैं आपकी रेटो ईआरपी सॉफ्टवेयर स्पीकिंग गाइड हूँ! हम रियल एस्टेट कंपनियों को मल्टी-प्रोजेक्ट मैनेजमेंट, विज़ुअल प्रॉपर्टी लेआउट, पेमेंट ऑटोमेशन के साथ 40X तेजी से बढ़ने में मदद करते हैं!"
     },
@@ -65,18 +65,18 @@ const AvatarAssistant = () => {
         hindi: "आप लीड्स प्रबंधन पेज पर हैं। यहाँ आप अपने सभी लीड्स देख सकते हैं।"
       },
       login: {
-        english: "You're on the Login page. Enter your mobile number to receive an OTP and access your RealApex dashboard. New user? Contact us to create your account and start managing your real estate business efficiently!",
+        english: "You're on the Login page. Enter your mobile number to receive an OTP and access your MemoraAI dashboard. New user? Contact us to create your account and start managing your real estate business efficiently!",
         telugu: "మీరు లాగిన్ పేజీలో ఉన్నారు. OTP పొందడానికి మీ మొబైల్ నంబర్‌ను నమోదు చేయండి మరియు మీ రెటో ఇఆర్‌పీ డాష్‌బోర్డ్‌ను యాక్సెస్ చేయండి!",
         hindi: "आप लॉगिन पेज पर हैं। अपने मोबाइल नंबर दर्ज करें।"
       },
       home: {
-        english: "You're on the RealApex homepage! We help real estate companies grow 40X faster. Scroll down to see our latest additions: Video Demo section (coming soon), Simple Pricing with 3 plans starting at ₹9,999/month, First 3 Months Free Support offer, Multi-Project Management capabilities, Feature Request system, and real client testimonials from Abhinandhana Avenues, BRR Group, and Sri Jayam Housing. Explore all features using the menu!",
+        english: "You're on the MemoraAI homepage! We help real estate companies grow 40X faster. Scroll down to see our latest additions: Video Demo section (coming soon), Simple Pricing with 3 plans starting at ₹9,999/month, First 3 Months Free Support offer, Multi-Project Management capabilities, Feature Request system, and real client testimonials from Abhinandhana Avenues, BRR Group, and Sri Jayam Housing. Explore all features using the menu!",
         telugu: "మీరు రెటో ఇఆర్‌పీ హోమ్‌పేజీలో ఉన్నారు! మేము రియల్ ఎస్టేట్ కంపెనీలకు 40X వేగంగా పెరగడానికి సహాయం చేస్తాము. క్రిందికి స్క్రోల్ చేసి మా తాజా జోడింపులను చూడండి: వీడియో డెమో, సాధారణ ధరలు ₹9,999/నెల నుండి, మొదటి 3 నెలలు ఉచిత మద్దతు!",
         hindi: "आप रेटो ईआरपी होमपेज पर हैं! हम रियल एस्टेट कंपनियों को 40X तेजी से बढ़ने में मदद करते हैं। नीचे स्क्रॉल करके हमारे नवीनतम जोड़ देखें: वीडियो डेमो, सरल मूल्य निर्धारण ₹9,999/माह से, पहले 3 महीने मुफ्त सहायता!"
       }
     },
     login: {
-      english: "Login page lets you access your RealApex dashboard. Use your mobile number to receive OTP and login securely.",
+      english: "Login page lets you access your MemoraAI dashboard. Use your mobile number to receive OTP and login securely.",
       telugu: "లాగిన్ పేజీ మీ రెటో ఇఆర్‌పీ డాష్‌బోర్డ్‌ను యాక్సెస్ చేయడానికి అనుమతిస్తుంది. OTP పొందడానికి మీ మొబైల్ నంబర్‌ను ఉపయోగించండి!",
       hindi: "लॉगिन पेज आपको रेटो ईआरपी डैशबोर्ड तक पहुंचने देता है।",
       link: "/login"
@@ -136,7 +136,7 @@ const AvatarAssistant = () => {
       link: "/contact"
     },
     demo: {
-      english: "Want to see RealApex in action? We have a product demo video coming soon! Meanwhile, you can schedule a live demo with our team to explore all features - multi-project dashboard, visual property layouts, payment automation, and WhatsApp integration!",
+      english: "Want to see MemoraAI in action? We have a product demo video coming soon! Meanwhile, you can schedule a live demo with our team to explore all features - multi-project dashboard, visual property layouts, payment automation, and WhatsApp integration!",
       telugu: "రెటో ఇఆర్‌పీని చర్యలో చూడాలనుకుంటున్నారా? మా ఉత్పత్తి డెమో వీడియో త్వరలో వస్తోంది! అయితే, మా టీమ్‌తో లైవ్ డెమో షెడ్యూల్ చేయండి!",
       hindi: "रेटो ईआरपी को कार्रवाई में देखना चाहते हैं? हमारा उत्पाद डेमो वीडियो जल्द आ रहा है! इस बीच, हमारी टीम के साथ लाइव डेमो शेड्यूल करें!",
       link: "/contact"
@@ -389,7 +389,7 @@ const AvatarAssistant = () => {
         <div
           onClick={() => setIsOpen(true)}
           className="fixed bottom-28 right-6 z-40 cursor-pointer group"
-          title="RealApex Software Speaking Guide - Click to talk!"
+          title="MemoraAI Speaking Guide - Click to talk!"
         >
           <div className="relative">
             <div className="absolute inset-0 bg-purple-400 rounded-full animate-ping opacity-50"></div>
@@ -409,7 +409,7 @@ const AvatarAssistant = () => {
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-5 h-5" />
                 <div>
-                  <h3 className="font-bold text-sm">RealApex Software Speaking Guide</h3>
+                  <h3 className="font-bold text-sm">MemoraAI Speaking Guide</h3>
                   <p className="text-xs text-white/80">
                     {isSpeaking ? '🔊 Speaking...' : 'Ask me anything'}
                   </p>

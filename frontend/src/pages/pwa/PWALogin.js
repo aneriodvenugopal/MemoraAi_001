@@ -170,7 +170,7 @@ const PWALogin = () => {
           <div className="w-24 h-24 bg-white rounded-3xl shadow-2xl mx-auto flex items-center justify-center mb-4">
             <span className="text-4xl font-bold text-ocean-primary">R</span>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">RealApex</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">MemoraAI</h1>
           <p className="text-white/80">Real Estate Management</p>
         </div>
 

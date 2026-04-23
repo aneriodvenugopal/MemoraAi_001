@@ -65,7 +65,7 @@ function TenantsDirectory() {
                 <span className="text-white font-bold text-xl">R</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">RealApex</h1>
+                <h1 className="text-xl font-bold text-gray-900">MemoraAI</h1>
                 <p className="text-sm text-gray-600">Partner Companies</p>
               </div>
             </div>
@@ -84,7 +84,7 @@ function TenantsDirectory() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-5xl font-bold mb-4">Our Partner Companies</h2>
           <p className="text-xl text-blue-100 mb-8">
-            Discover trusted real estate companies powered by RealApex
+            Discover trusted real estate companies powered by MemoraAI
           </p>
           <div className="flex items-center justify-center gap-8 text-lg">
             <div className="flex items-center gap-2">
@@ -219,7 +219,7 @@ function TenantsDirectory() {
       <footer className="bg-gray-900 text-white py-8 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-400">
-            © {new Date().getFullYear()} RealApex. All rights reserved.
+            © {new Date().getFullYear()} MemoraAI. All rights reserved.
           </p>
           <div className="flex justify-center gap-6 mt-4">
             <button onClick={() => navigate('/')} className="text-gray-400 hover:text-white transition">

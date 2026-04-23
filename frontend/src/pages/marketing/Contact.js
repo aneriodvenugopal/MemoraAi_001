@@ -234,7 +234,7 @@ const Contact = () => {
       <footer className="bg-gray-900/50 py-8 border-t border-white/10 mt-16">
         <div className="container mx-auto px-6 text-center">
           <p className="text-gray-400">
-            © 2025 RealApex. All rights reserved. | 10+ Years in Real Estate Excellence
+            © 2025 MemoraAI. All rights reserved. | 10+ Years in Real Estate Excellence
           </p>
         </div>
       </footer>

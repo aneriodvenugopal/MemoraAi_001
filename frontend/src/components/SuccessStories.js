@@ -11,8 +11,8 @@ const SuccessStories = () => {
       logo: "🏢",
       color: "blue",
       results: ["Better Tracking", "Multi-project", "Time Saved"],
-      shortQuote: "RealApex helped us manage operations more efficiently.",
-      fullQuote: "RealApex helped us manage our real estate operations more efficiently. The dashboard gives us better visibility and the system is easy to use.",
+      shortQuote: "MemoraAI helped us manage operations more efficiently.",
+      fullQuote: "MemoraAI helped us manage our real estate operations more efficiently. The dashboard gives us better visibility and the system is easy to use.",
       person: "Managing Director",
       rating: 5
     },
@@ -71,7 +71,7 @@ const SuccessStories = () => {
               Real Results from Real Estate Companies
             </h2>
             <p className="text-base md:text-xl text-gray-600">
-              See how leading developers are growing with RealApex
+              See how leading developers are growing with MemoraAI
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-600 mx-auto mt-4 md:mt-6 rounded-full"></div>
           </div>
@@ -182,7 +182,7 @@ const SuccessStories = () => {
             </div>
             
             <p className="text-xs text-gray-500 text-center italic border-t border-gray-200 pt-4 mt-4 md:mt-6">
-              *Based on work done by parent company Eloniot Software Solutions over 10+ years. RealApex is our SaaS product launched in 2024.
+              *Based on work done by parent company Eloniot Software Solutions over 10+ years. MemoraAI is our SaaS product launched in 2024.
             </p>
           </div>
         </div>

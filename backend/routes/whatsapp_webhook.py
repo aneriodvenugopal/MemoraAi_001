@@ -355,6 +355,31 @@ async def process_incoming_message(
         if result.get("human_followup_required"):
             await notify_agent_for_followup(db, tenant_id, lead_id, result)
         
+        # ── MemoraAI: Business Memory AI + Abrupt Sales Detection ──
+        try:
+            from services.memory_ai_service import BusinessMemoryAI
+            memory_ai = BusinessMemoryAI(db)
+            
+            # Store interaction memory
+            response_text = result.get("response", "")
+            await memory_ai.extract_and_store_from_message(
+                tenant_id=tenant_id,
+                customer_phone=phone,
+                message=message,
+                ai_response=response_text,
+            )
+            
+            # Detect abrupt sales intent
+            alert = await memory_ai.detect_abrupt_sales(
+                tenant_id=tenant_id,
+                customer_phone=phone,
+                message=message,
+            )
+            if alert:
+                logger.info(f"🔥 MemoraAI: Sales alert created for {phone}: {alert.get('detected_intent')}")
+        except Exception as mem_err:
+            logger.warning(f"MemoraAI memory/alert error (non-blocking): {mem_err}")
+        
         logger.info(f"Message processed: intent={result.get('intent')}, action={result.get('action')}")
         
     except Exception as e:

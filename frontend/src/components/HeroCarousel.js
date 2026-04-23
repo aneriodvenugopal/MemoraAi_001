@@ -8,7 +8,7 @@ const HeroCarousel = () => {
   const slides = [
     {
       problem: "Losing 30-40% Leads Due to Poor Follow-up?",
-      solution: "RealApex's Smart CRM ensures 0% lead leakage with automated follow-ups",
+      solution: "MemoraAI's Smart CRM ensures 0% lead leakage with automated follow-ups",
       image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=600&fit=crop",
       benefit: "40X Faster Growth",
       cta: "Stop Lead Leakage",

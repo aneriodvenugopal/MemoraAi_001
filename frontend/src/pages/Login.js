@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Phone, KeyRound, Loader2, ArrowRight, RefreshCw, Lock, Mail } from 'lucide-react';
-import RealApexLogo from '../components/RealApexLogo';
+import MemoraAILogo from '../components/MemoraAILogo';
 
 const Login = () => {
   // Login method: 'otp' or 'password'
@@ -225,7 +225,7 @@ const Login = () => {
       <Card className="w-full max-w-md shadow-2xl border-0 relative z-10 bg-white/95 backdrop-blur">
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-4">
-            <RealApexLogo size="xl" showCaption={true} showBrand={true} />
+            <MemoraAILogo size="xl" showCaption={true} showBrand={true} />
           </div>
         </CardHeader>
 
@@ -485,7 +485,7 @@ const Login = () => {
           {/* Footer */}
           <div className="pt-4 border-t border-gray-100">
             <p className="text-center text-xs text-gray-400">
-              Secure login powered by RealApex
+              Secure login powered by MemoraAI
             </p>
           </div>
         </CardContent>

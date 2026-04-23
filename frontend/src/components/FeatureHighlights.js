@@ -165,11 +165,11 @@ const FeatureHighlights = () => {
               See How It All Works Together
             </h3>
             <p className="text-lg mb-6 opacity-90">
-              Schedule a free demo to see how RealApex benefits everyone in your organization
+              Schedule a free demo to see how MemoraAI benefits everyone in your organization
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://wa.me/919948303060?text=I want to see a demo of RealApex for my organization"
+                href="https://wa.me/919948303060?text=I want to see a demo of MemoraAI for my organization"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-white text-blue-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all"

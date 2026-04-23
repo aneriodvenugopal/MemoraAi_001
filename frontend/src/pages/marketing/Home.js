@@ -85,7 +85,7 @@ const Home = () => {
     stat_clients: "Happy Clients",
     // CTA
     cta_title: "Ready to Transform Your Real Estate Business?",
-    cta_subtitle: "Join thousands of real estate professionals using RealApex",
+    cta_subtitle: "Join thousands of real estate professionals using MemoraAI",
     cta_button: "Start Your Free Trial",
     // Footer
     footer_subscribe: "Subscribe to our newsletter",
@@ -164,7 +164,7 @@ const Home = () => {
                   Work on multiple real estate projects simultaneously without losing context
                 </p>
                 <p className="text-lg mb-6 opacity-80 leading-relaxed">
-                  Switch effortlessly between properties, leads, and developments. RealApex keeps all your projects organized and accessible - so you can focus on what matters most: closing deals and growing your business.
+                  Switch effortlessly between properties, leads, and developments. MemoraAI keeps all your projects organized and accessible - so you can focus on what matters most: closing deals and growing your business.
                 </p>
                 
                 {/* Key Benefits */}
@@ -311,7 +311,7 @@ const Home = () => {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              RealApex SOFTWARE: The Complete Solution
+              MemoraAI: The Complete Solution
             </h2>
             <p className="text-xl text-gray-600">
               Like AI transformed software development, we transform real estate operations
@@ -605,7 +605,7 @@ const Home = () => {
               Trusted by Leading Real Estate Companies
             </h2>
             <p className="text-xl text-gray-600">
-              Discover companies powered by RealApex across India
+              Discover companies powered by MemoraAI across India
             </p>
           </div>
 
@@ -909,10 +909,10 @@ const Home = () => {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                See RealApex in Action
+                See MemoraAI in Action
               </h2>
               <p className="text-xl text-gray-600">
-                Watch how RealApex transforms real estate operations
+                Watch how MemoraAI transforms real estate operations
               </p>
             </div>
 
@@ -1154,7 +1154,7 @@ const Home = () => {
                   Feature Requests & Updates
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Your feedback drives our development! We continuously improve RealApex based on customer needs.
+                  Your feedback drives our development! We continuously improve MemoraAI based on customer needs.
                 </p>
                 <div className="space-y-3 mb-6">
                   <div className="flex items-start gap-3">
@@ -1236,7 +1236,7 @@ const Home = () => {
               Ready to Transform Your Real Estate Business?
             </h2>
             <p className="text-xl mb-8 opacity-90">
-              Join hundreds of real estate companies using RealApex
+              Join hundreds of real estate companies using MemoraAI
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -1307,7 +1307,7 @@ const Home = () => {
                   <h3 className="text-xl font-bold text-gray-900 mb-3">Important Information & Disclaimer</h3>
                   <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
                     <p>
-                      <strong>Product Development & Continuous Improvement:</strong> RealApex Software is under continuous development and improvement. While we strive to deliver the best possible experience, features, functionality, and performance may vary based on usage patterns, system configurations, and specific business requirements. We are committed to addressing issues promptly and releasing regular updates.
+                      <strong>Product Development & Continuous Improvement:</strong> MemoraAI is under continuous development and improvement. While we strive to deliver the best possible experience, features, functionality, and performance may vary based on usage patterns, system configurations, and specific business requirements. We are committed to addressing issues promptly and releasing regular updates.
                     </p>
                     <p>
                       <strong>Results May Vary:</strong> Success metrics, growth percentages (e.g., "40X faster"), and performance improvements mentioned on this website are based on specific client implementations and their unique business scenarios. Individual results may vary depending on various factors including but not limited to business size, market conditions, team adoption, data quality, and usage patterns. Past performance of other clients does not guarantee similar results for your business.
@@ -1319,13 +1319,13 @@ const Home = () => {
                       <strong>Best Efforts & Support:</strong> We provide support and maintenance on a best-efforts basis. While we aim for 99.9% uptime and quick resolution of issues, factors beyond our control (such as internet connectivity, third-party service disruptions, or force majeure events) may occasionally affect service availability. We maintain regular backups and have disaster recovery procedures in place.
                     </p>
                     <p>
-                      <strong>No Liability for Business Decisions:</strong> RealApex Software is a tool to assist in real estate management. Final business decisions, legal compliance, financial transactions, and regulatory adherence remain the sole responsibility of the user/organization. We recommend consulting with legal, financial, and tax professionals for business-critical decisions.
+                      <strong>No Liability for Business Decisions:</strong> MemoraAI is a tool to assist in real estate management. Final business decisions, legal compliance, financial transactions, and regulatory adherence remain the sole responsibility of the user/organization. We recommend consulting with legal, financial, and tax professionals for business-critical decisions.
                     </p>
                     <p>
                       <strong>Testimonials & Case Studies:</strong> All testimonials featured on this website are from actual clients. However, specific numbers, percentages, and results mentioned are based on their individual experiences and may not be representative of typical results. Client names and details are used with permission.
                     </p>
                     <p>
-                      <strong>Terms & Conditions:</strong> Use of RealApex Software is subject to our{' '}
+                      <strong>Terms & Conditions:</strong> Use of MemoraAI is subject to our{' '}
                       <Link to="/terms-conditions" className="text-blue-600 hover:text-blue-700 font-semibold underline">
                         Terms & Conditions
                       </Link>,{' '}
@@ -1342,8 +1342,8 @@ const Home = () => {
                         +91 9948303060
                       </a>{' '}
                       or{' '}
-                      <a href="mailto:admin@realapex.in" className="text-blue-600 hover:text-blue-700 font-semibold">
-                        admin@realapex.in
+                      <a href="mailto:admin@memoraai.in" className="text-blue-600 hover:text-blue-700 font-semibold">
+                        admin@memoraai.in
                       </a>
                       . We're committed to transparency and customer satisfaction.
                     </p>
@@ -1355,7 +1355,7 @@ const Home = () => {
             {/* Additional Note */}
             <div className="mt-6 text-center">
               <p className="text-xs text-gray-500 italic">
-                This website is an informational and marketing platform for RealApex Software. All information is provided in good faith for general informational purposes only. We make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, or availability of the information, products, or services contained on this website.
+                This website is an informational and marketing platform for MemoraAI. All information is provided in good faith for general informational purposes only. We make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, or availability of the information, products, or services contained on this website.
               </p>
             </div>
           </div>
@@ -1367,7 +1367,7 @@ const Home = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">RealApex SOFTWARE</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">MemoraAI</h3>
               <p className="text-gray-600">
                 Transforming real estate operations with expert advisory and automation
               </p>
@@ -1415,7 +1415,7 @@ const Home = () => {
           <div className="border-t border-gray-200 mt-8 pt-8">
             <div className="text-center mb-4">
               <p className="text-gray-600 mb-2">
-                © 2025 RealApex SOFTWARE. All rights reserved. | 10+ Years in Real Estate Excellence
+                © 2025 MemoraAI. All rights reserved. | 10+ Years in Real Estate Excellence
               </p>
               <p className="text-sm text-gray-500 mb-2">
                 Secure payments powered by Razorpay & Stripe | Data protected with industry-standard encryption

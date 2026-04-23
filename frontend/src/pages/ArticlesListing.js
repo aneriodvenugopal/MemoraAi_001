@@ -51,9 +51,9 @@ const ArticlesListing = () => {
   return (
     <>
       <Helmet>
-        <title>Real Estate Articles & Tips | RealApex</title>
+        <title>Real Estate Articles & Tips | MemoraAI</title>
         <meta name="description" content="Expert real estate tips, market updates, and investment guides for property buyers in India." />
-        <meta property="og:title" content="Real Estate Articles & Tips | RealApex" />
+        <meta property="og:title" content="Real Estate Articles & Tips | MemoraAI" />
         <meta property="og:description" content="Expert real estate tips, market updates, and investment guides." />
       </Helmet>
 
@@ -188,7 +188,7 @@ const ArticlesListing = () => {
         {/* Footer */}
         <footer className="bg-gray-950 text-gray-500 py-8">
           <div className="max-w-6xl mx-auto px-4 text-center">
-            <p>&copy; {new Date().getFullYear()} RealApex. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} MemoraAI. All rights reserved.</p>
           </div>
         </footer>
       </div>

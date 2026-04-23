@@ -14,7 +14,7 @@ const OurStory = () => {
               <span className="text-cyan-100 font-semibold">By Eloniot Software Solutions</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              The RealApex Story
+              The MemoraAI Story
             </h2>
             <p className="text-xl text-cyan-200">
               Born from Real Experience, Built for Real Estate Success
@@ -103,9 +103,9 @@ const OurStory = () => {
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full mb-4">
                       <Rocket className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-3">Phase 4: RealApex is Born!</h3>
+                    <h3 className="text-2xl font-bold text-white mb-3">Phase 4: MemoraAI is Born!</h3>
                     <p className="text-white leading-relaxed mb-4">
-                      Decision made: Build <strong>RealApex</strong> - an <strong>advanced SaaS platform</strong> that combines everything we learned from dozens of successful implementations. One system that handles:
+                      Decision made: Build <strong>MemoraAI</strong> - an <strong>advanced SaaS platform</strong> that combines everything we learned from dozens of successful implementations. One system that handles:
                     </p>
                     <ul className="space-y-2 text-white">
                       <li className="flex items-start">
@@ -137,7 +137,7 @@ const OurStory = () => {
 
           {/* What Makes Us Different */}
           <div className="mt-16 bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-cyan-500/30">
-            <h3 className="text-3xl font-bold text-white mb-8 text-center">What Makes RealApex Different?</h3>
+            <h3 className="text-3xl font-bold text-white mb-8 text-center">What Makes MemoraAI Different?</h3>
             
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">

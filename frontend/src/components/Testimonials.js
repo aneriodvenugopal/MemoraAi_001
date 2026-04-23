@@ -11,7 +11,7 @@ const Testimonials = () => {
       location: "Hyderabad",
       rating: 5,
       project: "Complete Real Estate Management Software + Website Development",
-      testimonial: "RealApex has completely transformed our operations. Managing 3 projects simultaneously was chaotic with Excel sheets and WhatsApp groups. Now with RealApex's multi-project dashboard, we have complete visibility of leads, payments, and inventory across all projects in one place. The visual property layout system has impressed our customers immensely. Our booking conversion rate improved by 35% within 3 months. The team's dedication and support throughout implementation was exceptional. We provided official feedback on our company letterhead - that's how confident we are!",
+      testimonial: "MemoraAI has completely transformed our operations. Managing 3 projects simultaneously was chaotic with Excel sheets and WhatsApp groups. Now with MemoraAI's multi-project dashboard, we have complete visibility of leads, payments, and inventory across all projects in one place. The visual property layout system has impressed our customers immensely. Our booking conversion rate improved by 35% within 3 months. The team's dedication and support throughout implementation was exceptional. We provided official feedback on our company letterhead - that's how confident we are!",
       results: [
         "35% increase in booking conversions",
         "3 projects managed effortlessly",
@@ -30,7 +30,7 @@ const Testimonials = () => {
       location: "Telangana",
       rating: 5,
       project: "Real Estate Management Software + Professional Website",
-      testimonial: "Before RealApex, tracking payments and generating reports took 2 full days every month. Now everything is automated! The system generates daily, weekly, and monthly reports automatically. Payment reminders are sent via WhatsApp and SMS automatically, which improved our collection speed by 40%. The professional website they built for us brings in 15-20 genuine inquiries every week. Customer support team responds in Telugu which our staff really appreciates. Highly recommended for Telugu real estate businesses!",
+      testimonial: "Before MemoraAI, tracking payments and generating reports took 2 full days every month. Now everything is automated! The system generates daily, weekly, and monthly reports automatically. Payment reminders are sent via WhatsApp and SMS automatically, which improved our collection speed by 40%. The professional website they built for us brings in 15-20 genuine inquiries every week. Customer support team responds in Telugu which our staff really appreciates. Highly recommended for Telugu real estate businesses!",
       results: [
         "40% faster payment collections",
         "15-20 weekly inquiries from website",
@@ -49,7 +49,7 @@ const Testimonials = () => {
       location: "Vijayawada",
       rating: 5,
       project: "Payment Management & Business Intelligence Reports",
-      testimonial: "Payment tracking was our biggest headache. Customers would forget installment dates, we'd forget to follow up, disputes over what was paid. RealApex's payment module solved everything. Automated reminders go out 3 days before due date via SMS and WhatsApp. Payment receipts are generated automatically with our logo. Commission calculations are transparent - no more agent disputes! The BI reports help us understand which projects are performing well and where we need to focus. ROI was achieved in just 2 months!",
+      testimonial: "Payment tracking was our biggest headache. Customers would forget installment dates, we'd forget to follow up, disputes over what was paid. MemoraAI's payment module solved everything. Automated reminders go out 3 days before due date via SMS and WhatsApp. Payment receipts are generated automatically with our logo. Commission calculations are transparent - no more agent disputes! The BI reports help us understand which projects are performing well and where we need to focus. ROI was achieved in just 2 months!",
       results: [
         "Zero payment disputes",
         "90% on-time payment collection",
@@ -68,7 +68,7 @@ const Testimonials = () => {
       location: "Hyderabad",
       rating: 5,
       project: "Visual Layout System + Multi-Project Admin Dashboard",
-      testimonial: "We were looking for a solution to showcase our multiple villa and plot projects visually. RealApex's interactive layout system exceeded our expectations! Customers can see plot availability in real-time with color coding. Sales team can update status instantly from mobile. The multi-project admin dashboard gives us bird's eye view of all 5 projects - inventory, bookings, revenue - everything at a glance. Site visit confirmations through WhatsApp have reduced no-shows by 60%. The system has become our competitive advantage!",
+      testimonial: "We were looking for a solution to showcase our multiple villa and plot projects visually. MemoraAI's interactive layout system exceeded our expectations! Customers can see plot availability in real-time with color coding. Sales team can update status instantly from mobile. The multi-project admin dashboard gives us bird's eye view of all 5 projects - inventory, bookings, revenue - everything at a glance. Site visit confirmations through WhatsApp have reduced no-shows by 60%. The system has become our competitive advantage!",
       results: [
         "5 projects managed seamlessly",
         "60% reduction in site visit no-shows",
@@ -87,7 +87,7 @@ const Testimonials = () => {
       location: "Andhra Pradesh",
       rating: 5,
       project: "Complete Real Estate Management Software + Website Development",
-      testimonial: "As a growing real estate business, we needed a system that could scale with us. RealApex delivered exactly that. The software handles our daily operations - from lead capture to final booking. The website they developed is modern, mobile-responsive, and generates quality leads. What impressed us most was the ease of use. Our staff, who were not tech-savvy, started using the system within 2 days of training. The mobile app means our field agents can work from anywhere. Customer inquiries are responded to within minutes now!",
+      testimonial: "As a growing real estate business, we needed a system that could scale with us. MemoraAI delivered exactly that. The software handles our daily operations - from lead capture to final booking. The website they developed is modern, mobile-responsive, and generates quality leads. What impressed us most was the ease of use. Our staff, who were not tech-savvy, started using the system within 2 days of training. The mobile app means our field agents can work from anywhere. Customer inquiries are responded to within minutes now!",
       results: [
         "Fully operational within 1 week",
         "Staff adapted in 2 days with training",
@@ -106,7 +106,7 @@ const Testimonials = () => {
       location: "Hyderabad",
       rating: 5,
       project: "Project-Specific Software + Professional Website for Nisarga",
-      testimonial: "For our premium Nisarga project, we wanted a dedicated software system and professional online presence. RealApex delivered both brilliantly! The custom website showcases our project beautifully with high-quality images, virtual tours, and interactive plot selection. The backend software manages all bookings, payment schedules, and customer communication seamlessly. We've had zero technical issues in 6 months of operation. The automated payment reminder system alone has saved our accounts team countless hours. Highly professional team!",
+      testimonial: "For our premium Nisarga project, we wanted a dedicated software system and professional online presence. MemoraAI delivered both brilliantly! The custom website showcases our project beautifully with high-quality images, virtual tours, and interactive plot selection. The backend software manages all bookings, payment schedules, and customer communication seamlessly. We've had zero technical issues in 6 months of operation. The automated payment reminder system alone has saved our accounts team countless hours. Highly professional team!",
       results: [
         "Zero technical issues in 6 months",
         "Premium project presentation online",
@@ -125,7 +125,7 @@ const Testimonials = () => {
       location: "Telangana",
       rating: 5,
       project: "Real Estate Management Software + Website",
-      testimonial: "We've tried 2 other real estate software before RealApex, and this is by far the best. The difference is that RealApex actually understands Indian real estate business. Features like Telugu language support, WhatsApp integration, and commission tracking are built-in, not afterthoughts. The website brings professional credibility to our business. Customers trust us more when they see our professional online presence. The software's reporting feature helps us make data-driven decisions. Setup was smooth, support is responsive. Worth every rupee!",
+      testimonial: "We've tried 2 other real estate software before MemoraAI, and this is by far the best. The difference is that MemoraAI actually understands Indian real estate business. Features like Telugu language support, WhatsApp integration, and commission tracking are built-in, not afterthoughts. The website brings professional credibility to our business. Customers trust us more when they see our professional online presence. The software's reporting feature helps us make data-driven decisions. Setup was smooth, support is responsive. Worth every rupee!",
       results: [
         "3rd time lucky - best software choice",
         "Telugu language support built-in",
@@ -145,7 +145,7 @@ const Testimonials = () => {
           {/* Header */}
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Real Estate Companies Trust RealApex
+              Real Estate Companies Trust MemoraAI
             </h2>
             <p className="text-xl text-gray-600">
               Genuine feedback from our clients who've transformed their operations

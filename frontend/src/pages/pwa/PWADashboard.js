@@ -96,7 +96,7 @@ const PWADashboard = () => {
     }
   };
 
-  const openInApp = async (url, title = 'RealApex') => {
+  const openInApp = async (url, title = 'MemoraAI') => {
     const token = localStorage.getItem('auth_token');
     const baseUrl = process.env.REACT_APP_BACKEND_URL?.replace('/api', '') || window.location.origin;
     const fullUrl = `${baseUrl}${url}?token=${token}&from=pwa`;
@@ -317,7 +317,7 @@ const PWADashboard = () => {
 
         {/* Open Full Web App */}
         <button
-          onClick={() => openInApp('/dashboard', 'RealApex Full')}
+          onClick={() => openInApp('/dashboard', 'MemoraAI Full')}
           className="w-full bg-gradient-to-r from-ocean-primary to-ocean-secondary text-white p-4 rounded-2xl shadow-lg flex items-center justify-center space-x-2 hover:shadow-xl transition-all active:scale-95"
         >
           <ExternalLink className="w-5 h-5" />

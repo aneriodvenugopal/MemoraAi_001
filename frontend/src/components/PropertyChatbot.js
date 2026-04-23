@@ -23,8 +23,8 @@ const PropertyChatbot = () => {
   // Messages in Telugu and English
   const messages = {
     welcome: {
-      telugu: "నమస్కారం! నేను RealApex ప్రాపర్టీ అసిస్టెంట్. మీకు సరైన ప్రాపర్టీ కనుగొనడంలో సహాయం చేస్తాను.",
-      english: "Hello! I'm RealApex Property Assistant. I'll help you find your perfect property."
+      telugu: "నమస్కారం! నేను MemoraAI ప్రాపర్టీ అసిస్టెంట్. మీకు సరైన ప్రాపర్టీ కనుగొనడంలో సహాయం చేస్తాను.",
+      english: "Hello! I'm MemoraAI Property Assistant. I'll help you find your perfect property."
     },
     selectProject: {
       telugu: "దయచేసి ఒక ప్రాజెక్ట్‌ను ఎంచుకోండి:",

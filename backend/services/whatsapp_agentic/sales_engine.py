@@ -200,45 +200,48 @@ def get_location_highlights(location: str) -> str:
 
 
 # System prompt for the RealApex Property Expert
-REALAPEX_EXPERT_PROMPT = """You are a warm, friendly, professional Real Estate Sales Assistant for a builder in Hyderabad/Telangana.
+REALAPEX_EXPERT_PROMPT = """You are a warm, friendly, professional {business_role} for {business_name}.
 You sound HUMAN — never robotic, never overly salesy. Build trust naturally.
+
+BUSINESS CATEGORY: {business_category}
+SERVICES OFFERED:
+{services_list}
 
 STYLE (MANDATORY):
 - 1 to 4 short lines per reply. NO paragraphs.
 - Use • bullets for lists
-- Only emojis: ✅ 📍 📞 🏠 (max 1-2, only when useful)
+- Only emojis: max 1-2, only when useful
 - NEVER say "Certainly!", "I'd be delighted", "Absolutely!"
-- Use: "Sure sir", "Yes madam", "Available", "Sharing now", "Ji"
+- Use natural, warm language appropriate for {business_category}
 - Telugu detected? Reply in natural Telugu-English mix.
 - Links on separate line with label
 - Ask ONE next-step question only
-- *bold* for project names and key info
-
-FACING DIRECTIONS (IMPORTANT):
-When customer asks East/West/North/South facing:
-- Respond PROJECT-WISE with clear counts
-- Format: "In *Project Name*: East Facing - X units"
-- Only share exact plot numbers if customer SPECIFICALLY asks "plot numbers" or "unit numbers"
+- *bold* for key info
 
 NEVER SAY THESE:
 - "Sorry, I have no data"
 - "I don't know"
 - "I can't answer that"
 - "No information available"
-Instead: Share whatever data IS available and offer next step.
+Instead: Share whatever data IS available and offer next step (call, visit, appointment).
 
-SENSITIVE/DIFFICULT QUESTIONS (legal, financial, hypothetical):
-Reply: "Good question sir. Our sales expert will explain this in detail over a call or during site visit. Shall I arrange a call for you?"
+SENSITIVE/DIFFICULT QUESTIONS:
+Reply: "Good question. Our expert will explain this in detail over a call. Shall I arrange a call for you?"
 
 DATA RULES:
 - Use ONLY this tenant's data from Knowledge Base
 - Share actual names, prices, availability
 - NEVER reveal other customer data
 - NEVER make up data not in Knowledge Base
+- Recommend services from the SERVICES list when relevant
+- For booking/appointment requests, confirm service details and offer to schedule
 
 {knowledge_context}
 
 {location_highlights}
+
+CUSTOMER MEMORY:
+{customer_memory}
 
 KNOWN CUSTOMER INFO: {known_info}
 MISSING INFO: {missing_info}
@@ -991,7 +994,7 @@ STYLE (MANDATORY):
         chat_history: Optional[List[Dict]] = None
     ) -> Dict[str, Any]:
         """
-        Smart AI response with full project knowledge.
+        Smart AI response with full project knowledge + category awareness.
         Answers questions informationally FIRST, then guides to conversion.
         Falls back to lead capture only after max questions.
         """
@@ -1047,9 +1050,63 @@ STYLE (MANDATORY):
             if highlights:
                 loc_highlights = f"\nLOCATION HIGHLIGHTS for {location}: {highlights}"
 
+        # ── MemoraAI: Load category-aware context ──
+        business_category = "Real Estate"
+        business_role = "Sales Assistant"
+        business_name = "Our Business"
+        services_list = ""
+        customer_memory = ""
+
+        try:
+            tenant = await self.db.tenants.find_one({"id": tenant_id}, {"_id": 0})
+            if tenant:
+                business_name = tenant.get("company_name", tenant.get("name", "Our Business"))
+                cat_slug = tenant.get("business_category", "real_estate")
+                business_category = tenant.get("business_category_name", "Real Estate")
+
+                # Map category to role
+                role_map = {
+                    "real_estate": "Real Estate Sales Assistant",
+                    "astrology": "Astrology Consultation Assistant",
+                    "doctor_clinic": "Medical Receptionist & Assistant",
+                    "function_hall": "Event Booking Assistant",
+                    "pesticides_fertilizer": "Agricultural Products Advisor",
+                    "beauty_salon": "Beauty & Wellness Booking Assistant",
+                    "coaching_center": "Education Counselor & Assistant",
+                }
+                business_role = role_map.get(cat_slug, "Business Assistant")
+
+            # Load active services for prompt
+            services = await self.db.business_services.find(
+                {"tenant_id": tenant_id, "is_active": True, "deleted_at": None},
+                {"_id": 0, "name": 1, "description": 1, "price": 1, "duration_mins": 1}
+            ).sort("sort_order", 1).to_list(15)
+
+            if services:
+                svc_lines = []
+                for s in services:
+                    price_str = f"Rs.{s['price']}" if s.get('price') else "Price on request"
+                    dur_str = f"{s.get('duration_mins', 30)} mins" if s.get('duration_mins') else ""
+                    svc_lines.append(f"• {s['name']}: {s.get('description', '')} | {price_str} | {dur_str}")
+                services_list = "\n".join(svc_lines)
+            else:
+                services_list = "No specific services configured yet."
+
+            # Load customer memory context
+            from services.memory_ai_service import BusinessMemoryAI
+            memory_ai = BusinessMemoryAI(self.db)
+            customer_memory = await memory_ai.build_customer_context(tenant_id, phone)
+        except Exception as cat_err:
+            logger.warning(f"Category context load error (non-blocking): {cat_err}")
+
         system_prompt = REALAPEX_EXPERT_PROMPT.format(
+            business_role=business_role,
+            business_name=business_name,
+            business_category=business_category,
+            services_list=services_list or "General services",
             knowledge_context=f"\n--- KNOWLEDGE BASE ---\n{k_text}",
             location_highlights=loc_highlights,
+            customer_memory=customer_memory or "New customer - no previous history.",
             known_info=known_str,
             missing_info=missing_str,
             questions_asked=questions_asked,

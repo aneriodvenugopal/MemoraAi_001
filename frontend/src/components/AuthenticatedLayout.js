@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import NotificationCenter from './notifications/NotificationCenter';
+import MemoraAILogo from './MemoraAILogo';
 
 const ROLE_LABELS = {
   super_admin: 'Super Admin',
@@ -87,10 +88,7 @@ const AuthenticatedLayout = ({ children }) => {
               className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               data-testid="header-logo"
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center shadow-md">
-                <FileText className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-lg font-bold text-gray-900 hidden sm:block">RealApex</span>
+              <MemoraAILogo size="xs" showCaption={false} showBrand={true} />
             </button>
 
             {/* Right side - User Info & Actions */}

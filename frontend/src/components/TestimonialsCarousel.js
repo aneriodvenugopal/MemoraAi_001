@@ -13,8 +13,8 @@ const TestimonialsCarousel = () => {
       location: "Hyderabad",
       logo: "🏢",
       rating: 5,
-      shortQuote: "RealApex helped us manage operations more efficiently.",
-      fullQuote: "RealApex helped us manage our real estate operations more efficiently. The dashboard gives us better visibility and the system is easy to use.",
+      shortQuote: "MemoraAI helped us manage operations more efficiently.",
+      fullQuote: "MemoraAI helped us manage our real estate operations more efficiently. The dashboard gives us better visibility and the system is easy to use.",
       person: "Managing Director",
       features: ["Multi-project management", "Better tracking", "Time saved"]
     },

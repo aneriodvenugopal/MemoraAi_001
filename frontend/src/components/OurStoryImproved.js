@@ -20,7 +20,7 @@ const OurStoryImproved = () => {
       stats: ["Client Feedback", "Pain Points", "Market Research"]
     },
     {
-      phase: "Phase 3: RealApex Development (2022-2023)",
+      phase: "Phase 3: MemoraAI Development (2022-2023)",
       icon: <Rocket className="w-8 h-8" />,
       color: "purple",
       gradient: "from-purple-500 to-purple-600",
@@ -32,7 +32,7 @@ const OurStoryImproved = () => {
       icon: <Award className="w-8 h-8" />,
       color: "orange",
       gradient: "from-orange-500 to-orange-600",
-      content: "Launched RealApex SOFTWARE as a complete real estate automation platform. Helping real estate companies manage multiple projects efficiently with zero lead leakage.",
+      content: "Launched MemoraAI as a complete real estate automation platform. Helping real estate companies manage multiple projects efficiently with zero lead leakage.",
       stats: ["SaaS Launch", "Live Platform", "Growing"]
     }
   ];
@@ -43,7 +43,7 @@ const OurStoryImproved = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-            The RealApex Story
+            The MemoraAI Story
           </h2>
           <p className="text-xl md:text-2xl text-gray-600">
             From Custom Solutions to Complete SaaS Platform
@@ -125,7 +125,7 @@ const OurStoryImproved = () => {
                 Powered by Eloniot Software Solutions
               </h3>
               <p className="text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto">
-                RealApex is developed by <span className="font-bold text-blue-600">Eloniot Software Solutions</span>, a company with 10+ years of experience in building custom software for real estate, education, healthcare, and government sectors.
+                MemoraAI is developed by <span className="font-bold text-blue-600">Eloniot Software Solutions</span>, a company with 10+ years of experience in building custom software for real estate, education, healthcare, and government sectors.
               </p>
             </div>
 

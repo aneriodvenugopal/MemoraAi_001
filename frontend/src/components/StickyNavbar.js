@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
-import RealApexLogo from './RealApexLogo';
+import MemoraAILogo from './MemoraAILogo';
 
 const StickyNavbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -45,7 +45,7 @@ const StickyNavbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
-            <RealApexLogo size="sm" showCaption={true} showBrand={true} />
+            <MemoraAILogo size="sm" showCaption={true} showBrand={true} />
           </Link>
 
           {/* Desktop Menu */}

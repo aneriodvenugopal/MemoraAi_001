@@ -1,6 +1,6 @@
 {
-  "name": "RealApex - Infrastructure for Real Estate Operations",
-  "short_name": "RealApex",
+  "name": "MemoraAI - Infrastructure for Real Estate Operations",
+  "short_name": "MemoraAI",
   "description": "Infrastructure for Real Estate Operations",
   "start_url": "/pwa/login",
   "scope": "/",
@@ -13,13 +13,13 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "/realapex-logo.png",
+      "src": "/memoraai-logo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/realapex-logo.png",
+      "src": "/memoraai-logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

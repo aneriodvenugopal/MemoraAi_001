@@ -16,7 +16,7 @@ const EloniotCredibility = () => {
     { name: 'CCTV Inventory', icon: '📹', count: 'Cyberabad Govt Project' },
     { name: 'NGO Websites', icon: '🤝', count: 'Social Sector' },
     { name: 'Service Companies', icon: '⚡', count: 'B2B Solutions' },
-    { name: 'Real Estate', icon: '🏢', count: 'RealApex SOFTWARE' }
+    { name: 'Real Estate', icon: '🏢', count: 'MemoraAI' }
   ];
 
   const highlights = [
@@ -86,10 +86,10 @@ const EloniotCredibility = () => {
               <span className="text-blue-900 font-bold text-lg">Powered by Eloniot Software Solutions</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Why Trust RealApex SOFTWARE?
+              Why Trust MemoraAI?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              RealApex is built by <strong>Eloniot Software Solutions</strong> - a proven software company with successful implementations across <strong>14+ industries</strong>, including Government projects and International clients.
+              MemoraAI is built by <strong>Eloniot Software Solutions</strong> - a proven software company with successful implementations across <strong>14+ industries</strong>, including Government projects and International clients.
             </p>
           </div>
 
@@ -215,11 +215,11 @@ const EloniotCredibility = () => {
           <div className="mt-12 text-center bg-green-50 rounded-xl p-8 border border-green-200">
             <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-gray-900 mb-3">
-              RealApex is Not Our First Rodeo!
+              MemoraAI is Not Our First Rodeo!
             </h3>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
               We've successfully built and deployed software for <strong>Government, International clients, E-commerce, Logistics, Manufacturing, Services</strong> and more. 
-              Real Estate software is what we know best - <strong>RealApex SOFTWARE is the culmination of our 10+ years of software development expertise.</strong>
+              Real Estate software is what we know best - <strong>MemoraAI is the culmination of our 10+ years of software development expertise.</strong>
             </p>
             <div className="mt-6">
               <span className="inline-block bg-white px-6 py-3 rounded-lg border-2 border-green-500 text-green-700 font-bold">

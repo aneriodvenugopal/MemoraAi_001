@@ -28,7 +28,7 @@ const CRMDemo = () => {
                 Smart CRM & Lead Management
               </h1>
               <p className="text-xl text-gray-600">
-                See how RealApex captures 100% of leads and converts them 3X faster
+                See how MemoraAI captures 100% of leads and converts them 3X faster
               </p>
             </div>
 
