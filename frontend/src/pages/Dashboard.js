@@ -39,8 +39,8 @@ const Dashboard = () => {
     <div className="min-h-screen relative">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-ocean-primary/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-ocean-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       {/* Header */}
@@ -57,11 +57,11 @@ const Dashboard = () => {
               <NotificationCenter />
               <div className="text-right hidden md:block">
                 <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                <p className="text-xs text-ocean-primary capitalize">{typeof user?.role === 'string' ? user.role.replace('_', ' ') : 'User'}</p>
+                <p className="text-xs text-amber-600 capitalize">{typeof user?.role === 'string' ? user.role.replace('_', ' ') : 'User'}</p>
               </div>
               <Button 
                 onClick={logout}
-                className="bg-gradient-to-r from-ocean-primary to-ocean-secondary hover:from-ocean-primary-light hover:to-ocean-secondary-light text-white"
+                className="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-ocean-primary-light hover:to-ocean-secondary-light text-white"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -204,14 +204,14 @@ const SuperAdminDashboard = () => {
           icon={Building2} 
           title="Total Tenants" 
           value={loading ? '...' : stats.tenants.toString()} 
-          gradient="from-ocean-primary to-ocean-secondary"
+          gradient="from-amber-500 to-yellow-500"
           onClick={() => navigate('/admin/saas-dashboard')}
         />
         <StatCard 
           icon={Users} 
           title="Active Tenants" 
           value={loading ? '...' : stats.users.toString()} 
-          gradient="from-ocean-secondary to-ocean-accent"
+          gradient="from-yellow-500 to-amber-400"
           onClick={() => navigate('/admin/saas-dashboard')}
         />
         <StatCard 
@@ -327,7 +327,7 @@ const SuperAdminDashboard = () => {
 
       <Card className="glass-card">
         <CardHeader>
-          <CardTitle className="text-ocean-primary">Recent Activity</CardTitle>
+          <CardTitle className="text-amber-600">Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-gray-500">No recent activity</p>
@@ -393,28 +393,28 @@ const TenantAdminDashboard = () => {
           icon={Building2} 
           title="Projects" 
           value={loading ? '...' : stats.projects.toString()} 
-          gradient="from-ocean-primary to-ocean-secondary"
+          gradient="from-amber-500 to-yellow-500"
           onClick={() => navigate('/projects')} 
         />
         <StatCard 
           icon={Users} 
           title="Leads" 
           value={loading ? '...' : stats.leads.toString()} 
-          gradient="from-ocean-secondary to-ocean-accent"
+          gradient="from-yellow-500 to-amber-400"
           onClick={() => navigate('/leads')} 
         />
         <StatCard 
           icon={BarChart3} 
           title="Bookings" 
           value={loading ? '...' : stats.bookings.toString()} 
-          gradient="from-ocean-accent to-ocean-success"
+          gradient="from-amber-400 to-green-500"
           onClick={() => navigate('/bookings')} 
         />
         <StatCard 
           icon={Users} 
           title="Team" 
           value={loading ? '...' : stats.team.toString()} 
-          gradient="from-ocean-success to-ocean-primary"
+          gradient="from-green-500 to-amber-500"
         />
       </div>
 
@@ -716,7 +716,7 @@ const StaffDashboard = () => {
           icon={Users} 
           title="My Leads" 
           value={loading ? '...' : stats.myLeads.toString()} 
-          gradient="from-ocean-primary to-ocean-secondary"
+          gradient="from-amber-500 to-yellow-500"
           onClick={() => navigate('/leads')}
         />
         <StatCard 
@@ -745,7 +745,7 @@ const DefaultDashboard = () => {
       <h2 className="text-3xl font-bold text-gray-900">Dashboard</h2>
       <Card className="glass-card">
         <CardHeader>
-          <CardTitle className="text-ocean-primary">Welcome to MemoraAI</CardTitle>
+          <CardTitle className="text-amber-600">Welcome to MemoraAI</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-gray-500">Your dashboard is being set up...</p>
@@ -778,7 +778,7 @@ const StatCard = ({ icon: Icon, title, value, gradient, onClick }) => {
 };
 
 // Action Card Component
-const ActionCard = ({ icon: Icon, title, description, onClick, gradient = "from-ocean-primary to-ocean-secondary" }) => {
+const ActionCard = ({ icon: Icon, title, description, onClick, gradient = "from-amber-500 to-yellow-500" }) => {
   return (
     <Card className="glass-card hover-lift cursor-pointer" onClick={onClick}>
       <CardContent className="pt-6">

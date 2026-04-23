@@ -288,7 +288,7 @@ const Login = () => {
                     <button
                       type="button"
                       onClick={switchToPassword}
-                      className="text-sm text-blue-600 hover:underline flex items-center justify-center gap-1 mx-auto"
+                      className="text-sm text-amber-600 hover:underline flex items-center justify-center gap-1 mx-auto"
                     >
                       <Lock className="w-4 h-4" />
                       Can't receive OTP? Login with Password
@@ -307,7 +307,7 @@ const Login = () => {
                       <button
                         type="button"
                         onClick={handleBack}
-                        className="text-blue-600 hover:underline ml-2 text-xs"
+                        className="text-amber-600 hover:underline ml-2 text-xs"
                       >
                         Change
                       </button>
@@ -364,7 +364,7 @@ const Login = () => {
                       type="button"
                       onClick={handleResendOTP}
                       disabled={resendTimer > 0 || loading}
-                      className={`${resendTimer > 0 ? 'text-gray-400' : 'text-blue-600 hover:underline'}`}
+                      className={`${resendTimer > 0 ? 'text-gray-400' : 'text-amber-600 hover:underline'}`}
                     >
                       {resendTimer > 0 ? (
                         <span className="flex items-center gap-1">
@@ -382,7 +382,7 @@ const Login = () => {
                     <button
                       type="button"
                       onClick={switchToPassword}
-                      className="text-gray-500 hover:text-blue-600"
+                      className="text-gray-500 hover:text-amber-600"
                     >
                       Use Password
                     </button>
@@ -465,7 +465,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={switchToOTP}
-                  className="text-sm text-blue-600 hover:underline flex items-center justify-center gap-1 mx-auto"
+                  className="text-sm text-amber-600 hover:underline flex items-center justify-center gap-1 mx-auto"
                 >
                   <Phone className="w-4 h-4" />
                   Login with OTP instead
@@ -477,9 +477,9 @@ const Login = () => {
           {/* Terms */}
           <p className="text-center text-xs text-gray-500 pt-2">
             By continuing, you agree to our{' '}
-            <Link to="/terms" className="text-blue-600 hover:underline">Terms</Link>
+            <Link to="/terms" className="text-amber-600 hover:underline">Terms</Link>
             {' & '}
-            <Link to="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
+            <Link to="/privacy" className="text-amber-600 hover:underline">Privacy Policy</Link>
           </p>
 
           {/* Footer */}
