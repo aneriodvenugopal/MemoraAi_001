@@ -11,7 +11,7 @@ router = APIRouter(prefix="/memoraai/content", tags=["memoraai-content"])
 def get_db(request: Request):
     return request.app.state.db
 
-CONTENT_TYPES = ["brochure", "image", "video", "link", "faq", "price_list", "template", "document"]
+CONTENT_TYPES = ["brochure", "image", "video", "link", "faq", "price_list", "template", "document", "note"]
 
 
 @router.get("")

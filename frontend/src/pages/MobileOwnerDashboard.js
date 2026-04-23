@@ -490,59 +490,104 @@ function ReportsTab({ analytics, navigate }) {
 function MoreTab({ navigate, catName, templates }) {
   const { user, logout } = useAuth();
 
-  const sections = [
-    { icon: Building, label: 'Business Information', sub: catName, onClick: () => navigate('/category-setup') },
-    { icon: MessageSquare, label: 'Team Inbox', sub: 'Live conversations + handover', onClick: () => navigate('/team-inbox') },
-    { icon: MessageSquare, label: 'WhatsApp Setup', sub: 'WABA Configuration', onClick: () => navigate('/waba-setup') },
-    { icon: FileText, label: 'Content Library', sub: 'Brochures, images, videos', onClick: () => navigate('/content-library') },
-    { icon: FileText, label: 'Templates', sub: `${templates.length} templates`, onClick: () => navigate('/memoraai-templates') },
-    { icon: Star, label: 'Category Setup', sub: 'Manage categories & services', onClick: () => navigate('/category-setup') },
-    { icon: Globe, label: 'Industry Pages', sub: 'Manage landing pages', onClick: () => navigate('/admin-industries') },
-    { icon: Flame, label: 'Hot Sales Mode', sub: 'Manual entry & AI alerts', onClick: () => navigate('/hot-sales') },
-    { icon: Brain, label: 'AI Memory', sub: 'RAG-based customer memory', onClick: () => navigate('/memoraai-appointments') },
-    { icon: Shield, label: 'Business Rules', sub: 'Control AI behavior', onClick: () => navigate('/business-rules') },
-    { icon: Calendar, label: 'Google Calendar Sync', sub: 'Auto-push appointments', onClick: () => navigate('/calendar-sync') },
-    { icon: Brain, label: 'Chat Learning', sub: 'Teach AI from corrections', onClick: () => navigate('/chat-corrections') },
-    { icon: Users, label: 'Staff & Permissions', onClick: () => navigate('/settings/role-assignments') },
-    { icon: Settings, label: 'Settings', onClick: () => navigate('/settings') },
+  // Grouped sections with a premium dark/light hybrid feel
+  const groups = [
+    {
+      title: 'AI & Automation',
+      items: [
+        { icon: Bot, label: 'WhatsApp Setup', sub: 'WABA configuration', onClick: () => navigate('/waba-setup') },
+        { icon: MessageSquare, label: 'Team Inbox', sub: 'Live chats + handover', onClick: () => navigate('/team-inbox') },
+        { icon: Brain, label: 'AI Memory', sub: 'RAG customer memory', onClick: () => navigate('/memoraai-appointments') },
+        { icon: Brain, label: 'Chat Learning', sub: 'Teach AI from corrections', onClick: () => navigate('/chat-corrections') },
+        { icon: Shield, label: 'Business Rules', sub: 'Control AI behavior', onClick: () => navigate('/business-rules') },
+      ],
+    },
+    {
+      title: 'Content & Services',
+      items: [
+        { icon: FileText, label: 'Content Library', sub: 'Brochures, images, videos', onClick: () => navigate('/content-library') },
+        { icon: Send, label: 'Templates', sub: `${templates.length} templates`, onClick: () => navigate('/memoraai-templates') },
+        { icon: Star, label: 'Category Setup', sub: 'Manage categories & services', onClick: () => navigate('/category-setup') },
+        { icon: Globe, label: 'Industry Pages', sub: 'Manage landing pages', onClick: () => navigate('/admin-industries') },
+      ],
+    },
+    {
+      title: 'Sales & Growth',
+      items: [
+        { icon: Flame, label: 'Hot Sales Mode', sub: 'Manual entry & AI alerts', onClick: () => navigate('/hot-sales') },
+        { icon: Calendar, label: 'Google Calendar Sync', sub: 'Auto-push appointments', onClick: () => navigate('/calendar-sync') },
+        { icon: Building, label: 'Business Information', sub: catName, onClick: () => navigate('/category-setup') },
+      ],
+    },
+    {
+      title: 'Team & Settings',
+      items: [
+        { icon: Users, label: 'Staff & Permissions', sub: 'Manage team access', onClick: () => navigate('/settings/role-assignments') },
+        { icon: Settings, label: 'Settings', sub: 'Account preferences', onClick: () => navigate('/settings') },
+      ],
+    },
   ];
 
   return (
-    <div className="px-4 pt-4 space-y-4" data-testid="more-tab">
-      {/* Profile Card */}
-      <div className="bg-white rounded-2xl p-4 border border-gray-100 flex items-center gap-4" data-testid="profile-card">
-        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 to-yellow-400 flex items-center justify-center text-white text-xl font-bold shadow-md">
-          {(user?.name || 'U')[0].toUpperCase()}
-        </div>
-        <div className="flex-1">
-          <h2 className="font-bold text-gray-900">{user?.name || 'Business Owner'}</h2>
-          <p className="text-xs text-gray-400">{user?.phone || user?.email}</p>
-          <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">{catName}</span>
+    <div className="pb-6" data-testid="more-tab">
+      {/* Premium dark profile header */}
+      <div className="bg-gradient-to-br from-gray-900 via-gray-900 to-amber-950 px-4 pt-6 pb-14 rounded-b-[28px] relative overflow-hidden" data-testid="profile-card">
+        <div className="absolute -top-10 -right-10 w-56 h-56 bg-amber-500/15 rounded-full blur-3xl" />
+        <div className="absolute -bottom-6 -left-6 w-40 h-40 bg-orange-500/10 rounded-full blur-3xl" />
+        <div className="relative flex items-center gap-4">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center text-gray-900 text-2xl font-bold shadow-xl shadow-amber-500/30 ring-2 ring-white/10">
+            {(user?.name || 'U')[0].toUpperCase()}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h2 className="font-bold text-white text-lg truncate">{user?.name || 'Business Owner'}</h2>
+            <p className="text-[11px] text-gray-400 truncate">{user?.phone || user?.email}</p>
+            <span className="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded-full font-medium mt-1 inline-block">
+              {catName}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Menu Items */}
-      <div className="bg-white rounded-2xl border border-gray-100 divide-y divide-gray-50">
-        {sections.map((s, i) => (
-          <button key={i} onClick={s.onClick}
-            className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-colors text-left" data-testid={`more-item-${i}`}>
-            <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
-              <s.icon className="w-4 h-4 text-amber-600" />
+      {/* Lifted menu groups */}
+      <div className="px-4 -mt-10 relative z-10 space-y-4">
+        {groups.map((group, gi) => (
+          <section key={gi} className="space-y-2" data-testid={`more-group-${gi}`}>
+            <p className="text-[10px] uppercase tracking-widest font-bold text-gray-500 px-1.5">
+              {group.title}
+            </p>
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm shadow-gray-200/50 divide-y divide-gray-50 overflow-hidden">
+              {group.items.map((s, i) => (
+                <button
+                  key={i}
+                  onClick={s.onClick}
+                  className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-amber-50/40 active:bg-amber-50 transition-colors text-left group"
+                  data-testid={`more-item-${gi}-${i}`}
+                >
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-100 flex items-center justify-center flex-shrink-0 group-hover:from-amber-100 group-hover:to-yellow-100 transition-colors">
+                    <s.icon className="w-4 h-4 text-amber-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-gray-900">{s.label}</p>
+                    {s.sub && <p className="text-[11px] text-gray-400 truncate">{s.sub}</p>}
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-300 flex-shrink-0 group-hover:text-amber-500 transition-colors" />
+                </button>
+              ))}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900">{s.label}</p>
-              {s.sub && <p className="text-[10px] text-gray-400 truncate">{s.sub}</p>}
-            </div>
-            <ChevronRight className="w-4 h-4 text-gray-300 flex-shrink-0" />
-          </button>
+          </section>
         ))}
-      </div>
 
-      {/* Logout */}
-      <button onClick={logout}
-        className="w-full bg-red-50 text-red-600 font-medium text-sm py-3 rounded-xl hover:bg-red-100 transition-colors" data-testid="logout-btn">
-        Logout
-      </button>
+        {/* Logout */}
+        <button
+          onClick={logout}
+          className="w-full bg-white border border-red-100 text-red-600 font-semibold text-sm py-3.5 rounded-2xl hover:bg-red-50 transition-colors flex items-center justify-center gap-2 shadow-sm"
+          data-testid="logout-btn"
+        >
+          <X className="w-4 h-4" /> Logout
+        </button>
+
+        <p className="text-center text-[10px] text-gray-400 pt-2">MemoraAI &middot; v2.0</p>
+      </div>
     </div>
   );
 }

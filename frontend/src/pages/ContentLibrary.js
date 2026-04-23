@@ -16,6 +16,7 @@ const CONTENT_TYPES = [
   { key: "document",   icon: FileText,    label: "Document",   desc: "Any other file",                  accept: "*",                color: "gray" },
   { key: "link",       icon: Link2,       label: "Link",       desc: "YouTube, website URL",            accept: null,               color: "purple" },
   { key: "faq",        icon: HelpCircle,  label: "FAQ",        desc: "Text answers to common questions",accept: null,               color: "amber" },
+  { key: "note",       icon: FileText,    label: "Long Note",  desc: "Long-form notes, SOPs, scripts",  accept: null,               color: "indigo", longText: true },
   { key: "template",   icon: FileText,    label: "Template",   desc: "Reusable message template",       accept: null,               color: "indigo" },
 ];
 
@@ -470,16 +471,39 @@ function AddContentModal({ editItem, onClose, onSaved, onError, headers }) {
             )}
 
             {/* URL input for link types */}
-            {!needsFile && (selectedType === "link" || selectedType === "template" || selectedType === "faq") && (
-              <Field label={selectedType === "link" ? "URL *" : selectedType === "faq" ? "Answer text *" : "Template text *"}>
-                {selectedType === "faq" || selectedType === "template" ? (
-                  <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                    rows={4} required placeholder={selectedType === "faq" ? "Write the answer the AI should use…" : "Message template with placeholders, e.g. Hi {name}, your order is ready."}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-vertical" data-testid="input-long-text" />
+            {!needsFile && (selectedType === "link" || selectedType === "template" || selectedType === "faq" || selectedType === "note") && (
+              <Field label={
+                selectedType === "link" ? "URL *"
+                : selectedType === "faq" ? "Answer text *"
+                : selectedType === "note" ? "Long note content *"
+                : "Template text *"
+              }>
+                {selectedType === "faq" || selectedType === "template" || selectedType === "note" ? (
+                  <textarea
+                    value={form.description}
+                    onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                    rows={selectedType === "note" ? 10 : 5}
+                    required
+                    placeholder={
+                      selectedType === "faq" ? "Write the answer the AI should use…" :
+                      selectedType === "note" ? "Write long-form notes, SOPs, conversation scripts, product descriptions… (no length limit)" :
+                      "Message template with placeholders, e.g. Hi {name}, your order is ready."
+                    }
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-vertical font-mono"
+                    style={{ minHeight: selectedType === "note" ? '220px' : '100px' }}
+                    data-testid="input-long-text"
+                  />
                 ) : (
                   <input type="url" value={form.url} onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
                     placeholder="https://…" required
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" data-testid="input-url" />
+                )}
+                {(selectedType === "note" || selectedType === "faq" || selectedType === "template") && (
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-[10px] text-gray-400">
+                      {(form.description || "").length} characters · drag corner to resize
+                    </p>
+                  </div>
                 )}
               </Field>
             )}
@@ -490,11 +514,18 @@ function AddContentModal({ editItem, onClose, onSaved, onError, headers }) {
                 required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" data-testid="input-title" />
             </Field>
 
-            {!(selectedType === "faq" || selectedType === "template") && (
-              <Field label="Description (optional)">
-                <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                  rows={2} placeholder="Short note for your team"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-vertical" data-testid="input-description" />
+            {!(selectedType === "faq" || selectedType === "template" || selectedType === "note") && (
+              <Field label="Description / Long notes (optional)">
+                <textarea
+                  value={form.description}
+                  onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                  rows={5}
+                  placeholder="Add long-form notes, details, or instructions here. No length limit."
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-vertical"
+                  style={{ minHeight: '100px' }}
+                  data-testid="input-description"
+                />
+                <p className="text-[10px] text-gray-400 mt-1">{(form.description || "").length} characters · drag corner to resize</p>
               </Field>
             )}
 
