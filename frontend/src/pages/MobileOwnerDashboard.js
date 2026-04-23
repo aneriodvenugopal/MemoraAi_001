@@ -5,7 +5,7 @@ import {
   Home, MessageSquare, CalendarDays, BarChart3, MoreHorizontal,
   Upload, Bell, Calendar, Megaphone, Eye, ShoppingBag,
   TrendingUp, ArrowUpRight, ArrowDownRight, Bot, ChevronRight,
-  Star, Settings, Users, Phone, Clock, Flame, Brain,
+  Star, Settings, Users, Phone, Clock, Flame, Brain, Globe,
   FileText, Sparkles, Send, Scissors, Stethoscope, Building,
   PartyPopper, Sprout, GraduationCap, CircleCheck, CircleX,
   AlertTriangle, Search, Plus, Filter, X
@@ -161,7 +161,7 @@ function DashboardTab({ userName, catName, CatIcon, totalChats, pendingReplies, 
         <h3 className="text-sm font-semibold text-gray-700 mb-3">Quick Actions</h3>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3" data-testid="quick-actions">
           {[
-            { icon: Upload, label: 'Upload Content', onClick: () => navigate('/content-cms') },
+            { icon: Upload, label: 'Content Library', onClick: () => navigate('/content-library') },
             { icon: Bell, label: 'Send Notification', onClick: () => navigate('/memoraai-templates') },
             { icon: Calendar, label: 'New Booking', onClick: () => navigate('/memoraai-appointments') },
             { icon: Megaphone, label: 'Broadcast', onClick: () => navigate('/memoraai-templates') },
@@ -485,8 +485,10 @@ function MoreTab({ navigate, catName, templates }) {
   const sections = [
     { icon: Building, label: 'Business Information', sub: catName, onClick: () => navigate('/category-setup') },
     { icon: MessageSquare, label: 'WhatsApp Setup', sub: 'WABA Configuration', onClick: () => navigate('/waba-setup') },
+    { icon: FileText, label: 'Content Library', sub: 'Brochures, images, videos', onClick: () => navigate('/content-library') },
     { icon: FileText, label: 'Templates', sub: `${templates.length} templates`, onClick: () => navigate('/memoraai-templates') },
     { icon: Star, label: 'Category Setup', sub: 'Manage categories & services', onClick: () => navigate('/category-setup') },
+    { icon: Globe, label: 'Industry Pages', sub: 'Manage landing pages', onClick: () => navigate('/admin-industries') },
     { icon: Flame, label: 'Hot Sales Mode', sub: 'Manual entry & AI alerts', onClick: () => navigate('/hot-sales') },
     { icon: Brain, label: 'AI Memory', sub: 'RAG-based customer memory', onClick: () => navigate('/memoraai-appointments') },
     { icon: Users, label: 'Staff & Permissions', onClick: () => navigate('/settings/role-assignments') },

@@ -164,7 +164,7 @@ const Home = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-3">Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-blue-400">Every Business</span> That Uses WhatsApp</h2>
             <p className="text-gray-500 max-w-xl mx-auto">Select your industry to see how MemoraAI transforms your customer communication.</p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {industries.map((ind, i) => {
               const Icon = ICON_MAP[ind.icon] || Star;
               return (
@@ -173,8 +173,19 @@ const Home = () => {
                   <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500/20 to-blue-500/20 flex items-center justify-center mb-3 group-hover:from-violet-500/30 group-hover:to-blue-500/30 transition-all">
                     <Icon className="w-5 h-5 text-violet-400" />
                   </div>
-                  <h3 className="font-semibold text-white text-sm mb-1">{ind.title}</h3>
-                  <p className="text-[11px] text-gray-500 mb-3 line-clamp-1">{ind.hero_sub?.slice(0, 60)}...</p>
+                  <h3 className="font-semibold text-white text-sm mb-1.5">{ind.title}</h3>
+                  {/* Service Tags */}
+                  {ind.services && ind.services.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {ind.services.slice(0, 3).map((s, j) => (
+                        <span key={j} className="text-[9px] px-1.5 py-0.5 rounded bg-violet-500/10 text-violet-300 border border-violet-500/10">{s}</span>
+                      ))}
+                      {ind.services.length > 3 && (
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-gray-500">+{ind.services.length - 3}</span>
+                      )}
+                    </div>
+                  )}
+                  <p className="text-[11px] text-gray-500 mb-3 line-clamp-2">{ind.hero_sub?.slice(0, 90)}...</p>
                   <span className="text-[11px] text-violet-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                     View Demo <ChevronRight className="w-3 h-3" />
                   </span>

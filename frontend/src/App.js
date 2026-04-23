@@ -207,6 +207,8 @@ import AppointmentsManager from "./pages/AppointmentsManager";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import TemplateWorkflow from "./pages/TemplateWorkflow";
 import IndustryPage from "./pages/IndustryPage";
+import AdminIndustries from "./pages/AdminIndustries";
+import MemoraContentLibrary from "./pages/ContentLibrary";
 
 // SEO Articles
 import ArticlesListing from "./pages/ArticlesListing";
@@ -1106,6 +1108,22 @@ function App() {
                 element={
                   <PrivateRoute>
                     <TemplateWorkflow />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin-industries"
+                element={
+                  <PrivateRoute>
+                    <AdminIndustries />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/content-library"
+                element={
+                  <PrivateRoute>
+                    <MemoraContentLibrary />
                   </PrivateRoute>
                 }
               />
