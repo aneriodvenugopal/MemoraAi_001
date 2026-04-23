@@ -212,8 +212,10 @@ import MemoraContentLibrary from "./pages/ContentLibrary";
 import BusinessRules from "./pages/BusinessRules";
 import CalendarSync from "./pages/CalendarSync";
 import ChatCorrections from "./pages/ChatCorrections";
+import ImpersonationBanner from "./components/ImpersonationBanner";
 import TeamInbox from "./pages/TeamInbox";
 import SaaSAdminDashboard from "./pages/SaaSAdminDashboard";
+import ImpersonationLog from "./pages/ImpersonationLog";
 
 // SEO Articles
 import ArticlesListing from "./pages/ArticlesListing";
@@ -264,6 +266,7 @@ function App() {
           <div className="App">
             <BrowserRouter>
               <ScrollToTop />
+              <ImpersonationBanner />
               <Routes>
                 {/* SaaS Landing Page - Public */}
                 <Route path="/saas" element={<LandingPage />} />
@@ -1169,6 +1172,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <SaaSAdminDashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/saas-admin/impersonation-log"
+                element={
+                  <PrivateRoute>
+                    <ImpersonationLog />
                   </PrivateRoute>
                 }
               />

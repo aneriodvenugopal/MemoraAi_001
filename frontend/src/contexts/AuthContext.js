@@ -97,7 +97,68 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem('token_expiry');
     localStorage.removeItem('remember_me');
+    localStorage.removeItem('impersonation');
+    localStorage.removeItem('admin_token_backup');
+    localStorage.removeItem('admin_user_backup');
     authService.logout();
+  };
+
+  // ── Impersonation helpers (SaaS admin → Login as Business) ──
+  const startImpersonation = (impToken, impUser, meta) => {
+    // Back up the admin's own session so we can restore on exit
+    const currentToken = localStorage.getItem('token');
+    const currentUser = localStorage.getItem('user');
+    if (currentToken) localStorage.setItem('admin_token_backup', currentToken);
+    if (currentUser) localStorage.setItem('admin_user_backup', currentUser);
+
+    setToken(impToken);
+    setUser(impUser);
+    localStorage.setItem('token', impToken);
+    localStorage.setItem('user', JSON.stringify(impUser));
+    localStorage.setItem('user_id', impUser.id);
+    localStorage.setItem('impersonation', JSON.stringify({
+      active: true,
+      tenant_name: meta?.tenant_name,
+      started_at: new Date().toISOString(),
+    }));
+  };
+
+  const stopImpersonation = async () => {
+    try {
+      const currentToken = localStorage.getItem('token');
+      if (currentToken) {
+        await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/memoraai/saas-admin/impersonate/end`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${localStorage.getItem('admin_token_backup') || currentToken}` },
+        });
+      }
+    } catch (e) { /* swallow */ }
+
+    const backupToken = localStorage.getItem('admin_token_backup');
+    const backupUser = localStorage.getItem('admin_user_backup');
+    if (backupToken && backupUser) {
+      setToken(backupToken);
+      setUser(JSON.parse(backupUser));
+      localStorage.setItem('token', backupToken);
+      localStorage.setItem('user', backupUser);
+      localStorage.removeItem('admin_token_backup');
+      localStorage.removeItem('admin_user_backup');
+      localStorage.removeItem('impersonation');
+    } else {
+      logout();
+    }
+  };
+
+  const isImpersonating = () => {
+    try {
+      const raw = localStorage.getItem('impersonation');
+      return raw ? JSON.parse(raw)?.active === true : false;
+    } catch { return false; }
+  };
+
+  const getImpersonationMeta = () => {
+    try { return JSON.parse(localStorage.getItem('impersonation') || 'null'); }
+    catch { return null; }
   };
 
   const value = {
@@ -107,6 +168,10 @@ export const AuthProvider = ({ children }) => {
     login,
     loginWithPassword,
     logout,
+    startImpersonation,
+    stopImpersonation,
+    isImpersonating,
+    getImpersonationMeta,
     isAuthenticated: !!token,
   };
 
