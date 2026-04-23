@@ -494,6 +494,7 @@ function MoreTab({ navigate, catName, templates }) {
     { icon: Brain, label: 'AI Memory', sub: 'RAG-based customer memory', onClick: () => navigate('/memoraai-appointments') },
     { icon: Shield, label: 'Business Rules', sub: 'Control AI behavior', onClick: () => navigate('/business-rules') },
     { icon: Calendar, label: 'Google Calendar Sync', sub: 'Auto-push appointments', onClick: () => navigate('/calendar-sync') },
+    { icon: Brain, label: 'Chat Learning', sub: 'Teach AI from corrections', onClick: () => navigate('/chat-corrections') },
     { icon: Users, label: 'Staff & Permissions', onClick: () => navigate('/settings/role-assignments') },
     { icon: Settings, label: 'Settings', onClick: () => navigate('/settings') },
   ];

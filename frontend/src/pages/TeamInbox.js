@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   ArrowLeft, MessageSquare, User, Bot, Send, Phone, Brain,
-  Users, Clock, Tag, Flame, CheckCircle, ChevronRight, Search
+  Users, Clock, Tag, Flame, CheckCircle, ChevronRight, Search,
+  Edit3, X, Save, Loader2
 } from "lucide-react";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -21,6 +22,7 @@ export default function TeamInbox() {
   const [stats, setStats] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [sending, setSending] = useState(false);
+  const [correctingMsg, setCorrectingMsg] = useState(null);
 
   const token = localStorage.getItem("token");
   const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
@@ -142,19 +144,38 @@ export default function TeamInbox() {
                   </div>
                 </div>
                 <div className="flex-1 overflow-y-auto p-3 space-y-2" style={{maxHeight: 'calc(100vh - 280px)'}}>
-                  {messages.map((m, i) => (
+                  {messages.map((m, i) => {
+                    // Find previous customer (incoming) message for context of AI reply corrections
+                    const prevCustomerMsg = m.direction === 'outgoing' && !m.is_manual
+                      ? [...messages].slice(0, i).reverse().find(x => x.direction === 'incoming')
+                      : null;
+                    return (
                     <div key={i} className={`flex ${m.direction === 'outgoing' ? 'justify-end' : m.direction === 'system' ? 'justify-center' : 'justify-start'}`}>
                       {m.direction === 'system' ? (
                         <span className="text-[10px] text-gray-400 bg-gray-100 px-3 py-1 rounded-full">{m.content}</span>
                       ) : (
-                        <div className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${m.direction === 'outgoing' ? 'bg-green-600 text-white rounded-br-sm' : 'bg-gray-100 text-gray-800 rounded-bl-sm'}`}>
-                          {m.is_manual && <span className="text-[8px] font-bold opacity-70 block mb-0.5">{m.sent_by_name}</span>}
-                          {m.content}
-                          <div className="text-[8px] opacity-50 text-right mt-0.5">{m.timestamp?.split('T')[1]?.slice(0, 5)}</div>
+                        <div className="group max-w-[75%] relative">
+                          <div className={`px-3 py-2 rounded-2xl text-sm ${m.direction === 'outgoing' ? 'bg-green-600 text-white rounded-br-sm' : 'bg-gray-100 text-gray-800 rounded-bl-sm'}`}>
+                            {m.is_manual && <span className="text-[8px] font-bold opacity-70 block mb-0.5">{m.sent_by_name}</span>}
+                            {m.content}
+                            <div className="text-[8px] opacity-50 text-right mt-0.5">{m.timestamp?.split('T')[1]?.slice(0, 5)}</div>
+                          </div>
+                          {/* Correct AI button — only on AI (non-manual outgoing) replies */}
+                          {m.direction === 'outgoing' && !m.is_manual && (
+                            <button
+                              onClick={() => setCorrectingMsg({ msg: m, customerMsg: prevCustomerMsg })}
+                              className="absolute -top-2 -left-2 bg-amber-500 hover:bg-amber-600 text-white text-[9px] px-1.5 py-0.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5"
+                              data-testid={`correct-ai-btn-${i}`}
+                              title="Teach AI the correct response"
+                            >
+                              <Edit3 className="w-2.5 h-2.5" /> Correct
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 <div className="p-3 border-t flex gap-2">
                   <Input value={replyText} onChange={e => setReplyText(e.target.value)} placeholder="Type a message..." className="flex-1"
@@ -191,6 +212,117 @@ export default function TeamInbox() {
           </div>
         </div>
       </div>
+
+      {correctingMsg && (
+        <CorrectAIModal
+          aiMsg={correctingMsg.msg}
+          customerMsg={correctingMsg.customerMsg}
+          conversationId={selectedConvo?.id}
+          onClose={() => setCorrectingMsg(null)}
+          onSaved={() => setCorrectingMsg(null)}
+          headers={headers}
+        />
+      )}
+    </div>
+  );
+}
+
+function CorrectAIModal({ aiMsg, customerMsg, conversationId, onClose, onSaved, headers }) {
+  const [note, setNote] = useState("");
+  const [suggested, setSuggested] = useState("");
+  const [category, setCategory] = useState("general");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!note.trim()) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await axios.post(`${API}/memoraai/corrections`, {
+        original_message: customerMsg?.content || "",
+        ai_response: aiMsg?.content || "",
+        correction_note: note,
+        suggested_response: suggested,
+        category,
+        conversation_id: conversationId,
+        message_id: aiMsg?.id,
+      }, { headers });
+      if (res.status === 200 || res.status === 201) {
+        onSaved();
+      }
+    } catch (err) {
+      setError("Failed to save correction");
+    }
+    setSaving(false);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose} data-testid="correct-ai-modal">
+      <form onSubmit={submit} onClick={e => e.stopPropagation()}
+        className="bg-white w-full max-w-lg rounded-2xl max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+          <h2 className="font-bold text-gray-900 flex items-center gap-2">
+            <Brain className="w-4 h-4 text-amber-600" /> Teach AI the Correct Response
+          </h2>
+          <button type="button" onClick={onClose} className="p-1 text-gray-400 hover:text-gray-700" data-testid="close-correct-modal">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="px-4 py-4 space-y-3">
+          {customerMsg && (
+            <div>
+              <p className="text-[10px] uppercase font-semibold text-gray-500 mb-1">Customer said</p>
+              <p className="text-xs text-gray-700 bg-gray-50 rounded-lg px-3 py-2">{customerMsg.content}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] uppercase font-semibold text-red-500 mb-1">AI replied (incorrect)</p>
+            <p className="text-xs text-gray-700 bg-red-50 rounded-lg px-3 py-2 line-through decoration-red-300">{aiMsg.content}</p>
+          </div>
+          <label className="block">
+            <span className="text-[11px] font-semibold text-gray-600 mb-1 block">What should change? *</span>
+            <textarea value={note} onChange={e => setNote(e.target.value)} rows="3" required
+              placeholder="E.g., Don't quote price. Instead ask budget first."
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-vertical"
+              data-testid="correct-note-input" />
+          </label>
+          <label className="block">
+            <span className="text-[11px] font-semibold text-gray-600 mb-1 block">Preferred reply (optional)</span>
+            <textarea value={suggested} onChange={e => setSuggested(e.target.value)} rows="2"
+              placeholder="Exact phrasing the AI should use next time"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-vertical"
+              data-testid="correct-suggested-input" />
+          </label>
+          <label className="block">
+            <span className="text-[11px] font-semibold text-gray-600 mb-1 block">Category</span>
+            <select value={category} onChange={e => setCategory(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" data-testid="correct-category-select">
+              <option value="general">General</option>
+              <option value="pricing">Pricing</option>
+              <option value="policy">Policy</option>
+              <option value="tone">Tone</option>
+              <option value="fact">Fact</option>
+              <option value="booking">Booking</option>
+              <option value="product">Product</option>
+              <option value="hours">Hours</option>
+            </select>
+          </label>
+          {error && <p className="text-xs text-red-600" data-testid="correct-error">{error}</p>}
+        </div>
+        <div className="sticky bottom-0 bg-white border-t border-gray-100 px-4 py-3 flex gap-2">
+          <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">
+            Cancel
+          </button>
+          <button type="submit" disabled={saving || !note.trim()}
+            className="flex-1 flex items-center justify-center gap-1.5 bg-amber-500 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-amber-600 disabled:opacity-50"
+            data-testid="save-correct-btn">
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            Save & Teach AI
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

@@ -1104,6 +1104,22 @@ STYLE (MANDATORY):
             if active_rules:
                 rules_text = "\n".join([f"- {r.get('rule','')}" for r in active_rules])
                 customer_memory = f"{customer_memory}\n\n[BUSINESS RULES - MUST FOLLOW]\n{rules_text}"
+
+            # Load owner corrections (Chat Learning)
+            try:
+                from routes.memoraai_corrections import (
+                    get_relevant_corrections,
+                    format_corrections_for_prompt,
+                    increment_applied_counts,
+                )
+                relevant = await get_relevant_corrections(self.db, tenant_id, message, limit=5)
+                if relevant:
+                    customer_memory += format_corrections_for_prompt(relevant)
+                    await increment_applied_counts(
+                        self.db, tenant_id, [c.get("id") for c in relevant if c.get("id")]
+                    )
+            except Exception as corr_err:
+                logger.warning(f"Correction injection skipped: {corr_err}")
             
             # Detect emotional tone for response style
             from routes.memoraai_engine import EMOTION_KEYWORDS

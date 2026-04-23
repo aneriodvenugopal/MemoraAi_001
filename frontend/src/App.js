@@ -211,6 +211,7 @@ import AdminIndustries from "./pages/AdminIndustries";
 import MemoraContentLibrary from "./pages/ContentLibrary";
 import BusinessRules from "./pages/BusinessRules";
 import CalendarSync from "./pages/CalendarSync";
+import ChatCorrections from "./pages/ChatCorrections";
 import TeamInbox from "./pages/TeamInbox";
 import SaaSAdminDashboard from "./pages/SaaSAdminDashboard";
 
@@ -1144,6 +1145,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <CalendarSync />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/chat-corrections"
+                element={
+                  <PrivateRoute>
+                    <ChatCorrections />
                   </PrivateRoute>
                 }
               />

@@ -35,6 +35,8 @@
 22. **Landing Page** - Dark premium theme, 16 industry demos, pricing
 23. **Analytics & Reports** - KPIs, trends, service breakdown
 
+25. **Chat Learning / Corrections (Feb 2026)** — Owners review AI replies and teach corrections via `/api/memoraai/corrections` (full CRUD + toggle + stats/summary + keyword auto-extraction). Corrections are stored per tenant and injected into the AI system prompt in `sales_engine.py` as a `[OWNER CORRECTIONS — HIGHEST PRIORITY]` block, ranked by keyword overlap with the incoming customer message. Each hit increments `times_applied` for the relevant correction. UI: "Correct AI" hover button on every AI message in Team Inbox → modal captures the fix; new `/chat-corrections` page lists/edits/pauses/deletes learnings; "Chat Learning" menu item in Mobile Owner Dashboard → More.
+
 ### Integrations ✅
 24. **Google Calendar Sync (Feb 2026)** — Tenant-scoped OAuth via `/api/memoraai/calendar/*` (status/connect/callback/disconnect/sync/upcoming). Auto-syncs every new appointment (manual + WhatsApp AI) to the business owner's connected Google Calendar. Also deletes Google events when appointments are deleted. Runs in graceful placeholder mode until `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REDIRECT_URI` + `FRONTEND_URL` are added to `backend/.env`. New page `/calendar-sync` + "Google Calendar Sync" menu item in Mobile Owner Dashboard → More tab.
 
