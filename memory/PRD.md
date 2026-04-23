@@ -1,41 +1,40 @@
 # MemoraAI - Product Requirements Document
 
 ## Overview
-World-class AI Memory-Based WhatsApp Automation Platform for businesses. Premium SaaS design.
-
-## Architecture
-Backend: FastAPI port 8001 | Frontend: React port 3000 | DB: MongoDB (memoraai) | AI: Emergent LLM Key
+World-class AI Memory-Based WhatsApp Automation Platform. Premium SaaS design.
 
 ## All Implemented Features
 
-### Landing Page (World-Class SaaS)
-- Dark blue (#0a0e27) + purple + WhatsApp green color scheme
-- Hero: "Your WhatsApp Now Thinks, Remembers & Sells" with animated WhatsApp mockup
-- Trust signals (Official API, Verified Profile, Smart Replies, 24/7, Multi-language, CRM)
-- 16 industry cards with "View Demo" navigation
-- 10 feature cards (Memory Engine, Emotional AI, Lead Qualification, etc.)
-- 4 pricing plans (Starter Free, Growth Rs.2,999, Premium Rs.7,999, Enterprise Custom)
-- Final CTA: "Your Competitor Replies. You Remember."
-- Counter stats: 5,000+ Leads, 92% Faster, 38% Conversion
-- Floating WhatsApp button, sticky navbar
+### Landing Page (Dark Blue + Purple + Green)
+- Hero with animated WhatsApp mockup, trust badges, counters
+- **16 industry cards with service tags** (Plot Sales, Doctor Appointments, etc.)
+- 10 feature cards, 4 pricing plans, Final CTA, floating WhatsApp
 
-### Dynamic Industry Pages (16)
-Real Estate, Hospital, Astrology, Salon, Gym, Car Rental, Function Hall, Restaurant, Education, Lawyer, Finance, Ecommerce, Retail, Construction, Agriculture, Software
-- Each with: industry hero, benefits list, Memory AI use cases, animated WhatsApp conversation mockup, CTAs
-- Admin CRUD for industries
+### Dynamic Industry Pages (16 with expanded chats)
+Each page: Hero + benefits + use cases + **8-10 message WhatsApp demo** with realistic booking/inquiry flows
+- Real Estate: 10 messages (plot inquiry -> brochure -> site visit -> EMI)
+- Hospital: 10 messages (appointment -> blood test -> prescription)
+- Astrology: 10 messages (consultation -> career + marriage -> gemstone)
+- Salon: 10 messages (smoothening -> facial -> loyalty points)
+- All 16 industries fully expanded
+
+### Admin Industries Manager (/admin-industries)
+Full CRUD: title, slug, icon, hero, benefits, services, demo_chat, SEO fields
+
+### Content Library (/content-library)
+8 content types (brochure, image, video, link, FAQ, price_list, document, template)
+CRUD, share count tracking, type filters, stats dashboard
 
 ### Mobile-First Owner Dashboard
-5-tab bottom nav: Dashboard, Chats, Bookings, Reports, More
-- KPI cards, AI Auto Reply card, Quick Actions, category widgets
-- Bookings management, Reports with charts, Settings menu
+5-tab bottom nav with KPIs, AI Auto Reply, Quick Actions, category widgets
 
 ### Multi-Category System (7 categories, 42 services)
 ### Category-Aware WhatsApp AI with RAG Memory
-### Hot Sales Mode + Abrupt Sales Detection
-### Appointment Booking + Analytics + Template Workflow
+### Hot Sales + Abrupt Sales Detection
+### Appointments + Analytics + Template Workflow
 ### Self-Service WABA Setup
 
 ## Backlog
-1. WhatsApp-initiated booking
-2. Content Library for media sharing
-3. Broadcast campaigns
+1. WhatsApp-initiated booking flow
+2. Live interactive WhatsApp demo on industry pages
+3. Multi-language support
