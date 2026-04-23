@@ -215,19 +215,70 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-yellow-50 to-white p-4">
+    <div className="min-h-screen flex bg-gradient-to-br from-amber-50 via-yellow-50 to-white relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl"></div>
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-amber-200/40 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-24 -right-24 w-[32rem] h-[32rem] bg-yellow-200/40 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-orange-100/30 rounded-full blur-3xl"></div>
       </div>
 
-      <Card className="w-full max-w-md shadow-2xl border-0 relative z-10 bg-white/95 backdrop-blur">
-        <CardHeader className="text-center pb-2">
-          <div className="flex justify-center mb-4">
-            <MemoraAILogo size="xl" showCaption={true} showBrand={true} />
+      {/* Premium hero panel — desktop only */}
+      <aside className="hidden lg:flex flex-col justify-between w-1/2 xl:w-[55%] p-12 relative z-10 bg-gradient-to-br from-gray-900 via-gray-900 to-amber-950 text-white">
+        <div>
+          <div className="flex items-center gap-2 mb-12">
+            <MemoraAILogo size="md" showBrand={false} />
+            <span className="text-2xl font-bold tracking-tight">
+              Memora<span className="text-amber-400">AI</span>
+            </span>
           </div>
-        </CardHeader>
+          <h1 className="text-4xl xl:text-5xl font-bold leading-tight mb-5">
+            Your AI sales<br />agent that <span className="text-amber-400">never sleeps</span>.
+          </h1>
+          <p className="text-gray-300 text-base max-w-md leading-relaxed">
+            WhatsApp automation with AI memory for real estate, clinics, astrology, salons and more — built for Indian businesses.
+          </p>
+        </div>
+
+        <ul className="space-y-4 max-w-md">
+          {[
+            { t: 'Industry-aware AI', d: '16+ categories with dynamic replies & pricing' },
+            { t: 'RAG Memory Engine', d: 'Remembers every customer conversation forever' },
+            { t: 'Human handover', d: 'Live team inbox with AI suggestions' },
+          ].map((b, i) => (
+            <li key={i} className="flex items-start gap-3" data-testid={`hero-benefit-${i}`}>
+              <div className="w-7 h-7 rounded-lg bg-amber-400/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-2 h-2 rounded-full bg-amber-400" />
+              </div>
+              <div>
+                <p className="font-semibold text-white">{b.t}</p>
+                <p className="text-xs text-gray-400 leading-relaxed">{b.d}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex items-center gap-3 text-xs text-gray-400">
+          <div className="flex -space-x-2">
+            {['bg-amber-400', 'bg-orange-400', 'bg-yellow-400'].map((c, i) => (
+              <div key={i} className={`w-7 h-7 rounded-full ${c} border-2 border-gray-900`} />
+            ))}
+          </div>
+          <span>Trusted by growing Indian businesses</span>
+        </div>
+      </aside>
+
+      {/* Form column */}
+      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 relative z-10">
+        <Card className="w-full max-w-md shadow-xl border-0 bg-white/95 backdrop-blur">
+          <CardHeader className="text-center pb-2">
+            <div className="flex justify-center mb-4 lg:hidden">
+              <MemoraAILogo size="xl" showCaption={true} showBrand={true} />
+            </div>
+            <div className="hidden lg:block pt-4">
+              <span className="text-[10px] uppercase tracking-widest text-amber-600 font-bold">MemoraAI</span>
+            </div>
+          </CardHeader>
 
         <CardContent className="space-y-6">
           {loginMethod === 'otp' ? (
@@ -269,7 +320,7 @@ const Login = () => {
 
                   <Button
                     type="submit"
-                    className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold text-base"
+                    className="w-full h-12 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white font-semibold text-base shadow-md shadow-amber-500/20"
                     disabled={loading || mobile.length !== 10}
                     data-testid="send-otp-btn"
                   >
@@ -316,9 +367,9 @@ const Login = () => {
 
                   {/* Dev OTP Display */}
                   {devOTP && (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
-                      <p className="text-xs text-green-600 mb-1">Development Mode</p>
-                      <p className="text-2xl font-bold text-green-700 tracking-widest">{devOTP}</p>
+                    <div className="bg-gray-900 rounded-xl p-3 text-center" data-testid="dev-otp-box">
+                      <p className="text-[10px] text-amber-300 uppercase tracking-widest font-semibold mb-1">Dev Mode OTP</p>
+                      <p className="text-2xl font-bold text-white tracking-widest font-mono">{devOTP}</p>
                     </div>
                   )}
 
@@ -348,7 +399,7 @@ const Login = () => {
 
                   <Button
                     type="submit"
-                    className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold text-base"
+                    className="w-full h-12 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white font-semibold text-base shadow-md shadow-amber-500/20"
                     disabled={loading || otp.length !== 6}
                     data-testid="verify-otp-btn"
                   >
@@ -446,7 +497,7 @@ const Login = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold text-base"
+                className="w-full h-12 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white font-semibold text-base shadow-md shadow-amber-500/20"
                 disabled={loading || !identifier.trim() || !password.trim()}
                 data-testid="password-login-btn"
               >
@@ -490,6 +541,7 @@ const Login = () => {
           </div>
         </CardContent>
       </Card>
+      </main>
     </div>
   );
 };

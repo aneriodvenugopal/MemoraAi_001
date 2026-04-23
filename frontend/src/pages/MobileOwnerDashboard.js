@@ -122,27 +122,34 @@ export default function MobileOwnerDashboard() {
 /* ═══════════════ DASHBOARD TAB ═══════════════ */
 function DashboardTab({ userName, catName, CatIcon, totalChats, pendingReplies, newBookings, revenue, hotSales, alerts, catStats, navigate, loading }) {
   return (
-    <div className="px-4 pt-4 pb-4 space-y-5" data-testid="dashboard-tab">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-gray-900">Hi, {userName}!</h1>
-          <p className="text-xs text-gray-500">Here's what's happening today</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className={`w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center`}>
-            <CatIcon className="w-5 h-5 text-amber-600" />
+    <div className="space-y-5 pb-4" data-testid="dashboard-tab">
+      {/* Premium greeting header */}
+      <div className="bg-gradient-to-br from-amber-500 via-amber-400 to-yellow-400 px-4 pt-5 pb-12 rounded-b-[28px] relative overflow-hidden">
+        <div className="absolute -top-6 -right-6 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
+        <div className="absolute -bottom-8 -left-4 w-32 h-32 bg-amber-600/20 rounded-full blur-2xl" />
+        <div className="relative flex items-center justify-between">
+          <div className="min-w-0">
+            <p className="text-[11px] text-amber-900/80 font-semibold uppercase tracking-widest">Welcome back</p>
+            <h1 className="text-2xl font-bold text-white truncate drop-shadow-sm">Hi, {userName} 👋</h1>
+            <p className="text-[11px] text-amber-50/90 mt-0.5">Here's what's happening today</p>
+          </div>
+          <div className="w-11 h-11 rounded-2xl bg-white/25 backdrop-blur flex items-center justify-center shadow-md flex-shrink-0">
+            <CatIcon className="w-5 h-5 text-white" />
           </div>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 gap-3" data-testid="kpi-cards">
-        <KPICard label="Today Chats" value={totalChats} icon={MessageSquare} trend={18} color="bg-blue-50 text-blue-600" loading={loading} />
-        <KPICard label="Pending Replies" value={pendingReplies} icon={Clock} trend={-8} color="bg-orange-50 text-orange-600" loading={loading} />
-        <KPICard label="New Bookings" value={newBookings} icon={CalendarDays} trend={20} color="bg-green-50 text-green-600" loading={loading} />
-        <KPICard label="Revenue" value={`Rs.${revenue.toLocaleString()}`} icon={TrendingUp} trend={22} color="bg-purple-50 text-purple-600" loading={loading} />
+      {/* Lifted KPI grid (overlapping header) */}
+      <div className="px-4 -mt-10 relative z-10">
+        <div className="grid grid-cols-2 gap-3" data-testid="kpi-cards">
+          <KPICard label="Today Chats" value={totalChats} icon={MessageSquare} trend={18} color="bg-blue-50 text-blue-600" loading={loading} />
+          <KPICard label="Pending Replies" value={pendingReplies} icon={Clock} trend={-8} color="bg-orange-50 text-orange-600" loading={loading} />
+          <KPICard label="New Bookings" value={newBookings} icon={CalendarDays} trend={20} color="bg-green-50 text-green-600" loading={loading} />
+          <KPICard label="Revenue" value={`Rs.${revenue.toLocaleString()}`} icon={TrendingUp} trend={22} color="bg-purple-50 text-purple-600" loading={loading} />
+        </div>
       </div>
+
+      <div className="px-4 space-y-5">
 
       {/* AI Auto Reply Card */}
       <div className="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-2xl p-4 border border-amber-100 flex items-center gap-4" data-testid="ai-auto-reply-card">
@@ -231,6 +238,7 @@ function DashboardTab({ userName, catName, CatIcon, totalChats, pendingReplies, 
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
