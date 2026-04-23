@@ -8,6 +8,8 @@ from datetime import datetime, timezone, timedelta
 import uuid
 import logging
 
+from services.memoraai_calendar_sync import sync_appointment_to_calendar, delete_synced_event
+
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/memoraai/appointments", tags=["memoraai-appointments"])
 
@@ -103,7 +105,18 @@ async def create_appointment(data: AppointmentCreate, request: Request):
     }
     await db.memoraai_appointments.insert_one(appointment)
     appointment.pop("_id", None)
-    return {"message": "Appointment created", "appointment": appointment}
+
+    # Auto-sync to Google Calendar (no-op if not configured / tenant not connected)
+    calendar_result = await sync_appointment_to_calendar(db, tenant_id, appointment)
+    if calendar_result.get("synced"):
+        appointment["google_event_id"] = calendar_result.get("event_id")
+        appointment["google_event_link"] = calendar_result.get("event_link")
+
+    return {
+        "message": "Appointment created",
+        "appointment": appointment,
+        "calendar_sync": calendar_result,
+    }
 
 
 @router.get("/{appointment_id}")
@@ -152,9 +165,18 @@ async def delete_appointment(appointment_id: str, request: Request):
     user = await get_current_user(request)
     db = get_db(request)
     tenant_id = user.get("tenant_id")
-    result = await db.memoraai_appointments.delete_one({"id": appointment_id, "tenant_id": tenant_id})
-    if result.deleted_count == 0:
+
+    existing = await db.memoraai_appointments.find_one(
+        {"id": appointment_id, "tenant_id": tenant_id}, {"_id": 0}
+    )
+    if not existing:
         raise HTTPException(status_code=404, detail="Appointment not found")
+
+    # Best-effort remove from Google Calendar if it was synced
+    if existing.get("google_event_id"):
+        await delete_synced_event(db, tenant_id, existing["google_event_id"])
+
+    await db.memoraai_appointments.delete_one({"id": appointment_id, "tenant_id": tenant_id})
     return {"message": "Appointment deleted"}
 
 

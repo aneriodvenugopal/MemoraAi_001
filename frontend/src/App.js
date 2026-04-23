@@ -210,6 +210,7 @@ import IndustryPage from "./pages/IndustryPage";
 import AdminIndustries from "./pages/AdminIndustries";
 import MemoraContentLibrary from "./pages/ContentLibrary";
 import BusinessRules from "./pages/BusinessRules";
+import CalendarSync from "./pages/CalendarSync";
 import TeamInbox from "./pages/TeamInbox";
 import SaaSAdminDashboard from "./pages/SaaSAdminDashboard";
 
@@ -1135,6 +1136,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <BusinessRules />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/calendar-sync"
+                element={
+                  <PrivateRoute>
+                    <CalendarSync />
                   </PrivateRoute>
                 }
               />

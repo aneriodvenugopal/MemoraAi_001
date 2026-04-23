@@ -35,6 +35,10 @@
 22. **Landing Page** - Dark premium theme, 16 industry demos, pricing
 23. **Analytics & Reports** - KPIs, trends, service breakdown
 
+### Integrations ✅
+24. **Google Calendar Sync (Feb 2026)** — Tenant-scoped OAuth via `/api/memoraai/calendar/*` (status/connect/callback/disconnect/sync/upcoming). Auto-syncs every new appointment (manual + WhatsApp AI) to the business owner's connected Google Calendar. Also deletes Google events when appointments are deleted. Runs in graceful placeholder mode until `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REDIRECT_URI` + `FRONTEND_URL` are added to `backend/.env`. New page `/calendar-sync` + "Google Calendar Sync" menu item in Mobile Owner Dashboard → More tab.
+
+
 ## PENDING FOR PRODUCTION LAUNCH
 
 ### P0 - Required
