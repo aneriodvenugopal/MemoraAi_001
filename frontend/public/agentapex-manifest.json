@@ -1,0 +1,86 @@
+{
+  "name": "AgentApex - Free Pocket Diary for Land Agents",
+  "short_name": "AgentApex",
+  "description": "FREE pocket diary for real estate agents to track land deals, find nearby property leads and manage sales. Post properties, view on map, track follow-ups, generate share cards and manage your CRM pipeline.",
+  "start_url": "/agentapex",
+  "scope": "/agentapex",
+  "id": "/agentapex",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#ffffff",
+  "theme_color": "#1a365d",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity", "lifestyle"],
+  "lang": "en-IN",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/agentapex-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/agentapex-icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/agentapex-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/agentapex-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/agentapex-apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Post Property",
+      "short_name": "Post",
+      "description": "Post a new property for sale",
+      "url": "/agentapex/post",
+      "icons": [{"src": "/agentapex-icon-192.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "Map Search",
+      "short_name": "Search",
+      "description": "Find nearby properties on map",
+      "url": "/agentapex/search",
+      "icons": [{"src": "/agentapex-icon-192.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "My Follow-ups",
+      "short_name": "Follow-ups",
+      "description": "View pending follow-ups",
+      "url": "/agentapex/followups",
+      "icons": [{"src": "/agentapex-icon-192.png", "sizes": "192x192"}]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/agentapex-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "AgentApex Dashboard"
+    }
+  ],
+  "related_applications": [],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  }
+}

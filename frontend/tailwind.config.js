@@ -13,6 +13,19 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+  			// Ocean Theme Colors
+  			ocean: {
+  				primary: '#0891b2',
+  				'primary-light': '#06b6d4',
+  				'primary-dark': '#0e7490',
+  				secondary: '#14b8a6',
+  				'secondary-light': '#2dd4bf',
+  				'secondary-dark': '#0d9488',
+  				accent: '#06b6d4',
+  				'accent-light': '#22d3ee',
+  				success: '#10b981',
+  				'success-light': '#34d399'
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

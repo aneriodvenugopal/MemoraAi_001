@@ -1,0 +1,608 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #FAFAFA;
+  --bg-tertiary: #F5F5F5;
+  --text-primary: #262626;
+  --text-secondary: #8E8E8E;
+  --text-link: #0095F6;
+  --border: #DBDBDB;
+  --border-light: #EFEFEF;
+  --accent: #0095F6;
+  --accent-light: #E0F1FF;
+  --danger: #ED4956;
+  --success: #58C322;
+  --amber: #FFBB00;
+  
+  /* iOS-like timing */
+  --ios-spring: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ios-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ios-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* iOS-style scrollbar - hidden but functional */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* Touch-friendly inputs */
+input, select, textarea, button {
+  font-family: inherit;
+  font-size: 16px; /* Prevents zoom on iOS */
+  touch-action: manipulation;
+}
+
+input, textarea {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  outline: none;
+  transition: all 0.2s var(--ios-ease);
+}
+
+input:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 149, 246, 0.1);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-secondary);
+}
+
+/* iOS-style buttons with haptic-like feedback */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all 0.15s var(--ios-ease);
+  -webkit-appearance: none;
+}
+
+button:active {
+  transform: scale(0.97);
+  opacity: 0.8;
+}
+
+/* iOS-style touch feedback */
+.ios-tap {
+  transition: all 0.12s var(--ios-ease);
+}
+
+.ios-tap:active {
+  transform: scale(0.96);
+  opacity: 0.7;
+}
+
+/* iOS-style card with press effect */
+.ios-card {
+  transition: all 0.2s var(--ios-ease);
+  will-change: transform;
+}
+
+.ios-card:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* iOS-style spring animation for elements */
+@keyframes ios-spring-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  50% {
+    transform: scale(1.02) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes ios-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ios-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ios-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* iOS-style bounce scroll effect */
+.ios-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* iOS-style blur backdrop */
+.ios-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.ios-blur-dark {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* iOS-style header */
+.ios-header {
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* iOS-style navigation bar */
+.ios-nav {
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* iOS-style button styles */
+.ios-btn-primary {
+  background: var(--accent);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.15s var(--ios-ease);
+}
+
+.ios-btn-primary:active {
+  transform: scale(0.97);
+  background: #0084db;
+}
+
+.ios-btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.15s var(--ios-ease);
+}
+
+.ios-btn-secondary:active {
+  transform: scale(0.97);
+  background: #e8e8e8;
+}
+
+/* iOS-style list item */
+.ios-list-item {
+  padding: 16px;
+  border-bottom: 0.5px solid var(--border-light);
+  transition: background 0.15s var(--ios-ease);
+}
+
+.ios-list-item:active {
+  background: var(--bg-secondary);
+}
+
+/* iOS-style modal/sheet */
+.ios-sheet {
+  border-radius: 16px 16px 0 0;
+  animation: ios-slide-up 0.3s var(--ios-spring);
+}
+
+/* iOS-style segmented control */
+.ios-segment {
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.ios-segment-item {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s var(--ios-ease);
+}
+
+.ios-segment-item.active {
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Primary button */
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 12px 24px;
+  transition: opacity 0.2s ease;
+}
+
+.btn-primary:active {
+  opacity: 0.7;
+}
+
+.btn-primary:disabled {
+  background: var(--accent);
+  opacity: 0.3;
+}
+
+/* Secondary button */
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 12px 24px;
+}
+
+/* Safe areas for mobile */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Bottom navigation - Instagram style */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 50px;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  z-index: 1000;
+}
+
+.bottom-nav button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 50px;
+}
+
+/* Page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Pull to refresh indicator */
+.ptr-indicator {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Story/Avatar circle */
+.avatar-ring {
+  padding: 2px;
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  border-radius: 50%;
+}
+
+.avatar-ring-blue {
+  background: var(--accent);
+}
+
+/* Card styles */
+.card {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 16px 0;
+}
+
+/* Modal/Sheet overlay */
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 1001;
+}
+
+/* Bottom sheet */
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  border-radius: 16px 16px 0 0;
+  max-height: 90vh;
+  z-index: 1002;
+}
+
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 8px auto 16px;
+}
+
+/* Leaflet overrides for light theme */
+.leaflet-container {
+  background: var(--bg-secondary) !important;
+  font-family: inherit !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--bg-primary) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px !important;
+  font-size: 14px !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-primary) !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border: none !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Hide external badges and chatbot widgets */
+[class*="emergent"], [class*="Emergent"], [id*="emergent"],
+body > div:last-child:not(.App):not(#root),
+[class*="chatbot"], [id*="chatbot"],
+.intercom-lightweight-app, .intercom-launcher,
+[data-testid="chatbot-widget"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Override for AgentApex app - ensure chatbots are hidden */
+.agentapex-app [class*="emergent"],
+.agentapex-app [class*="chatbot"],
+.agentapex-app iframe[src*="chat"] {
+  display: none !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.2s ease;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ==================== */
+/* iOS Keyboard Handling */
+/* ==================== */
+
+/* AgentApex App Container - Fixed viewport for iOS */
+.agentapex-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg-primary);
+}
+
+/* Login Page - PhonePe style fixed layout */
+.login-page-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  overflow: hidden;
+}
+
+.login-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: all 0.25s ease;
+}
+
+/* When keyboard is open - move content up but don't compress */
+.login-content.keyboard-open {
+  justify-content: flex-start;
+  padding-top: 60px;
+}
+
+.login-footer {
+  padding: 24px;
+  text-align: center;
+}
+
+/* Prevent iOS zoom on input focus */
+@supports (-webkit-touch-callout: none) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* iOS viewport fix for keyboard */
+@supports (-webkit-touch-callout: none) {
+  .agentapex-app {
+    min-height: -webkit-fill-available;
+  }
+  
+  .login-page-container {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* Prevent body scroll when keyboard opens */
+body.keyboard-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* Generic page container for AgentApex - prevents keyboard push */
+.agentapex-page-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  overflow: hidden;
+  overflow-x: hidden !important;
+}
+
+.agentapex-page-container > .flex-1 {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent all horizontal scroll in AgentApex */
+.agentapex-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg-primary);
+}
+
+.agentapex-app * {
+  max-width: 100%;
+  box-sizing: border-box;
+}

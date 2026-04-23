@@ -1,0 +1,65 @@
+<svg width="1000" height="400" viewBox="0 0 1000 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- RETOERP Logo with Olympic-style interlocking circles forming R, E, T -->
+  <!-- Heritage badge -->
+  <g id="heritage-badge">
+    <circle cx="920" cy="80" r="50" fill="#003DA5" opacity="0.1"/>
+    <text x="920" y="75" font-family="Georgia, serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#003DA5">Since</text>
+    <text x="920" y="95" font-family="Georgia, serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#003DA5">1924</text>
+  </g>
+  
+  <!-- Main interlocking circles - Olympic style -->
+  <g id="ret-rings">
+    <!-- R Circle (Blue - like Olympic blue) -->
+    <circle cx="200" cy="200" r="85" stroke="#0085C7" stroke-width="16" fill="none" opacity="0.9"/>
+    
+    <!-- E Circle (Red - interlocking) -->
+    <circle cx="330" cy="200" r="85" stroke="#DF0024" stroke-width="16" fill="none" opacity="0.9"/>
+    
+    <!-- T Circle (Yellow/Gold - interlocking) -->
+    <circle cx="460" cy="200" r="85" stroke="#F4C300" stroke-width="16" fill="none" opacity="0.9"/>
+  </g>
+  
+  <!-- Letters inside circles - Rolling style like your reference -->
+  <g id="letters">
+    <!-- R - Rolling style with flowing curves -->
+    <path d="M170 140 Q170 130 180 130 L220 130 Q250 130 250 165 Q250 190 225 195 L170 195 L170 260" 
+          stroke="#0085C7" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M210 195 L245 260" 
+          stroke="#0085C7" stroke-width="24" stroke-linecap="round"/>
+    
+    <!-- E - Flowing style -->
+    <path d="M310 140 L310 260 M310 140 L370 140 M310 200 L360 200 M310 260 L370 260" 
+          stroke="#DF0024" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- T - Clean style -->
+    <path d="M420 140 L500 140 M460 140 L460 260" 
+          stroke="#F4C300" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Additional subtle circles for "O", "E", "R", "P" -->
+  <g id="subtle-circles" opacity="0.15">
+    <circle cx="560" cy="200" r="60" stroke="#00A651" stroke-width="12" fill="none"/>
+    <circle cx="640" cy="200" r="60" stroke="#EE334E" stroke-width="12" fill="none"/>
+    <circle cx="720" cy="200" r="60" stroke="#0085C7" stroke-width="12" fill="none"/>
+  </g>
+  
+  <!-- Company name -->
+  <g id="company-text">
+    <text x="500" y="320" font-family="'Arial', sans-serif" font-size="54" font-weight="800" text-anchor="middle" fill="#1F2937" letter-spacing="4">
+      RETOERP
+    </text>
+    <text x="500" y="355" font-family="'Georgia', serif" font-size="18" text-anchor="middle" fill="#6B7280">
+      Real Estate Automation Excellence
+    </text>
+    <line x1="380" y1="365" x2="620" y2="365" stroke="#0085C7" stroke-width="2"/>
+    <text x="500" y="385" font-family="'Georgia', serif" font-size="14" font-weight="600" text-anchor="middle" fill="#003DA5">
+      A Century of Innovation • 1924 - 2024
+    </text>
+  </g>
+  
+  <!-- Decorative connecting elements -->
+  <g id="connections" opacity="0.1">
+    <path d="M285 200 L345 200" stroke="#1F2937" stroke-width="2" stroke-dasharray="5,5"/>
+    <path d="M415 200 L545 200" stroke="#1F2937" stroke-width="2" stroke-dasharray="5,5"/>
+  </g>
+</svg>

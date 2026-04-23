@@ -1,0 +1,249 @@
+.map-view-container {
+  min-height: 100vh;
+  background: #F8F9FA;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.map-view-header {
+  background: white;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.map-view-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #212121;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.view-toggle,
+.filter-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid #E0E0E0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #757575;
+  transition: all 0.2s;
+}
+
+.view-toggle.active {
+  background: #1E88E5;
+  border-color: #1E88E5;
+  color: white;
+}
+
+.view-toggle:active,
+.filter-btn:active {
+  transform: scale(0.9);
+}
+
+/* Distance Filter */
+.distance-filter {
+  background: white;
+  padding: 16px;
+  border-bottom: 1px solid #E0E0E0;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.filter-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #212121;
+  margin: 0;
+}
+
+.filter-header button {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #757575;
+}
+
+.distance-options {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.distance-chip {
+  padding: 8px 16px;
+  background: #F5F5F5;
+  border: 2px solid #E0E0E0;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #757575;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.distance-chip.active {
+  background: #1E88E5;
+  border-color: #1E88E5;
+  color: white;
+}
+
+.distance-chip:active {
+  transform: scale(0.95);
+}
+
+/* Property Count */
+.property-count {
+  background: #E3F2FD;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1E88E5;
+  text-align: center;
+}
+
+/* Google Map */
+.google-map {
+  flex: 1;
+  width: 100%;
+  min-height: 400px;
+}
+
+/* List View */
+.properties-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.property-card-list {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.property-card-list:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.property-icon {
+  width: 56px;
+  height: 56px;
+  background: #F5F5F5;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.property-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.property-info h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #212121;
+  margin: 0 0 4px;
+  text-transform: capitalize;
+}
+
+.property-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #757575;
+  margin-bottom: 4px;
+}
+
+.property-location {
+  font-size: 12px;
+  color: #9E9E9E;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.property-distance {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1E88E5;
+  flex-shrink: 0;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-state p {
+  font-size: 15px;
+  color: #757575;
+  margin: 16px 0;
+}
+
+.empty-state button {
+  padding: 12px 24px;
+  background: #1E88E5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.empty-state button:active {
+  transform: scale(0.95);
+}

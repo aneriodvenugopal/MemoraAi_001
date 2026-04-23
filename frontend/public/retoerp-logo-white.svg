@@ -1,0 +1,22 @@
+<svg width="800" height="200" viewBox="0 0 800 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo Icon - White Version -->
+  <circle cx="100" cy="100" r="90" fill="white" opacity="0.1"/>
+  <circle cx="100" cy="100" r="88" stroke="white" stroke-width="2"/>
+  <path d="M100 45L70 70V125H130V70L100 45Z" fill="white" opacity="0.95"/>
+  <path d="M100 45L70 70H130L100 45Z" fill="white"/>
+  <rect x="85" y="85" width="10" height="10" rx="2" fill="white" opacity="0.8"/>
+  <rect x="105" y="85" width="10" height="10" rx="2" fill="white" opacity="0.8"/>
+  <rect x="85" y="105" width="10" height="10" rx="2" fill="white" opacity="0.8"/>
+  <rect x="105" y="105" width="10" height="10" rx="2" fill="white" opacity="0.8"/>
+  <circle cx="100" cy="65" r="8" fill="#10B981"/>
+  <path d="M100 57L95 62L100 67L105 62Z" fill="white"/>
+  
+  <!-- RETOERP Text - White -->
+  <text x="220" y="110" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white">RETOERP</text>
+  
+  <!-- Tagline - White -->
+  <text x="220" y="140" font-family="Arial, sans-serif" font-size="18" font-weight="normal" fill="white" opacity="0.8">Real Estate Automation SaaS</text>
+  
+  <!-- Small accent line - White -->
+  <rect x="220" y="150" width="120" height="3" rx="1.5" fill="white" opacity="0.6"/>
+</svg>

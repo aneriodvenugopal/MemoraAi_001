@@ -1,0 +1,30 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="95" fill="url(#gradient1)"/>
+  
+  <!-- Building/House Shape -->
+  <path d="M100 50L70 75V130H130V75L100 50Z" fill="white" opacity="0.9"/>
+  <path d="M100 50L70 75H130L100 50Z" fill="white"/>
+  
+  <!-- Tech Lines/Circuit Pattern -->
+  <path d="M85 90H95V100H85V90Z" fill="url(#gradient2)"/>
+  <path d="M105 90H115V100H105V90Z" fill="url(#gradient2)"/>
+  <path d="M85 110H95V120H85V110Z" fill="url(#gradient2)"/>
+  <path d="M105 110H115V120H105V110Z" fill="url(#gradient2)"/>
+  
+  <!-- Abstract Data/Automation Symbol -->
+  <circle cx="100" cy="70" r="8" fill="#10B981" opacity="0.8"/>
+  <path d="M100 62L95 67L100 72L105 67L100 62Z" fill="white"/>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34D399;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

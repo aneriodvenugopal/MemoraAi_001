@@ -1,0 +1,66 @@
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main Logo with 3 interlocking circles forming R E T -->
+  
+  <!-- Circle 1: R (Rolling style like your reference) -->
+  <g id="letter-r">
+    <!-- Outer ring for R -->
+    <circle cx="180" cy="200" r="90" stroke="#003DA5" stroke-width="20" fill="none"/>
+    <!-- Inner curve forming R stem -->
+    <path d="M180 110 L180 290" stroke="#003DA5" stroke-width="22" stroke-linecap="round"/>
+    <!-- R diagonal leg -->
+    <path d="M180 200 Q220 240 260 290" stroke="#003DA5" stroke-width="22" stroke-linecap="round"/>
+    <!-- R top curve -->
+    <path d="M180 130 Q250 130 250 180 Q250 210 210 210 L180 210" stroke="#003DA5" stroke-width="22" stroke-linecap="round" fill="none"/>
+  </g>
+  
+  <!-- Circle 2: E (Middle, interlocking) -->
+  <g id="letter-e">
+    <!-- Outer ring for E -->
+    <circle cx="340" cy="200" r="90" stroke="#DC143C" stroke-width="20" fill="none"/>
+    <!-- E vertical stem -->
+    <path d="M340 120 L340 280" stroke="#DC143C" stroke-width="22" stroke-linecap="round"/>
+    <!-- E top horizontal -->
+    <path d="M340 120 L410 120" stroke="#DC143C" stroke-width="22" stroke-linecap="round"/>
+    <!-- E middle horizontal -->
+    <path d="M340 200 L400 200" stroke="#DC143C" stroke-width="22" stroke-linecap="round"/>
+    <!-- E bottom horizontal -->
+    <path d="M340 280 L410 280" stroke="#DC143C" stroke-width="22" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Circle 3: T (Right side, interlocking) -->
+  <g id="letter-t">
+    <!-- Outer ring for T -->
+    <circle cx="500" cy="200" r="90" stroke="#FFB81C" stroke-width="20" fill="none"/>
+    <!-- T vertical stem -->
+    <path d="M500 140 L500 280" stroke="#FFB81C" stroke-width="22" stroke-linecap="round"/>
+    <!-- T horizontal top -->
+    <path d="M440 140 L560 140" stroke="#FFB81C" stroke-width="22" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Additional decorative elements showing "OER" subtly -->
+  <g id="secondary-letters" opacity="0.3">
+    <!-- Small O -->
+    <circle cx="620" cy="200" r="40" stroke="#003DA5" stroke-width="10" fill="none"/>
+    <!-- Small E hint -->
+    <path d="M680 180 L680 220 M680 180 L710 180 M680 200 L705 200 M680 220 L710 220" stroke="#DC143C" stroke-width="10" stroke-linecap="round"/>
+    <!-- Small R hint -->
+    <path d="M740 180 L740 220 M740 180 Q760 180 760 195 Q760 205 745 205 L740 205 M740 205 L755 220" stroke="#FFB81C" stroke-width="10" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Company text below -->
+  <text x="400" y="350" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#1F2937">
+    RETOERP
+  </text>
+  <text x="400" y="380" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#6B7280">
+    Real Estate Automation • Est. 1924
+  </text>
+  
+  <!-- Overlapping effects for Olympic rings style -->
+  <defs>
+    <style>
+      #letter-r { mix-blend-mode: multiply; }
+      #letter-e { mix-blend-mode: multiply; }
+      #letter-t { mix-blend-mode: multiply; }
+    </style>
+  </defs>
+</svg>

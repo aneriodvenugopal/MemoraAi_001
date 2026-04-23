@@ -1,0 +1,94 @@
+<svg width="900" height="400" viewBox="0 0 900 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- RETOERP Logo - Heritage Edition with Rolling R -->
+  
+  <!-- Three main interlocking circles (Olympic style) -->
+  <g id="main-rings">
+    <!-- Circle R (Blue) -->
+    <circle cx="180" cy="200" r="90" stroke="#0047AB" stroke-width="18" fill="none" style="mix-blend-mode: multiply;"/>
+    
+    <!-- Circle E (Red) - Interlocking -->
+    <circle cx="320" cy="200" r="90" stroke="#C8102E" stroke-width="18" fill="none" style="mix-blend-mode: multiply;"/>
+    
+    <!-- Circle T (Gold) - Interlocking -->
+    <circle cx="460" cy="200" r="90" stroke="#FDB913" stroke-width="18" fill="none" style="mix-blend-mode: multiply;"/>
+  </g>
+  
+  <!-- Letters with rolling/flowing style -->
+  <g id="rolling-letters">
+    <!-- R - Rolling style like your reference with flowing curves -->
+    <g id="letter-r-flowing">
+      <!-- Main stem -->
+      <path d="M150 120 L150 280" 
+            stroke="#0047AB" stroke-width="26" stroke-linecap="round" fill="none"/>
+      <!-- Top bowl - flowing curve -->
+      <path d="M150 120 Q150 100 170 100 L200 100 Q240 100 240 145 Q240 180 205 185 L150 185" 
+            stroke="#0047AB" stroke-width="26" stroke-linecap="round" fill="none"/>
+      <!-- Leg - diagonal flowing stroke -->
+      <path d="M175 185 Q200 220 230 270" 
+            stroke="#0047AB" stroke-width="26" stroke-linecap="round"/>
+      <!-- Decorative curve at top -->
+      <path d="M140 115 Q135 110 135 100" 
+            stroke="#0047AB" stroke-width="12" stroke-linecap="round" opacity="0.6"/>
+    </g>
+    
+    <!-- E - Flowing style -->
+    <g id="letter-e-flowing">
+      <path d="M295 130 L295 270" 
+            stroke="#C8102E" stroke-width="26" stroke-linecap="round"/>
+      <path d="M295 130 Q305 125 360 130" 
+            stroke="#C8102E" stroke-width="24" stroke-linecap="round"/>
+      <path d="M295 200 Q305 195 350 200" 
+            stroke="#C8102E" stroke-width="24" stroke-linecap="round"/>
+      <path d="M295 270 Q305 275 360 270" 
+            stroke="#C8102E" stroke-width="24" stroke-linecap="round"/>
+    </g>
+    
+    <!-- T - Clean flowing style -->
+    <g id="letter-t-flowing">
+      <path d="M410 140 L510 140" 
+            stroke="#FDB913" stroke-width="26" stroke-linecap="round"/>
+      <path d="M460 140 L460 270" 
+            stroke="#FDB913" stroke-width="26" stroke-linecap="round"/>
+      <!-- Decorative serif -->
+      <path d="M450 270 L470 270" 
+            stroke="#FDB913" stroke-width="20" stroke-linecap="round"/>
+    </g>
+  </g>
+  
+  <!-- Subtle "OE RP" hint circles -->
+  <g id="secondary-rings" opacity="0.12">
+    <circle cx="570" cy="200" r="50" stroke="#009B77" stroke-width="10" fill="none"/>
+    <circle cx="650" cy="200" r="50" stroke="#DD4124" stroke-width="10" fill="none"/>
+    <circle cx="730" cy="200" r="50" stroke="#5F4B8B" stroke-width="10" fill="none"/>
+  </g>
+  
+  <!-- Company name and heritage -->
+  <g id="brand-text">
+    <!-- Main company name -->
+    <text x="450" y="325" font-family="'Helvetica Neue', Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="#2C3E50" letter-spacing="6">
+      RETOERP
+    </text>
+    
+    <!-- Tagline -->
+    <text x="450" y="355" font-family="'Georgia', serif" font-size="16" text-anchor="middle" fill="#7F8C8D" font-style="italic">
+      Real Estate Automation Since 1924
+    </text>
+    
+    <!-- Heritage line -->
+    <line x1="320" y1="368" x2="580" y2="368" stroke="url(#heritage-gradient)" stroke-width="2"/>
+    
+    <!-- Century mark -->
+    <text x="450" y="390" font-family="'Georgia', serif" font-size="12" font-weight="600" text-anchor="middle" fill="#0047AB">
+      100 YEARS OF EXCELLENCE
+    </text>
+  </g>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="heritage-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0047AB;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#C8102E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FDB913;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

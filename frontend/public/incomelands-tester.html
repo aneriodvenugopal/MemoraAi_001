@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IncomeLands API Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-section button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .test-section button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .test-section button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .response {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .response.show {
+            display: block;
+        }
+        
+        .response pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .badge.success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .badge.error {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .badge.info {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ IncomeLands Marketplace API Tester</h1>
+            <p>Test RETOERP marketplace APIs for IncomeLands integration</p>
+        </div>
+        
+        <div class="content">
+            <!-- Test 1: Register Agent -->
+            <div class="test-section">
+                <h3>
+                    <span>1️⃣</span>
+                    <span>Register Agent</span>
+                    <span class="badge info">POST /marketplace/agents/register</span>
+                </h3>
+                <p style="color: #666; margin-bottom: 15px;">Register an IncomeLands agent in the marketplace</p>
+                
+                <div class="input-group">
+                    <label>Agent Name:</label>
+                    <input type="text" id="agentName" value="Ramesh Kumar" />
+                </div>
+                
+                <div class="input-group">
+                    <label>Phone Number:</label>
+                    <input type="text" id="agentPhone" value="9876543210" />
+                </div>
+                
+                <button onclick="registerAgent()">
+                    <span id="btn1-text">Register Agent</span>
+                    <span id="btn1-loading" class="loading" style="display:none;"></span>
+                </button>
+                <div id="response1" class="response"></div>
+            </div>
+            
+            <!-- Test 2: Search Projects -->
+            <div class="test-section">
+                <h3>
+                    <span>2️⃣</span>
+                    <span>Search Projects (Geo-Location)</span>
+                    <span class="badge info">GET /marketplace/projects</span>
+                </h3>
+                <p style="color: #666; margin-bottom: 15px;">Search projects near Hyderabad within 20km radius</p>
+                
+                <button onclick="searchProjects()">
+                    <span id="btn2-text">Search Projects</span>
+                    <span id="btn2-loading" class="loading" style="display:none;"></span>
+                </button>
+                <div id="response2" class="response"></div>
+            </div>
+            
+            <!-- Test 3: Search Properties -->
+            <div class="test-section">
+                <h3>
+                    <span>3️⃣</span>
+                    <span>Search Properties</span>
+                    <span class="badge info">GET /marketplace/properties/search</span>
+                </h3>
+                <p style="color: #666; margin-bottom: 15px;">Search available properties in Hyderabad</p>
+                
+                <button onclick="searchProperties()">
+                    <span id="btn3-text">Search Properties</span>
+                    <span id="btn3-loading" class="loading" style="display:none;"></span>
+                </button>
+                <div id="response3" class="response"></div>
+            </div>
+            
+            <!-- Test 4: Submit Lead -->
+            <div class="test-section">
+                <h3>
+                    <span>4️⃣</span>
+                    <span>Submit Lead to Developer</span>
+                    <span class="badge info">POST /marketplace/leads/submit</span>
+                </h3>
+                <p style="color: #666; margin-bottom: 15px;">Agent submits a buyer lead to a developer</p>
+                
+                <button onclick="submitLead()" id="submitLeadBtn" disabled>
+                    <span id="btn4-text">Submit Lead (Register agent first)</span>
+                    <span id="btn4-loading" class="loading" style="display:none;"></span>
+                </button>
+                <div id="response4" class="response"></div>
+            </div>
+            
+            <!-- Test 5: Create Buyer Requirement -->
+            <div class="test-section">
+                <h3>
+                    <span>5️⃣</span>
+                    <span>Create Buyer Requirement</span>
+                    <span class="badge info">POST /marketplace/requirements</span>
+                </h3>
+                <p style="color: #666; margin-bottom: 15px;">Post a buyer's property requirement for AI matching</p>
+                
+                <button onclick="createRequirement()">
+                    <span id="btn5-text">Create Requirement</span>
+                    <span id="btn5-loading" class="loading" style="display:none;"></span>
+                </button>
+                <div id="response5" class="response"></div>
+            </div>
+            
+            <!-- Test 6: Marketplace Stats -->
+            <div class="test-section">
+                <h3>
+                    <span>6️⃣</span>
+                    <span>Marketplace Statistics</span>
+                    <span class="badge info">GET /marketplace/stats/overview</span>
+                </h3>
+                <p style="color: #666; margin-bottom: 15px;">View overall marketplace analytics</p>
+                
+                <button onclick="getStats()">
+                    <span id="btn6-text">Get Statistics</span>
+                    <span id="btn6-loading" class="loading" style="display:none;"></span>
+                </button>
+                <div id="response6" class="response"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const BACKEND_URL = window.location.origin;
+        const API_BASE = `${BACKEND_URL}/api/marketplace`;
+        
+        let agentId = null;
+        let projectId = null;
+        let tenantId = null;
+        
+        function showResponse(id, data, isError = false) {
+            const responseDiv = document.getElementById(`response${id}`);
+            responseDiv.classList.add('show');
+            
+            const badge = isError ? 
+                '<span class="badge error">ERROR</span>' : 
+                '<span class="badge success">SUCCESS</span>';
+            
+            responseDiv.innerHTML = `
+                ${badge}
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+        }
+        
+        function setLoading(btnNum, loading) {
+            document.getElementById(`btn${btnNum}-text`).style.display = loading ? 'none' : 'inline';
+            document.getElementById(`btn${btnNum}-loading`).style.display = loading ? 'inline-block' : 'none';
+        }
+        
+        async function registerAgent() {
+            setLoading(1, true);
+            
+            const name = document.getElementById('agentName').value;
+            const phone = document.getElementById('agentPhone').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/agents/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        phone: phone,
+                        email: "ramesh@incomelands.com",
+                        city: "Hyderabad",
+                        state: "Telangana",
+                        areas_covered: ["Gachibowli", "HITEC City", "Madhapur"],
+                        latitude: 17.385,
+                        longitude: 78.486,
+                        experience_years: 5
+                    })
+                });
+                
+                const data = await response.json();
+                showResponse(1, data, !response.ok);
+                
+                if (data.success && data.agent) {
+                    agentId = data.agent.id;
+                    document.getElementById('submitLeadBtn').disabled = false;
+                    document.getElementById('btn4-text').textContent = 'Submit Lead';
+                }
+            } catch (error) {
+                showResponse(1, { error: error.message }, true);
+            } finally {
+                setLoading(1, false);
+            }
+        }
+        
+        async function searchProjects() {
+            setLoading(2, true);
+            
+            try {
+                const response = await fetch(
+                    `${API_BASE}/projects?latitude=17.385&longitude=78.486&radius_km=20&limit=10`
+                );
+                
+                const data = await response.json();
+                showResponse(2, data, !response.ok);
+                
+                if (data.success && data.projects && data.projects.length > 0) {
+                    projectId = data.projects[0].id;
+                    tenantId = data.projects[0].tenant_id;
+                }
+            } catch (error) {
+                showResponse(2, { error: error.message }, true);
+            } finally {
+                setLoading(2, false);
+            }
+        }
+        
+        async function searchProperties() {
+            setLoading(3, true);
+            
+            try {
+                const response = await fetch(
+                    `${API_BASE}/properties/search?city=Hyderabad&status=available&limit=10`
+                );
+                
+                const data = await response.json();
+                showResponse(3, data, !response.ok);
+            } catch (error) {
+                showResponse(3, { error: error.message }, true);
+            } finally {
+                setLoading(3, false);
+            }
+        }
+        
+        async function submitLead() {
+            setLoading(4, true);
+            
+            if (!agentId) {
+                showResponse(4, { error: "Please register an agent first" }, true);
+                setLoading(4, false);
+                return;
+            }
+            
+            // Get a project first if not already fetched
+            if (!projectId || !tenantId) {
+                await searchProjects();
+            }
+            
+            if (!projectId) {
+                showResponse(4, { error: "No projects available to submit lead" }, true);
+                setLoading(4, false);
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/leads/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tenant_id: tenantId,
+                        project_id: projectId,
+                        agent_id: agentId,
+                        agent_name: document.getElementById('agentName').value,
+                        agent_phone: document.getElementById('agentPhone').value,
+                        buyer_name: "Suresh Reddy",
+                        buyer_phone: "9988776655",
+                        buyer_email: "suresh@example.com",
+                        budget: 5000000,
+                        notes: "Interested in 1500 sqft plot from IncomeLands app",
+                        source_detail: "Map View"
+                    })
+                });
+                
+                const data = await response.json();
+                showResponse(4, data, !response.ok);
+            } catch (error) {
+                showResponse(4, { error: error.message }, true);
+            } finally {
+                setLoading(4, false);
+            }
+        }
+        
+        async function createRequirement() {
+            setLoading(5, true);
+            
+            try {
+                const response = await fetch(`${API_BASE}/requirements`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        requirement_type: "buy",
+                        property_type: "plot",
+                        budget_min: 3000000,
+                        budget_max: 7000000,
+                        preferred_locations: ["Hyderabad", "Gachibowli"],
+                        latitude: 17.385,
+                        longitude: 78.486,
+                        radius_km: 15,
+                        min_area: 1200,
+                        max_area: 2000,
+                        buyer_name: "Prakash Rao",
+                        buyer_phone: "9876543211",
+                        buyer_email: "prakash@example.com",
+                        is_direct_buyer: true
+                    })
+                });
+                
+                const data = await response.json();
+                showResponse(5, data, !response.ok);
+            } catch (error) {
+                showResponse(5, { error: error.message }, true);
+            } finally {
+                setLoading(5, false);
+            }
+        }
+        
+        async function getStats() {
+            setLoading(6, true);
+            
+            try {
+                const response = await fetch(`${API_BASE}/stats/overview`);
+                
+                const data = await response.json();
+                showResponse(6, data, !response.ok);
+            } catch (error) {
+                showResponse(6, { error: error.message }, true);
+            } finally {
+                setLoading(6, false);
+            }
+        }
+    </script>
+</body>
+</html>

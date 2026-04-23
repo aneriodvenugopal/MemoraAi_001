@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Maps API Test - IncomeLands</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        .status {
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        .success { background: #28a745; }
+        .error { background: #dc3545; }
+        .pending { background: #ffc107; color: black; }
+        #map {
+            width: 100%;
+            height: 500px;
+        }
+        .map-container {
+            position: relative;
+        }
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .instructions {
+            padding: 20px;
+            background: #e7f3ff;
+            border-left: 4px solid #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗺️ Google Maps API Test</h1>
+            <p>IncomeLands Integration Verification</p>
+        </div>
+        
+        <div class="status">
+            <h2>API Status:</h2>
+            <div class="status-item">
+                <div class="status-icon pending">⏳</div>
+                <div id="api-status">Checking API...</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon pending">⏳</div>
+                <div id="map-status">Initializing map...</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon pending">⏳</div>
+                <div id="marker-status">Adding markers...</div>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="legend">
+                <h3 style="margin-bottom: 10px;">Legend</h3>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4CAF50;"></div>
+                    <span>నా ప్రాపర్టీలు (My Properties)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #2196F3;"></div>
+                    <span>కొత్త ప్రాజెక్ట్స్ (Projects)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FF9800;"></div>
+                    <span>కావాలి (Requirements)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #F44336;"></div>
+                    <span>నా స్థానం (My Location)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>✅ Success Indicators:</h3>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Map loads without errors</li>
+                <li>You can see Google Maps tiles</li>
+                <li>Sample markers appear on the map</li>
+                <li>Info windows open when you click markers</li>
+                <li>Map controls (zoom, pan) work</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyA0_bXgS462aA-eas28mt7uWlNFiv0NagY';
+        
+        function updateStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            const icon = element.previousElementSibling;
+            element.textContent = message;
+            icon.className = `status-icon ${type}`;
+            icon.textContent = type === 'success' ? '✓' : (type === 'error' ? '✗' : '⏳');
+        }
+
+        // Sample data
+        const sampleProperties = [
+            { lat: 17.385, lng: 78.486, title: '2BHK Flat', price: '₹45L', type: 'property' },
+            { lat: 17.395, lng: 78.496, title: '3BHK Villa', price: '₹85L', type: 'property' }
+        ];
+
+        const sampleProjects = [
+            { lat: 17.405, lng: 78.476, title: 'Prestige Lakeside', price: '₹60L - ₹1.2Cr', type: 'project' },
+            { lat: 17.375, lng: 78.506, title: 'Brigade Towers', price: '₹50L - ₹90L', type: 'project' }
+        ];
+
+        const sampleRequirements = [
+            { lat: 17.415, lng: 78.486, title: 'Looking for 3BHK', budget: '₹80L - ₹1Cr', type: 'requirement' },
+            { lat: 17.365, lng: 78.496, title: 'Need Plot', budget: '₹25L - ₹35L', type: 'requirement' }
+        ];
+
+        function initMap() {
+            updateStatus('api-status', 'Google Maps API loaded successfully!', 'success');
+            updateStatus('map-status', 'Creating map...', 'pending');
+
+            try {
+                // Create map centered on Hyderabad
+                const map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 12,
+                    center: { lat: 17.385, lng: 78.486 },
+                    mapTypeId: 'roadmap',
+                    styles: [
+                        {
+                            featureType: 'poi',
+                            elementType: 'labels',
+                            stylers: [{ visibility: 'off' }]
+                        }
+                    ]
+                });
+
+                updateStatus('map-status', 'Map created successfully!', 'success');
+                updateStatus('marker-status', 'Adding markers...', 'pending');
+
+                // Add property markers (Green)
+                sampleProperties.forEach(prop => {
+                    const marker = new google.maps.Marker({
+                        position: { lat: prop.lat, lng: prop.lng },
+                        map: map,
+                        title: prop.title,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 10,
+                            fillColor: '#4CAF50',
+                            fillOpacity: 1,
+                            strokeColor: '#ffffff',
+                            strokeWeight: 2,
+                        }
+                    });
+
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="padding: 10px;">
+                                <h3 style="margin: 0 0 10px 0;">${prop.title}</h3>
+                                <p style="margin: 5px 0;"><strong>Price:</strong> ${prop.price}</p>
+                                <p style="margin: 5px 0;"><strong>Type:</strong> నా ప్రాపర్టీ</p>
+                            </div>
+                        `
+                    });
+
+                    marker.addListener('click', () => {
+                        infoWindow.open(map, marker);
+                    });
+                });
+
+                // Add project markers (Blue)
+                sampleProjects.forEach(proj => {
+                    const marker = new google.maps.Marker({
+                        position: { lat: proj.lat, lng: proj.lng },
+                        map: map,
+                        title: proj.title,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 10,
+                            fillColor: '#2196F3',
+                            fillOpacity: 1,
+                            strokeColor: '#ffffff',
+                            strokeWeight: 2,
+                        }
+                    });
+
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="padding: 10px;">
+                                <h3 style="margin: 0 0 10px 0;">${proj.title}</h3>
+                                <p style="margin: 5px 0;"><strong>Price Range:</strong> ${proj.price}</p>
+                                <p style="margin: 5px 0;"><strong>Commission:</strong> ₹50,000</p>
+                                <button style="margin-top: 10px; padding: 5px 15px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer;">Submit Lead</button>
+                            </div>
+                        `
+                    });
+
+                    marker.addListener('click', () => {
+                        infoWindow.open(map, marker);
+                    });
+                });
+
+                // Add requirement markers (Orange)
+                sampleRequirements.forEach(req => {
+                    const marker = new google.maps.Marker({
+                        position: { lat: req.lat, lng: req.lng },
+                        map: map,
+                        title: req.title,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 10,
+                            fillColor: '#FF9800',
+                            fillOpacity: 1,
+                            strokeColor: '#ffffff',
+                            strokeWeight: 2,
+                        }
+                    });
+
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="padding: 10px;">
+                                <h3 style="margin: 0 0 10px 0;">${req.title}</h3>
+                                <p style="margin: 5px 0;"><strong>Budget:</strong> ${req.budget}</p>
+                                <p style="margin: 5px 0;"><strong>Match:</strong> 87% 🎯</p>
+                                <button style="margin-top: 10px; padding: 5px 15px; background: #FF9800; color: white; border: none; border-radius: 5px; cursor: pointer;">Submit Property</button>
+                            </div>
+                        `
+                    });
+
+                    marker.addListener('click', () => {
+                        infoWindow.open(map, marker);
+                    });
+                });
+
+                // Add user location marker (Red)
+                new google.maps.Marker({
+                    position: { lat: 17.385, lng: 78.486 },
+                    map: map,
+                    title: 'My Location',
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: '#F44336',
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 3,
+                    }
+                });
+
+                updateStatus('marker-status', `${sampleProperties.length + sampleProjects.length + sampleRequirements.length + 1} markers added successfully!`, 'success');
+
+            } catch (error) {
+                updateStatus('map-status', `Error: ${error.message}`, 'error');
+                updateStatus('marker-status', 'Failed to add markers', 'error');
+            }
+        }
+
+        function handleApiError() {
+            updateStatus('api-status', 'Google Maps API failed to load!', 'error');
+            updateStatus('map-status', 'Cannot create map without API', 'error');
+            updateStatus('marker-status', 'Cannot add markers without map', 'error');
+        }
+
+        // Load Google Maps API
+        window.initMap = initMap;
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=initMap`;
+        script.async = true;
+        script.defer = true;
+        script.onerror = handleApiError;
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>

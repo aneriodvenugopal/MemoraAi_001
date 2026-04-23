@@ -2,14 +2,21 @@
 const path = require("path");
 require("dotenv").config();
 
-// Check if we're in development/preview mode (not production build)
-// Craco sets NODE_ENV=development for start, NODE_ENV=production for build
-const isDevServer = process.env.NODE_ENV !== "production";
-
 // Environment variable overrides
 const config = {
+  disableHotReload: process.env.DISABLE_HOT_RELOAD === "true",
+  enableVisualEdits: process.env.REACT_APP_ENABLE_VISUAL_EDITS === "true",
   enableHealthCheck: process.env.ENABLE_HEALTH_CHECK === "true",
 };
+
+// Conditionally load visual editing modules only if enabled
+let babelMetadataPlugin;
+let setupDevServer;
+
+if (config.enableVisualEdits) {
+  babelMetadataPlugin = require("./plugins/visual-edits/babel-metadata-plugin");
+  setupDevServer = require("./plugins/visual-edits/dev-server-setup");
+}
 
 // Conditionally load health check modules only if enabled
 let WebpackHealthPlugin;
@@ -22,23 +29,27 @@ if (config.enableHealthCheck) {
   healthPluginInstance = new WebpackHealthPlugin();
 }
 
-let webpackConfig = {
-  eslint: {
-    configure: {
-      extends: ["plugin:react-hooks/recommended"],
-      rules: {
-        "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn",
-      },
-    },
-  },
+const webpackConfig = {
   webpack: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
     configure: (webpackConfig) => {
 
-      // Add ignored patterns to reduce watched directories
+      // Disable hot reload completely if environment variable is set
+      if (config.disableHotReload) {
+        // Remove hot reload related plugins
+        webpackConfig.plugins = webpackConfig.plugins.filter(plugin => {
+          return !(plugin.constructor.name === 'HotModuleReplacementPlugin');
+        });
+
+        // Disable watch mode
+        webpackConfig.watch = false;
+        webpackConfig.watchOptions = {
+          ignored: /.*/, // Ignore all files
+        };
+      } else {
+        // Add ignored patterns to reduce watched directories
         webpackConfig.watchOptions = {
           ...webpackConfig.watchOptions,
           ignored: [
@@ -48,53 +59,54 @@ let webpackConfig = {
             '**/dist/**',
             '**/coverage/**',
             '**/public/**',
-        ],
-      };
+          ],
+        };
+      }
 
       // Add health check plugin to webpack if enabled
       if (config.enableHealthCheck && healthPluginInstance) {
         webpackConfig.plugins.push(healthPluginInstance);
       }
+
       return webpackConfig;
     },
   },
 };
 
-webpackConfig.devServer = (devServerConfig) => {
-  // Add health check endpoints if enabled
-  if (config.enableHealthCheck && setupHealthEndpoints && healthPluginInstance) {
-    const originalSetupMiddlewares = devServerConfig.setupMiddlewares;
+// Only add babel plugin if visual editing is enabled
+if (config.enableVisualEdits) {
+  webpackConfig.babel = {
+    plugins: [babelMetadataPlugin],
+  };
+}
 
-    devServerConfig.setupMiddlewares = (middlewares, devServer) => {
-      // Call original setup if exists
-      if (originalSetupMiddlewares) {
-        middlewares = originalSetupMiddlewares(middlewares, devServer);
-      }
-
-      // Setup health endpoints
-      setupHealthEndpoints(devServer, healthPluginInstance);
-
-      return middlewares;
-    };
-  }
-
-  return devServerConfig;
-};
-
-// Wrap with visual edits (automatically adds babel plugin, dev server, and overlay in dev mode)
-if (isDevServer) {
-  try {
-    const { withVisualEdits } = require("@emergentbase/visual-edits/craco");
-    webpackConfig = withVisualEdits(webpackConfig);
-  } catch (err) {
-    if (err.code === 'MODULE_NOT_FOUND' && err.message.includes('@emergentbase/visual-edits/craco')) {
-      console.warn(
-        "[visual-edits] @emergentbase/visual-edits not installed — visual editing disabled."
-      );
-    } else {
-      throw err;
+// Setup dev server with visual edits and/or health check
+if (config.enableVisualEdits || config.enableHealthCheck) {
+  webpackConfig.devServer = (devServerConfig) => {
+    // Apply visual edits dev server setup if enabled
+    if (config.enableVisualEdits && setupDevServer) {
+      devServerConfig = setupDevServer(devServerConfig);
     }
-  }
+
+    // Add health check endpoints if enabled
+    if (config.enableHealthCheck && setupHealthEndpoints && healthPluginInstance) {
+      const originalSetupMiddlewares = devServerConfig.setupMiddlewares;
+
+      devServerConfig.setupMiddlewares = (middlewares, devServer) => {
+        // Call original setup if exists
+        if (originalSetupMiddlewares) {
+          middlewares = originalSetupMiddlewares(middlewares, devServer);
+        }
+
+        // Setup health endpoints
+        setupHealthEndpoints(devServer, healthPluginInstance);
+
+        return middlewares;
+      };
+    }
+
+    return devServerConfig;
+  };
 }
 
 module.exports = webpackConfig;

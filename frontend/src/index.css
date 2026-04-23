@@ -113,3 +113,97 @@ code {
         border-bottom-color: inherit;
     }
 }
+
+/* Modal animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.2s ease-out;
+}
+
+.animate-slideUp {
+    animation: slideUp 0.3s ease-out;
+}
+
+
+/* Leaflet marker styles - ensure visibility */
+.sale-marker,
+.buy-marker,
+.user-loc {
+    background: transparent !important;
+    border: none !important;
+    pointer-events: auto !important;
+}
+
+.sale-marker > div,
+.buy-marker > div,
+.user-loc > div {
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    pointer-events: auto !important;
+}
+
+.sale-marker:hover > div,
+.buy-marker:hover > div,
+.user-loc:hover > div {
+    transform: scale(1.1);
+}
+
+/* Leaflet interactive fix */
+.leaflet-marker-icon {
+    pointer-events: auto !important;
+}
+
+/* Fix Leaflet popup styling */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px !important;
+    padding: 0 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+    overflow: hidden !important;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-width: 200px !important;
+}
+
+.leaflet-popup-tip-container {
+    margin-top: -1px;
+}
+
+.leaflet-popup-tip {
+    background: white !important;
+    box-shadow: none !important;
+}
+
+.leaflet-popup-close-button {
+    color: #666 !important;
+    font-size: 20px !important;
+    padding: 8px !important;
+    right: 4px !important;
+    top: 4px !important;
+}
+
+/* Ensure marker z-index */
+.leaflet-marker-pane {
+    z-index: 650 !important;
+}
