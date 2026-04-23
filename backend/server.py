@@ -12,6 +12,8 @@ import uuid
 
 # Import routes
 from routes import auth, tenants, currencies, categories, projects, properties, leads, bookings, commissions, analytics, notifications, users, scheduler, customer, layouts, layouts_library, in_app_notifications, referrals, translations, content, advisory, admin_content, share_referral, resale, saas_admin, chatbot, public_pages, marketplace, incomelands, incomelands_auth, google_auth, calendar_integration, workforce, project_dashboard, marketing_dashboard, payment_schemes, customer_payments, staff_hierarchy, commission_management, property_categories, currency_management, usage_tracking, coupons, bank_accounts, vendors, payment_transfer, articles, project_staff, role_assignments, roles, financial, ai_agents, sms, document_locker, festival_greetings, site_visits, booking_queue, customers_management, resale_release_mgmt, emi_payments, receipts, vendor_management, referral_wallet, complaints, commission_analytics, stripe_payments, stripe_webhook, email, subscriptions, certified_property, pdf, files, customer_portal, project_pricing, voters, payu, marketing_agents, push_notifications, tutorai, realapex_demos, agentapex, whatsapp_webhook
+# MemoraAI new routes
+from routes import memoraai_categories, memoraai_sales, memoraai_waba, memoraai_memory
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -58,7 +60,7 @@ def get_friendly_error_message(error_type: str, field: str, msg: str) -> str:
     return f"'{field}': {msg}"
 
 # Create the main app without a prefix
-app = FastAPI(title="RealApex API", version="1.0.0")
+app = FastAPI(title="MemoraAI API", version="2.0.0")
 
 
 # Global exception handler for validation errors
@@ -96,8 +98,8 @@ api_router = APIRouter(prefix="/api")
 @api_router.get("/")
 async def root():
     return {
-        "message": "RealApex API is running",
-        "version": "1.0.0",
+        "message": "MemoraAI API is running",
+        "version": "2.0.0",
         "status": "healthy"
     }
 
@@ -105,13 +107,13 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint for Kubernetes"""
-    return {"status": "healthy", "service": "realapex-api"}
+    return {"status": "healthy", "service": "memoraai-api"}
 
 # API health check (alternative route)
 @api_router.get("/health")
 async def api_health_check():
     """Health check endpoint via API prefix"""
-    return {"status": "healthy", "service": "realapex-api"}
+    return {"status": "healthy", "service": "memoraai-api"}
 
 # Include all route modules
 api_router.include_router(auth.router)
@@ -199,6 +201,12 @@ api_router.include_router(tutorai.router)  # TutorAI Admin Tool
 api_router.include_router(realapex_demos.router)  # RealApex SaaS Demo Generator
 api_router.include_router(agentapex.router)  # AgentApex Mobile Property App
 api_router.include_router(whatsapp_webhook.router)  # WhatsApp Agentic AI Workflow (NEW)
+
+# MemoraAI Multi-Category Routes
+api_router.include_router(memoraai_categories.router)  # Business Categories & Services
+api_router.include_router(memoraai_sales.router)       # Hot Sales Mode & Alerts
+api_router.include_router(memoraai_waba.router)        # Self-Service WABA Setup
+api_router.include_router(memoraai_memory.router)      # Business Memory AI
 
 # Phase 1 — Accounting & Money Tracking
 from routes import payment_receive, payment_out

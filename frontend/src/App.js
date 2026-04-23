@@ -199,6 +199,11 @@ import VotersBulkUpdate from "./pages/VotersBulkUpdate";
 // Settings Page
 import SettingsPage from "./pages/SettingsPage";
 
+// MemoraAI Pages
+import CategorySetup from "./pages/CategorySetup";
+import HotSalesMode from "./pages/HotSalesMode";
+import WABASetup from "./pages/WABASetup";
+
 // SEO Articles
 import ArticlesListing from "./pages/ArticlesListing";
 import SEOArticle from "./pages/SEOArticle";
@@ -1046,6 +1051,32 @@ function App() {
                 element={
                   <PrivateRoute>
                     <WhatsAppCRM />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* MemoraAI Routes */}
+              <Route
+                path="/category-setup"
+                element={
+                  <PrivateRoute>
+                    <CategorySetup />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/hot-sales"
+                element={
+                  <PrivateRoute>
+                    <HotSalesMode />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/waba-setup"
+                element={
+                  <PrivateRoute>
+                    <WABASetup />
                   </PrivateRoute>
                 }
               />

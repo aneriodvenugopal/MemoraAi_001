@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOut, Building2, Users, BarChart3, FileText, UserCog, Home, Layers, MessageSquare, MapPin, Wallet, Shield, Tags, FolderTree, Settings, Bot, DollarSign, CreditCard, TrendingUp, Banknote, Mail, Receipt } from 'lucide-react';
+import { LogOut, Building2, Users, BarChart3, FileText, UserCog, Home, Layers, MessageSquare, MapPin, Wallet, Shield, Tags, FolderTree, Settings, Bot, DollarSign, CreditCard, TrendingUp, Banknote, Mail, Receipt, Star, Stethoscope, Scissors, Flame, Brain, Phone } from 'lucide-react';
 import NotificationCenter from '../components/notifications/NotificationCenter';
 import PageInfoModal from '../components/PageInfoModal';
 import RealApexLogo from '../components/RealApexLogo';
@@ -385,7 +385,7 @@ const TenantAdminDashboard = () => {
   
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-gray-900">Tenant Dashboard</h2>
+      <h2 className="text-3xl font-bold text-gray-900">MemoraAI Dashboard</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <StatCard 
@@ -558,6 +558,44 @@ const TenantAdminDashboard = () => {
       </div>
       
       {/* Category Management Section */}
+      <div className="mt-8">
+        <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <Brain className="w-5 h-5 text-purple-600" />
+          MemoraAI - Multi-Category Business
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <ActionCard
+            icon={Star}
+            title="Category Setup"
+            description="Select business categories & manage AI-suggested services"
+            onClick={() => navigate('/category-setup')}
+            gradient="from-purple-500 to-indigo-500"
+          />
+          <ActionCard
+            icon={Flame}
+            title="Hot Sales Mode"
+            description="Manual hot leads & AI sales alerts"
+            onClick={() => navigate('/hot-sales')}
+            gradient="from-orange-500 to-red-500"
+          />
+          <ActionCard
+            icon={Phone}
+            title="WhatsApp Setup"
+            description="Self-service WABA configuration & templates"
+            onClick={() => navigate('/waba-setup')}
+            gradient="from-green-500 to-emerald-500"
+          />
+          <ActionCard
+            icon={MessageSquare}
+            title="WhatsApp CRM"
+            description="Manage WhatsApp leads & conversations"
+            onClick={() => navigate('/whatsapp-crm')}
+            gradient="from-green-600 to-teal-500"
+          />
+        </div>
+      </div>
+
+      {/* Original Category Management Section */}
       <div className="mt-8">
         <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
           <FolderTree className="w-5 h-5" />
