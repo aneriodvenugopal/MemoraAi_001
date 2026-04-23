@@ -91,7 +91,7 @@ const RoleManagement = ({ projectId, tenantId }) => {
       1: 'bg-purple-500',
       2: 'bg-blue-500',
       3: 'bg-green-500',
-      4: 'bg-yellow-500',
+      4: 'bg-blue-500',
       5: 'bg-orange-500',
       6: 'bg-pink-500',
       7: 'bg-gray-500',

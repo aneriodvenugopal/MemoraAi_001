@@ -23,7 +23,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 // Status colors
 const STATUS_COLORS = {
   waiting: 'bg-blue-100 text-blue-800',
-  notified: 'bg-yellow-100 text-yellow-800',
+  notified: 'bg-blue-100 text-blue-800',
   converted: 'bg-green-100 text-green-800',
   expired: 'bg-gray-100 text-gray-800',
   cancelled: 'bg-red-100 text-red-800',
@@ -299,10 +299,10 @@ const BookingQueue = () => {
               <p className="text-2xl font-bold text-blue-800">{stats.by_status?.waiting || 0}</p>
             </CardContent>
           </Card>
-          <Card className="bg-yellow-50 border-yellow-200">
+          <Card className="bg-blue-50 border-blue-200">
             <CardContent className="p-4">
-              <p className="text-sm text-yellow-600">Notified</p>
-              <p className="text-2xl font-bold text-yellow-800">{stats.by_status?.notified || 0}</p>
+              <p className="text-sm text-blue-600">Notified</p>
+              <p className="text-2xl font-bold text-blue-800">{stats.by_status?.notified || 0}</p>
             </CardContent>
           </Card>
           <Card className="bg-green-50 border-green-200">
@@ -577,7 +577,7 @@ const BookingQueue = () => {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Bell className="w-5 h-5 text-yellow-600" />
+              <Bell className="w-5 h-5 text-blue-600" />
               Notify Customer
             </DialogTitle>
           </DialogHeader>
@@ -592,8 +592,8 @@ const BookingQueue = () => {
                 </p>
               </div>
               
-              <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-sm text-yellow-800">
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
                   <AlertCircle className="w-4 h-4 inline mr-1" />
                   Customer will be notified that the property is available.
                   They will have <strong>48 hours</strong> to respond.
@@ -604,7 +604,7 @@ const BookingQueue = () => {
                 <Button variant="outline" onClick={() => setShowNotifyModal(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleNotify} className="bg-yellow-600 hover:bg-yellow-700">
+                <Button onClick={handleNotify} className="bg-blue-600 hover:bg-blue-700">
                   <Bell className="w-4 h-4 mr-2" />
                   Send Notification
                 </Button>

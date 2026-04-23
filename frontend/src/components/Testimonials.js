@@ -182,7 +182,7 @@ const Testimonials = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       {[...Array(item.rating)].map((_, i) => (
-                        <Star key={i} className="w-6 h-6 fill-yellow-400 text-yellow-400" />
+                        <Star key={i} className="w-6 h-6 fill-blue-400 text-blue-400" />
                       ))}
                     </div>
                   </div>
@@ -196,7 +196,7 @@ const Testimonials = () => {
                       </span>
                     )}
                     {item.letterhead && (
-                      <span className="px-3 py-1 bg-yellow-500 text-white text-xs font-semibold rounded-full">
+                      <span className="px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">
                         ⭐ Official Letterhead Feedback
                       </span>
                     )}

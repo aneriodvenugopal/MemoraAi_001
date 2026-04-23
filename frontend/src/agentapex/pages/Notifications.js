@@ -16,7 +16,7 @@ const NOTIFICATION_ICONS = {
 const NOTIFICATION_COLORS = {
   new_property: { bg: 'bg-blue-100', text: 'text-blue-600' },
   price_drop: { bg: 'bg-green-100', text: 'text-green-600' },
-  interest_match: { bg: 'bg-amber-100', text: 'text-amber-600' }
+  interest_match: { bg: 'bg-sky-100', text: 'text-sky-600' }
 };
 
 const Notifications = () => {

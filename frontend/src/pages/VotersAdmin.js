@@ -177,7 +177,7 @@ const VotersAdmin = () => {
               </Button>
               <div>
                 <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <Shield className="w-6 h-6 text-amber-500" />
+                  <Shield className="w-6 h-6 text-sky-500" />
                   Voters Admin Settings
                 </h1>
                 <p className="text-gray-500 text-sm">Manage ward visibility and export permissions</p>
@@ -258,8 +258,8 @@ const VotersAdmin = () => {
           <Card className="bg-white border-gray-200 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                  <Download className="w-5 h-5 text-amber-600" />
+                <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
+                  <Download className="w-5 h-5 text-sky-600" />
                 </div>
                 <div>
                   <p className="text-gray-500 text-xs">Export Enabled</p>
@@ -347,7 +347,7 @@ const VotersAdmin = () => {
                           onClick={() => toggleWardExport(ward.ward_no)}
                           className={`p-2 rounded-lg transition-colors ${
                             setting.export_enabled 
-                              ? 'bg-amber-100 text-amber-600 hover:bg-amber-200' 
+                              ? 'bg-sky-100 text-sky-600 hover:bg-sky-200' 
                               : 'bg-gray-200 text-gray-400 hover:bg-gray-300'
                           }`}
                           title={setting.export_enabled ? 'Click to disable export' : 'Click to enable export'}

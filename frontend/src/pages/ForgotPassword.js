@@ -348,14 +348,14 @@ const ForgotPassword = () => {
                         <div 
                           className={`h-full transition-all duration-300 ${
                             passwordStrength.color === 'red' ? 'bg-red-500 w-1/3' :
-                            passwordStrength.color === 'yellow' ? 'bg-yellow-500 w-2/3' :
+                            passwordStrength.color === 'yellow' ? 'bg-blue-500 w-2/3' :
                             'bg-green-500 w-full'
                           }`}
                         />
                       </div>
                       <span className={`text-xs font-medium ${
                         passwordStrength.color === 'red' ? 'text-red-600' :
-                        passwordStrength.color === 'yellow' ? 'text-yellow-600' :
+                        passwordStrength.color === 'yellow' ? 'text-blue-600' :
                         'text-green-600'
                       }`}>
                         {passwordStrength.text}

@@ -115,7 +115,7 @@ const StripePayments = () => {
       return <Badge className="bg-red-100 text-red-700"><XCircle className="w-3 h-3 mr-1" />Expired</Badge>;
     }
     if (status === 'pending' || paymentStatus === 'initiated') {
-      return <Badge className="bg-yellow-100 text-yellow-700"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
+      return <Badge className="bg-blue-100 text-blue-700"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
     }
     return <Badge className="bg-gray-100 text-gray-700">{status}</Badge>;
   };
@@ -179,15 +179,15 @@ const StripePayments = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-yellow-700">Pending</p>
-                    <p className="text-2xl font-bold text-yellow-800">{stats.pending}</p>
+                    <p className="text-sm text-blue-700">Pending</p>
+                    <p className="text-2xl font-bold text-blue-800">{stats.pending}</p>
                   </div>
-                  <div className="w-12 h-12 rounded-full bg-yellow-200 flex items-center justify-center">
-                    <Clock className="w-6 h-6 text-yellow-700" />
+                  <div className="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-blue-700" />
                   </div>
                 </div>
               </CardContent>

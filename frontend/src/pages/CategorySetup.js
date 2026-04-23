@@ -28,7 +28,7 @@ const CATEGORY_COLORS = {
   real_estate: "bg-blue-500",
   astrology: "bg-purple-500",
   doctor_clinic: "bg-emerald-500",
-  function_hall: "bg-amber-500",
+  function_hall: "bg-sky-500",
   pesticides_fertilizer: "bg-lime-600",
   beauty_salon: "bg-pink-500",
   coaching_center: "bg-indigo-500",

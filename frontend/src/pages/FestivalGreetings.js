@@ -276,11 +276,11 @@ const FestivalGreetings = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-green-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-green-50 p-6">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-orange-100 to-green-100 rounded-xl">
+          <div className="p-3 bg-gradient-to-br from-indigo-100 to-green-100 rounded-xl">
             <Flag className="w-8 h-8 text-orange-600" />
           </div>
           <div>
@@ -305,7 +305,7 @@ const FestivalGreetings = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Next Greeting */}
-              <div className="p-4 bg-gradient-to-br from-orange-50 to-green-50 rounded-xl border border-orange-200">
+              <div className="p-4 bg-gradient-to-br from-indigo-50 to-green-50 rounded-xl border border-orange-200">
                 <p className="text-sm text-slate-600 mb-1">Next Greeting</p>
                 <p className="text-xl font-bold text-slate-800">
                   {nextGreeting.festival.emoji} {nextGreeting.festival.name}
@@ -488,8 +488,8 @@ const FestivalGreetings = () => {
               )}
             </div>
             
-            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-xs text-yellow-800">
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-xs text-blue-800">
                 <AlertCircle className="w-4 h-4 inline mr-1" />
                 Only customers and past customers. NO leads, NO cold numbers.
               </p>

@@ -48,7 +48,7 @@ const PropertyCard = ({ property, isBuying, onFavorite, isFavorite }) => {
           className="w-full h-full object-cover"
         />
         <div className="absolute top-3 left-3">
-          <span className={`px-2.5 py-1 rounded-full text-xs font-semibold text-white ${isBuying ? 'bg-blue-500' : 'bg-amber-500'}`}>
+          <span className={`px-2.5 py-1 rounded-full text-xs font-semibold text-white ${isBuying ? 'bg-blue-500' : 'bg-sky-500'}`}>
             {isBuying ? 'WANTED' : 'FOR SALE'}
           </span>
         </div>
@@ -232,7 +232,7 @@ const MapSearch = () => {
                 <Marker key={p.id} position={[p.latitude, p.longitude]} icon={createSaleMarker()}>
                   <Popup>
                     <div className="min-w-[160px]">
-                      <p className="font-bold text-amber-600">₹{p.price} {p.price_unit}</p>
+                      <p className="font-bold text-sky-600">₹{p.price} {p.price_unit}</p>
                       <p className="text-gray-600 text-sm">{p.property_type}</p>
                       <p className="text-gray-400 text-xs">{p.area} {p.area_unit}</p>
                       <button 
@@ -268,7 +268,7 @@ const MapSearch = () => {
               <button
                 onClick={() => setViewMode('list')}
                 className={`w-full py-3.5 rounded-full font-semibold text-white shadow-lg ${
-                  listingMode === 'sell' ? 'bg-amber-500' : 'bg-blue-500'
+                  listingMode === 'sell' ? 'bg-sky-500' : 'bg-blue-500'
                 }`}
               >
                 View {data.length} {listingMode === 'sell' ? 'Properties' : 'Requirements'}

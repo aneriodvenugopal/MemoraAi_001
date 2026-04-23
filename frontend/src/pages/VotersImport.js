@@ -349,7 +349,7 @@ const VotersImport = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white">
+          <Card className="bg-gradient-to-br from-indigo-500 to-orange-600 text-white">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <FileText className="w-8 h-8 opacity-80" />

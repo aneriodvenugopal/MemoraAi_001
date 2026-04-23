@@ -595,12 +595,12 @@ const PropertyEdit = () => {
         <div className="bg-white rounded-2xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-              <StickyNote className="w-5 h-5 text-amber-500" />
+              <StickyNote className="w-5 h-5 text-sky-500" />
               Notes ({property.notes?.length || 0})
             </h3>
             <button
               onClick={() => setShowAddNote(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-600 rounded-xl text-sm font-medium"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 text-sky-600 rounded-xl text-sm font-medium"
             >
               <Plus className="w-4 h-4" /> Add Note
             </button>
@@ -609,8 +609,8 @@ const PropertyEdit = () => {
           {property.notes?.length > 0 ? (
             <div className="space-y-2">
               {property.notes.map((note, i) => (
-                <div key={i} className="flex items-start gap-3 p-3 bg-amber-50 rounded-xl">
-                  <StickyNote className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                <div key={i} className="flex items-start gap-3 p-3 bg-sky-50 rounded-xl">
+                  <StickyNote className="w-4 h-4 text-sky-500 mt-0.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-700">{note.text}</p>
                     {note.created_at && (
@@ -677,8 +677,8 @@ const PropertyEdit = () => {
                   data-testid="attach-note"
                   className="flex flex-col items-center gap-2"
                 >
-                  <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center">
-                    <StickyNote className="w-6 h-6 text-amber-500" />
+                  <div className="w-14 h-14 bg-sky-50 rounded-2xl flex items-center justify-center">
+                    <StickyNote className="w-6 h-6 text-sky-500" />
                   </div>
                   <span className="text-xs text-gray-600 font-medium">Notes</span>
                 </button>
@@ -745,7 +745,7 @@ const PropertyEdit = () => {
               <button
                 onClick={addNote}
                 disabled={!noteText.trim() || savingNote}
-                className="w-full py-3.5 bg-amber-500 text-white font-semibold rounded-xl disabled:opacity-50"
+                className="w-full py-3.5 bg-sky-500 text-white font-semibold rounded-xl disabled:opacity-50"
                 data-testid="save-note-btn"
               >
                 {savingNote ? 'Saving...' : 'Save Note'}

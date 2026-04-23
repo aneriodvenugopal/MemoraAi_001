@@ -115,7 +115,7 @@ const AgentApexAdminDashboard = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-amber-500 border-t-transparent mx-auto"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-sky-500 border-t-transparent mx-auto"></div>
           <p className="mt-4 text-gray-600 font-medium">Loading AgentApex Admin...</p>
         </div>
       </div>
@@ -125,7 +125,7 @@ const AgentApexAdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg">
+      <div className="bg-gradient-to-r from-sky-500 to-orange-500 text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -133,7 +133,7 @@ const AgentApexAdminDashboard = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold">AgentApex Admin</h1>
-              <p className="text-amber-100 mt-1">Manage users, properties, leads and requirements</p>
+              <p className="text-sky-100 mt-1">Manage users, properties, leads and requirements</p>
             </div>
           </div>
         </div>
@@ -149,7 +149,7 @@ const AgentApexAdminDashboard = () => {
                 onClick={() => setActiveTab(tab)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === tab
-                    ? 'border-amber-500 text-amber-600'
+                    ? 'border-sky-500 text-sky-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -178,7 +178,7 @@ const AgentApexAdminDashboard = () => {
                 title="Properties"
                 value={stats.total_properties}
                 subtitle="Active listings"
-                color="bg-amber-500"
+                color="bg-sky-500"
               />
               <StatCard
                 icon={TrendingUp}
@@ -204,8 +204,8 @@ const AgentApexAdminDashboard = () => {
                 <div className="space-y-4">
                   {properties.slice(0, 5).map((property) => (
                     <div key={property.id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                      <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-                        <Building2 className="w-6 h-6 text-amber-600" />
+                      <div className="w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center">
+                        <Building2 className="w-6 h-6 text-sky-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">{property.title || property.property_type}</p>
@@ -214,7 +214,7 @@ const AgentApexAdminDashboard = () => {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-amber-600">{formatPrice(property.price, property.price_unit)}</p>
+                        <p className="font-semibold text-sky-600">{formatPrice(property.price, property.price_unit)}</p>
                         <p className="text-xs text-gray-400">{property.area} {property.area_unit}</p>
                       </div>
                     </div>
@@ -241,7 +241,7 @@ const AgentApexAdminDashboard = () => {
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                         lead.status === 'new' ? 'bg-blue-100 text-blue-700' :
                         lead.status === 'hot' ? 'bg-red-100 text-red-700' :
-                        lead.status === 'contacted' ? 'bg-yellow-100 text-yellow-700' :
+                        lead.status === 'contacted' ? 'bg-blue-100 text-blue-700' :
                         'bg-gray-100 text-gray-700'
                       }`}>
                         {lead.status}
@@ -270,7 +270,7 @@ const AgentApexAdminDashboard = () => {
                     placeholder="Search users..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                   />
                 </div>
               </div>
@@ -294,8 +294,8 @@ const AgentApexAdminDashboard = () => {
                     <tr key={user.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                            <span className="text-amber-600 font-semibold">
+                          <div className="w-10 h-10 bg-sky-100 rounded-full flex items-center justify-center">
+                            <span className="text-sky-600 font-semibold">
                               {(user.name || user.phone)?.[0]?.toUpperCase() || 'U'}
                             </span>
                           </div>
@@ -308,7 +308,7 @@ const AgentApexAdminDashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-gray-600">{user.phone}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          user.subscription_type === 'premium' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700'
+                          user.subscription_type === 'premium' ? 'bg-sky-100 text-sky-700' : 'bg-gray-100 text-gray-700'
                         }`}>
                           {user.subscription_type || 'free'}
                         </span>
@@ -343,7 +343,7 @@ const AgentApexAdminDashboard = () => {
                     placeholder="Search properties..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                   />
                 </div>
               </div>
@@ -375,7 +375,7 @@ const AgentApexAdminDashboard = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 bg-amber-50 text-amber-700 rounded text-sm">
+                        <span className="px-2 py-1 bg-sky-50 text-sky-700 rounded text-sm">
                           {property.property_type}
                         </span>
                       </td>
@@ -435,7 +435,7 @@ const AgentApexAdminDashboard = () => {
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           lead.status === 'new' ? 'bg-blue-100 text-blue-700' :
                           lead.status === 'hot' ? 'bg-red-100 text-red-700' :
-                          lead.status === 'contacted' ? 'bg-yellow-100 text-yellow-700' :
+                          lead.status === 'contacted' ? 'bg-blue-100 text-blue-700' :
                           lead.status === 'closed' ? 'bg-green-100 text-green-700' :
                           'bg-gray-100 text-gray-700'
                         }`}>
@@ -460,8 +460,8 @@ const AgentApexAdminDashboard = () => {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-amber-100 rounded-xl">
-                    <Settings className="w-6 h-6 text-amber-600" />
+                  <div className="p-3 bg-sky-100 rounded-xl">
+                    <Settings className="w-6 h-6 text-sky-600" />
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-gray-900">Contact Reveal Settings</h2>
@@ -481,7 +481,7 @@ const AgentApexAdminDashboard = () => {
                     step="1"
                     value={contactRevealPrice}
                     onChange={(e) => setContactRevealPrice(Number(e.target.value))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                     placeholder="Enter price in INR"
                   />
                   <p className="mt-2 text-sm text-gray-500">
@@ -501,14 +501,14 @@ const AgentApexAdminDashboard = () => {
                       onChange={(e) => setContactRevealEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-sky-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
                   </label>
                 </div>
                 
                 <button
                   onClick={saveSettings}
                   disabled={savingSettings}
-                  className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+                  className="w-full py-3 bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
                 >
                   {savingSettings ? (
                     <span>Saving...</span>

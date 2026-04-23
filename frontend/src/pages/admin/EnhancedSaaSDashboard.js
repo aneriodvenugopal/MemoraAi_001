@@ -200,7 +200,7 @@ function EnhancedSaaSDashboard() {
               </button>
               <button
                 onClick={() => navigate('/admin/master-categories')}
-                className="px-4 py-2.5 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2 font-medium"
+                className="px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-orange-700 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2 font-medium"
               >
                 <Building2 size={18} />
                 Categories
@@ -275,7 +275,7 @@ function EnhancedSaaSDashboard() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition-all">
+          <div className="bg-gradient-to-br from-indigo-500 to-orange-600 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition-all">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
                 <Home size={28} />
@@ -501,10 +501,10 @@ function EnhancedSaaSDashboard() {
             <div className="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <Award className="text-yellow-600" size={24} />
+                  <Award className="text-blue-600" size={24} />
                   Top Performing Tenants
                 </h3>
-                <span className="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded-full">
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
                   By Properties
                 </span>
               </div>

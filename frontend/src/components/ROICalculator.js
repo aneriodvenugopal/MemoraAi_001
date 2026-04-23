@@ -63,7 +63,7 @@ const ROICalculator = () => {
     <section className="py-20 bg-gradient-to-r from-blue-900 to-purple-900 text-white">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
-          <Calculator className="w-16 h-16 mx-auto mb-4 text-yellow-400" />
+          <Calculator className="w-16 h-16 mx-auto mb-4 text-blue-400" />
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             Calculate Your ROI with MemoraAI
           </h2>
@@ -93,7 +93,7 @@ const ROICalculator = () => {
                   />
                   <div className="flex justify-between text-sm mt-2">
                     <span>50</span>
-                    <span className="font-bold text-2xl text-yellow-400">{leads}</span>
+                    <span className="font-bold text-2xl text-blue-400">{leads}</span>
                     <span>500</span>
                   </div>
                 </div>
@@ -206,9 +206,9 @@ const ROICalculator = () => {
               </div>
 
               {/* ROI */}
-              <div className="bg-yellow-500/20 backdrop-blur-lg rounded-2xl p-6 border-2 border-yellow-400">
+              <div className="bg-blue-500/20 backdrop-blur-lg rounded-2xl p-6 border-2 border-blue-400">
                 <div className="text-center">
-                  <div className="text-6xl font-bold text-yellow-400 mb-2">
+                  <div className="text-6xl font-bold text-blue-400 mb-2">
                     {results.roi}X
                   </div>
                   <div className="text-xl font-semibold">Return on Investment</div>

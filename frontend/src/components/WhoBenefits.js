@@ -291,7 +291,7 @@ const WhoBenefits = () => {
             <div className="font-bold mb-1">Agents</div>
             <div className="text-sm opacity-90">Sell More, Earn More</div>
           </div>
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-xl p-6 text-center">
+          <div className="bg-gradient-to-br from-indigo-500 to-orange-600 text-white rounded-xl p-6 text-center">
             <div className="text-4xl mb-2">💼</div>
             <div className="font-bold mb-1">Staff</div>
             <div className="text-sm opacity-90">Work Smarter</div>

@@ -108,7 +108,7 @@ export default function WABASetup() {
         {/* Status Badge */}
         {config && (
           <div className="mb-4 flex gap-2">
-            <Badge className={config.is_verified ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}>
+            <Badge className={config.is_verified ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}>
               {config.is_verified ? <><CheckCircle className="w-3 h-3 mr-1" /> Verified</> : <><AlertCircle className="w-3 h-3 mr-1" /> Not Verified</>}
             </Badge>
             {config.is_active && <Badge className="bg-blue-100 text-blue-700">Active</Badge>}

@@ -31,7 +31,7 @@ const OurStoryImproved = () => {
       phase: "Phase 4: Launch & Growth (2024+)",
       icon: <Award className="w-8 h-8" />,
       color: "orange",
-      gradient: "from-orange-500 to-orange-600",
+      gradient: "from-indigo-500 to-orange-600",
       content: "Launched MemoraAI as a complete real estate automation platform. Helping real estate companies manage multiple projects efficiently with zero lead leakage.",
       stats: ["SaaS Launch", "Live Platform", "Growing"]
     }
@@ -153,7 +153,7 @@ const OurStoryImproved = () => {
               </div>
               
               <div className="text-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-white text-xl font-bold">25+</span>
                 </div>
                 <p className="text-sm font-semibold text-gray-700">CRM Systems</p>

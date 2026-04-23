@@ -126,7 +126,7 @@ class ErrorBoundary extends React.Component {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => window.location.reload()}
-              className="px-6 py-2.5 bg-amber-500 text-white rounded-xl font-medium"
+              className="px-6 py-2.5 bg-sky-500 text-white rounded-xl font-medium"
             >
               Refresh
             </motion.button>

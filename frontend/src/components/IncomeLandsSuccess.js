@@ -168,7 +168,7 @@ const IncomeLandsSuccess = () => {
           </div>
 
           {/* Why This Matters */}
-          <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white shadow-2xl">
+          <div className="bg-gradient-to-r from-indigo-500 to-red-500 rounded-2xl p-8 text-white shadow-2xl">
             <h3 className="text-3xl font-bold mb-6 text-center">Why This Proves Our Real Estate Expertise</h3>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">

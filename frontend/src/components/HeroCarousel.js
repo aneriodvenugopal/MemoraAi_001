@@ -135,7 +135,7 @@ const HeroCarousel = () => {
 
                 {/* Benefit - Clean Badge (not button-like) */}
                 <div className="mb-6">
-                  <span className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-4 py-1.5 text-base font-bold">
+                  <span className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-400 to-orange-400 text-gray-900 px-4 py-1.5 text-base font-bold">
                     🚀 {slide.benefit}
                   </span>
                 </div>

@@ -148,7 +148,7 @@ const PropertySearchById = () => {
                     <span className="text-gray-400">No Image</span>
                   </div>
                 )}
-                <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white px-3 py-1.5 rounded-lg">
+                <div className="absolute top-3 left-3 bg-gradient-to-r from-sky-500 to-sky-600 text-white px-3 py-1.5 rounded-lg">
                   <p className="text-xs font-bold uppercase">{result.property.property_type}</p>
                 </div>
                 <div className="absolute top-3 right-3 bg-white/90 backdrop-blur text-gray-900 px-3 py-1.5 rounded-lg">
@@ -180,19 +180,19 @@ const PropertySearchById = () => {
                 </div>
 
                 {/* Agent Info */}
-                <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-100">
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-300 flex-shrink-0">
+                <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-sky-50 to-orange-50 rounded-xl border border-sky-100">
+                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-sky-300 flex-shrink-0">
                     {agentImage ? (
                       <img src={agentImage} alt={result.agent.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                      <div className="w-full h-full bg-gradient-to-br from-sky-400 to-orange-500 flex items-center justify-center">
                         <User className="w-6 h-6 text-white" />
                       </div>
                     )}
                   </div>
                   <div className="flex-1">
                     <p className="font-bold text-gray-900 text-sm">{result.agent.name}</p>
-                    <p className="text-xs text-amber-600 font-medium">{result.agent.designation}</p>
+                    <p className="text-xs text-sky-600 font-medium">{result.agent.designation}</p>
                   </div>
                 </div>
 

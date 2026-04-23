@@ -438,7 +438,7 @@ const AIAgentsHub = () => {
       id: 'followup-agent',
       name: 'Lead Follow-up Automation Agent',
       icon: Users,
-      color: 'from-orange-500 to-orange-600',
+      color: 'from-indigo-500 to-orange-600',
       status: 'coming_soon',
       shortDescription: 'Intelligent follow-up scheduler and reminder system for lead nurturing',
       benefits: [
@@ -690,7 +690,7 @@ const AIAgentsHub = () => {
       id: 'voice-agent',
       name: 'Voice Call Automation Agent',
       icon: Phone,
-      color: 'from-yellow-500 to-yellow-600',
+      color: 'from-blue-500 to-blue-600',
       status: 'coming_soon',
       shortDescription: 'AI voice assistant for automated calling and IVR systems',
       benefits: [
@@ -821,7 +821,7 @@ const AIAgentsHub = () => {
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      coming_soon: { label: 'Coming Soon', color: 'bg-yellow-500' },
+      coming_soon: { label: 'Coming Soon', color: 'bg-blue-500' },
       active: { label: 'Active', color: 'bg-green-500' },
       beta: { label: 'Beta', color: 'bg-blue-500' },
       planned: { label: 'Planned', color: 'bg-gray-500' }
@@ -888,7 +888,7 @@ const AIAgentsHub = () => {
                         <Button
                           size="sm"
                           onClick={pauseSpeaking}
-                          className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs"
+                          className="bg-blue-500 hover:bg-blue-600 text-white text-xs"
                         >
                           <Pause className="w-3 h-3 mr-1" />
                           Pause
@@ -919,12 +919,12 @@ const AIAgentsHub = () => {
               </div>
             </div>
           </div>
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg mb-4">
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg mb-4">
             <div className="flex items-start gap-2">
-              <Info className="w-5 h-5 text-yellow-600 mt-0.5" />
+              <Info className="w-5 h-5 text-blue-600 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-yellow-800">Documentation Phase</p>
-                <p className="text-sm text-yellow-700 mt-1">
+                <p className="text-sm font-medium text-blue-800">Documentation Phase</p>
+                <p className="text-sm text-blue-700 mt-1">
                   ప్రతి AI Agent పక్కన <Info className="w-4 h-4 inline" /> icon click చేసి detailed information చూడండి. 
                   Implementation తర్వాత confirm చేసిన తర్వాత start అవుతుంది.
                 </p>
@@ -1023,7 +1023,7 @@ const AIAgentsHub = () => {
                     <ul className="text-xs text-gray-600 space-y-1">
                       {agent.benefits.slice(0, 3).map((benefit, idx) => (
                         <li key={idx} className="flex items-start gap-2">
-                          <Zap className="w-3 h-3 text-yellow-500 mt-0.5 flex-shrink-0" />
+                          <Zap className="w-3 h-3 text-blue-500 mt-0.5 flex-shrink-0" />
                           <span>{benefit}</span>
                         </li>
                       ))}
@@ -1087,7 +1087,7 @@ const AIAgentsHub = () => {
                             <Play className="w-3 h-3 mr-1" /> Resume
                           </Button>
                         ) : (
-                          <Button size="sm" onClick={pauseSpeaking} className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs">
+                          <Button size="sm" onClick={pauseSpeaking} className="bg-blue-500 hover:bg-blue-600 text-white text-xs">
                             <Pause className="w-3 h-3 mr-1" /> Pause
                           </Button>
                         )}
@@ -1215,12 +1215,12 @@ const AIAgentsHub = () => {
                 </div>
 
                 {/* Status Banner */}
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <Info className="w-5 h-5 text-yellow-600" />
-                    <p className="font-semibold text-yellow-900">Implementation Status</p>
+                    <Info className="w-5 h-5 text-blue-600" />
+                    <p className="font-semibold text-blue-900">Implementation Status</p>
                   </div>
-                  <p className="text-sm text-yellow-800">
+                  <p className="text-sm text-blue-800">
                     This agent is currently in <strong>documentation phase</strong>. 
                     Implementation will begin after your review and confirmation. 
                     Estimated development time: 2-3 weeks.

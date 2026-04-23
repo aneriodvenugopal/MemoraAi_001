@@ -19,7 +19,7 @@ export default function ImpersonationBanner() {
 
   return (
     <div
-      className="sticky top-0 z-[60] bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-4 py-2 flex items-center justify-between gap-3 shadow-md"
+      className="sticky top-0 z-[60] bg-gradient-to-r from-sky-500 to-blue-500 text-white px-4 py-2 flex items-center justify-between gap-3 shadow-md"
       data-testid="impersonation-banner"
     >
       <div className="flex items-center gap-2 min-w-0">

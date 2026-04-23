@@ -186,9 +186,9 @@ const LoginForm = ({ onLoginSuccess }) => {
                 <button type="button" onClick={() => { setStep('phone'); setOtp(''); setMockOtp(null); }} className="text-emerald-600 text-sm hover:underline mt-1" aria-label="Change phone number">Change number</button>
               </div>
               {mockOtp && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-center">
-                  <p className="text-xs text-amber-700 font-medium">DEMO MODE - Your OTP</p>
-                  <p className="text-2xl font-bold text-amber-900 tracking-widest">{mockOtp}</p>
+                <div className="bg-sky-50 border border-sky-200 rounded-lg p-3 text-center">
+                  <p className="text-xs text-sky-700 font-medium">DEMO MODE - Your OTP</p>
+                  <p className="text-2xl font-bold text-sky-900 tracking-widest">{mockOtp}</p>
                 </div>
               )}
               <div className="space-y-2">
@@ -242,7 +242,7 @@ const TreeItem = ({ item, level = 0, isExpanded, onToggle, onSelect, isSelected 
         )}
         
         {isProject ? (
-          isExpanded ? <FolderOpen className="w-5 h-5 text-amber-500" /> : <Folder className="w-5 h-5 text-amber-500" />
+          isExpanded ? <FolderOpen className="w-5 h-5 text-sky-500" /> : <Folder className="w-5 h-5 text-sky-500" />
         ) : (
           <Home className="w-5 h-5 text-emerald-600" />
         )}
@@ -260,7 +260,7 @@ const TreeItem = ({ item, level = 0, isExpanded, onToggle, onSelect, isSelected 
           <Badge className={`text-xs ${
             item.paymentProgress > 80 ? 'bg-emerald-100 text-emerald-700' :
             item.paymentProgress > 50 ? 'bg-blue-100 text-blue-700' :
-            'bg-amber-100 text-amber-700'
+            'bg-sky-100 text-sky-700'
           }`}>
             {item.paymentProgress}%
           </Badge>
@@ -397,7 +397,7 @@ const PropertyDetailPanel = ({ property, onResaleRequest, onPayNow, session }) =
           <Progress value={(property.booking?.paid_amount / property.booking?.total_amount) * 100 || 0} className="h-3 bg-white/20" />
           <div className="flex justify-between mt-2 text-sm">
             <span className="text-emerald-400">Paid: {formatCurrency(property.booking?.paid_amount)}</span>
-            <span className="text-amber-400">Pending: {formatCurrency(property.booking?.pending_amount)}</span>
+            <span className="text-sky-400">Pending: {formatCurrency(property.booking?.pending_amount)}</span>
           </div>
         </div>
       </div>
@@ -487,28 +487,28 @@ const PropertyDetailPanel = ({ property, onResaleRequest, onPayNow, session }) =
                 </div>
                 <div className="flex justify-between py-2">
                   <span className="text-slate-600">Balance Due</span>
-                  <span className="font-medium text-amber-600">{formatCurrency(property.booking?.pending_amount)}</span>
+                  <span className="font-medium text-sky-600">{formatCurrency(property.booking?.pending_amount)}</span>
                 </div>
               </CardContent>
             </Card>
 
             {nextPayment && (
-              <Card className="md:col-span-2 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
+              <Card className="md:col-span-2 bg-gradient-to-r from-sky-50 to-orange-50 border-sky-200">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                      <AlertCircle className="w-6 h-6 text-amber-600" />
+                    <div className="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
+                      <AlertCircle className="w-6 h-6 text-sky-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-amber-900">Next Payment Due</p>
-                      <p className="text-sm text-amber-700">
+                      <p className="font-medium text-sky-900">Next Payment Due</p>
+                      <p className="text-sm text-sky-700">
                         {nextPayment.installment_name} • Due: {formatDate(nextPayment.due_date)}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-amber-900">{formatCurrency(nextPayment.remaining_amount || nextPayment.due_amount)}</p>
-                    <Button size="sm" className="mt-2 bg-amber-600 hover:bg-amber-700" onClick={() => onPayNow(nextPayment)}>
+                    <p className="text-2xl font-bold text-sky-900">{formatCurrency(nextPayment.remaining_amount || nextPayment.due_amount)}</p>
+                    <Button size="sm" className="mt-2 bg-sky-600 hover:bg-sky-700" onClick={() => onPayNow(nextPayment)}>
                       Pay Now
                     </Button>
                   </div>
@@ -558,7 +558,7 @@ const PropertyDetailPanel = ({ property, onResaleRequest, onPayNow, session }) =
                         <Badge className={`text-xs ${
                           schedule.status === 'paid' ? 'bg-emerald-100 text-emerald-700' :
                           schedule.status === 'overdue' ? 'bg-red-100 text-red-700' :
-                          'bg-amber-100 text-amber-700'
+                          'bg-sky-100 text-sky-700'
                         }`}>
                           {schedule.status}
                         </Badge>
@@ -590,13 +590,13 @@ const PropertyDetailPanel = ({ property, onResaleRequest, onPayNow, session }) =
                     doc.type === 'payment_receipt' ? 'bg-emerald-100' :
                     doc.type === 'booking_confirmation' ? 'bg-blue-100' :
                     doc.type === 'allotment_letter' ? 'bg-purple-100' :
-                    'bg-amber-100'
+                    'bg-sky-100'
                   }`}>
                     <FileText className={`w-6 h-6 ${
                       doc.type === 'payment_receipt' ? 'text-emerald-600' :
                       doc.type === 'booking_confirmation' ? 'text-blue-600' :
                       doc.type === 'allotment_letter' ? 'text-purple-600' :
-                      'text-amber-600'
+                      'text-sky-600'
                     }`} />
                   </div>
                   <div className="flex-1">
@@ -809,7 +809,7 @@ const Dashboard = ({ session, onLogout }) => {
         <div className="w-80 bg-white border-r border-slate-200 flex flex-col">
           <div className="p-4 border-b border-slate-200 bg-slate-50">
             <h2 className="font-semibold text-slate-700 flex items-center gap-2">
-              <FolderOpen className="w-5 h-5 text-amber-500" />
+              <FolderOpen className="w-5 h-5 text-sky-500" />
               My Projects & Properties
             </h2>
             <p className="text-xs text-slate-500 mt-1">{properties.length} properties in {projectTree.length} projects</p>

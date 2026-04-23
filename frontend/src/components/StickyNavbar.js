@@ -52,7 +52,7 @@ const StickyNavbar = () => {
           <div className="hidden lg:flex items-center space-x-5">
             <Link
               to="/"
-              className="text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
+              className="text-sm text-gray-700 hover:text-sky-600 font-medium transition-colors whitespace-nowrap"
             >
               Home
             </Link>
@@ -60,7 +60,7 @@ const StickyNavbar = () => {
             {/* Solutions Dropdown */}
             <div className="relative group">
               <button
-                className="flex items-center text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
+                className="flex items-center text-sm text-gray-700 hover:text-sky-600 font-medium transition-colors whitespace-nowrap"
                 onMouseEnter={() => setSolutionsOpen(true)}
                 onMouseLeave={() => setSolutionsOpen(false)}
               >
@@ -80,7 +80,7 @@ const StickyNavbar = () => {
                   <Link
                     key={solution.link}
                     to={solution.link}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-amber-600 transition-colors"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-sky-600 transition-colors"
                   >
                     {solution.name}
                   </Link>
@@ -90,42 +90,42 @@ const StickyNavbar = () => {
 
             <Link
               to="/features"
-              className="text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
+              className="text-sm text-gray-700 hover:text-sky-600 font-medium transition-colors whitespace-nowrap"
             >
               Features
             </Link>
 
             <Link
               to="/pricing"
-              className="text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
+              className="text-sm text-gray-700 hover:text-sky-600 font-medium transition-colors whitespace-nowrap"
             >
               Pricing
             </Link>
 
             <Link
               to="/advisory"
-              className="text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
+              className="text-sm text-gray-700 hover:text-sky-600 font-medium transition-colors whitespace-nowrap"
             >
               FREE Expert
             </Link>
 
             <Link
               to="/workforce-map"
-              className="text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
+              className="text-sm text-gray-700 hover:text-sky-600 font-medium transition-colors whitespace-nowrap"
             >
               Workforce
             </Link>
 
             <Link
               to="/faq"
-              className="text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
+              className="text-sm text-gray-700 hover:text-sky-600 font-medium transition-colors whitespace-nowrap"
             >
               FAQ
             </Link>
 
             <Link
               to="/contact"
-              className="text-sm text-gray-700 hover:text-amber-600 font-medium transition-colors whitespace-nowrap"
+              className="text-sm text-gray-700 hover:text-sky-600 font-medium transition-colors whitespace-nowrap"
             >
               Contact
             </Link>
@@ -135,13 +135,13 @@ const StickyNavbar = () => {
           <div className="hidden lg:flex items-center space-x-3 flex-shrink-0">
             <Link
               to="/login"
-              className="px-4 py-2 text-sm text-amber-600 font-semibold hover:text-amber-700 transition-colors"
+              className="px-4 py-2 text-sm text-sky-600 font-semibold hover:text-sky-700 transition-colors"
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg transition-all"
+              className="px-4 py-2 text-sm bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-lg transition-all"
             >
               Start Free Trial
             </Link>
@@ -150,7 +150,7 @@ const StickyNavbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden text-gray-700 hover:text-amber-600"
+            className="lg:hidden text-gray-700 hover:text-sky-600"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -162,7 +162,7 @@ const StickyNavbar = () => {
             <div className="flex flex-col space-y-4">
               <Link
                 to="/"
-                className="text-gray-700 hover:text-amber-600 font-medium"
+                className="text-gray-700 hover:text-sky-600 font-medium"
               >
                 Home
               </Link>
@@ -171,7 +171,7 @@ const StickyNavbar = () => {
               <div>
                 <button
                   onClick={() => setSolutionsOpen(!solutionsOpen)}
-                  className="flex items-center text-gray-700 hover:text-amber-600 font-medium w-full"
+                  className="flex items-center text-gray-700 hover:text-sky-600 font-medium w-full"
                 >
                   Solutions
                   <ChevronDown className={`w-4 h-4 ml-1 transition-transform ${solutionsOpen ? 'rotate-180' : ''}`} />
@@ -182,7 +182,7 @@ const StickyNavbar = () => {
                       <Link
                         key={solution.link}
                         to={solution.link}
-                        className="block text-gray-600 hover:text-amber-600"
+                        className="block text-gray-600 hover:text-sky-600"
                       >
                         {solution.name}
                       </Link>
@@ -193,42 +193,42 @@ const StickyNavbar = () => {
 
               <Link
                 to="/features"
-                className="text-gray-700 hover:text-amber-600 font-medium"
+                className="text-gray-700 hover:text-sky-600 font-medium"
               >
                 Features
               </Link>
 
               <Link
                 to="/pricing"
-                className="text-gray-700 hover:text-amber-600 font-medium"
+                className="text-gray-700 hover:text-sky-600 font-medium"
               >
                 Pricing
               </Link>
 
               <Link
                 to="/advisory"
-                className="text-gray-700 hover:text-amber-600 font-medium"
+                className="text-gray-700 hover:text-sky-600 font-medium"
               >
                 FREE Expert Advisory
               </Link>
 
               <Link
                 to="/faq"
-                className="text-gray-700 hover:text-amber-600 font-medium"
+                className="text-gray-700 hover:text-sky-600 font-medium"
               >
                 FAQ
               </Link>
 
               <Link
                 to="/workforce-map"
-                className="text-gray-700 hover:text-amber-600 font-medium"
+                className="text-gray-700 hover:text-sky-600 font-medium"
               >
                 Workforce Map
               </Link>
 
               <Link
                 to="/contact"
-                className="text-gray-700 hover:text-amber-600 font-medium"
+                className="text-gray-700 hover:text-sky-600 font-medium"
               >
                 Contact
               </Link>
@@ -236,13 +236,13 @@ const StickyNavbar = () => {
               <div className="flex flex-col space-y-2 pt-4 border-t">
                 <Link
                   to="/login"
-                  className="px-6 py-2 text-center text-amber-600 font-semibold border-2 border-amber-600 rounded-lg"
+                  className="px-6 py-2 text-center text-sky-600 font-semibold border-2 border-sky-600 rounded-lg"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="px-6 py-2 text-center bg-amber-600 text-white font-semibold rounded-lg"
+                  className="px-6 py-2 text-center bg-sky-600 text-white font-semibold rounded-lg"
                 >
                   Start Free Trial
                 </Link>

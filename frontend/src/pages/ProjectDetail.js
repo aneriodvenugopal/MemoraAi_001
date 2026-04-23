@@ -179,7 +179,7 @@ const ProjectDetail = () => {
   const getStatusColor = (statusSlug) => {
     const colors = {
       available: 'bg-green-500',   // Green
-      booked: 'bg-yellow-500',     // Yellow
+      booked: 'bg-blue-500',     // Yellow
       blocked: 'bg-orange-500',    // Orange
       sold: 'bg-red-500',          // Red
       resale: 'bg-purple-500',
@@ -572,7 +572,7 @@ const StatCard = ({ title, value, color, icon: Icon }) => {
       icon: 'text-gray-500'
     },
     orange: {
-      gradient: 'from-orange-500 to-orange-600',
+      gradient: 'from-indigo-500 to-orange-600',
       bg: 'bg-orange-50',
       text: 'text-orange-600',
       icon: 'text-orange-500'

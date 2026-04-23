@@ -97,7 +97,7 @@ const SuccessStories = () => {
                       </div>
                       <div className="flex gap-0.5">
                         {[...Array(story.rating)].map((_, i) => (
-                          <Star key={i} className="w-3 h-3 md:w-4 md:h-4 fill-yellow-300 text-yellow-300" />
+                          <Star key={i} className="w-3 h-3 md:w-4 md:h-4 fill-blue-300 text-blue-300" />
                         ))}
                       </div>
                     </div>
@@ -174,7 +174,7 @@ const SuccessStories = () => {
               </div>
               
               <div className="text-center p-3 md:p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-all">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-indigo-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-white text-lg md:text-xl font-bold">25+</span>
                 </div>
                 <p className="text-xs md:text-sm font-semibold text-gray-700">CRM Systems</p>

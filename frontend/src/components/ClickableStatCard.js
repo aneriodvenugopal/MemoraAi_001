@@ -51,11 +51,11 @@ const COLOR_CLASSES = {
     hover: 'hover:border-cyan-400 hover:shadow-cyan-100'
   },
   yellow: {
-    bg: 'bg-yellow-500',
-    bgLight: 'bg-yellow-50',
-    text: 'text-yellow-600',
-    border: 'border-yellow-200',
-    hover: 'hover:border-yellow-400 hover:shadow-yellow-100'
+    bg: 'bg-blue-500',
+    bgLight: 'bg-blue-50',
+    text: 'text-blue-600',
+    border: 'border-blue-200',
+    hover: 'hover:border-blue-400 hover:shadow-blue-100'
   },
   gray: {
     bg: 'bg-gray-500',

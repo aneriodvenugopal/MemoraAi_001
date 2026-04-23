@@ -369,7 +369,7 @@ function ProjectLandingPage() {
               <div key={idx} className="bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} size={20} className="text-yellow-400 fill-current" />
+                    <Star key={i} size={20} className="text-blue-400 fill-current" />
                   ))}
                 </div>
                 <p className="text-gray-700 mb-4 italic">"{testimonial.text}"</p>

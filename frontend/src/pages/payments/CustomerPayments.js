@@ -311,7 +311,7 @@ const CustomerPayments = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: <Clock size={14} /> },
+      pending: { color: 'bg-blue-100 text-blue-800', icon: <Clock size={14} /> },
       completed: { color: 'bg-green-100 text-green-800', icon: <CheckCircle size={14} /> },
       failed: { color: 'bg-red-100 text-red-800', icon: <XCircle size={14} /> }
     };
@@ -458,7 +458,7 @@ const CustomerPayments = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {getStatusBadge(payment.status)}
                         {!payment.is_cleared && payment.payment_mode === 'cheque' && (
-                          <div className="text-xs text-amber-600 mt-1">⏳ Awaiting clearance</div>
+                          <div className="text-xs text-sky-600 mt-1">⏳ Awaiting clearance</div>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">

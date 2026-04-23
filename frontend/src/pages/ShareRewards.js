@@ -360,7 +360,7 @@ const ShareRewards = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                           <div className={`text-2xl font-bold ${
-                            index === 0 ? 'text-yellow-500' :
+                            index === 0 ? 'text-blue-500' :
                             index === 1 ? 'text-gray-400' :
                             index === 2 ? 'text-orange-600' :
                             'text-gray-300'

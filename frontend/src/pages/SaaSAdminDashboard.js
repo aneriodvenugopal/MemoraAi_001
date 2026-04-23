@@ -45,7 +45,7 @@ export default function SaaSAdminDashboard() {
 
   if (loading) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500" />
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500" />
     </div>
   );
 
@@ -72,7 +72,7 @@ export default function SaaSAdminDashboard() {
           </button>
           <div className="flex-1">
             <h1 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-amber-600" />
+              <ShieldCheck className="w-5 h-5 text-sky-600" />
               SaaS Admin
             </h1>
             <p className="text-xs text-gray-500">MemoraAI Platform — manage all tenants</p>
@@ -111,7 +111,7 @@ export default function SaaSAdminDashboard() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by name or category"
-                className="pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 w-full sm:w-64"
+                className="pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 w-full sm:w-64"
                 data-testid="tenant-search-input"
               />
             </div>
@@ -135,10 +135,10 @@ export default function SaaSAdminDashboard() {
                 {filteredTenants.length === 0 ? (
                   <tr><td colSpan="7" className="px-4 py-8 text-center text-gray-400 text-sm">No businesses found.</td></tr>
                 ) : filteredTenants.map(t => (
-                  <tr key={t.id} className="border-t border-gray-50 hover:bg-amber-50/30" data-testid={`tenant-row-${t.id}`}>
+                  <tr key={t.id} className="border-t border-gray-50 hover:bg-sky-50/30" data-testid={`tenant-row-${t.id}`}>
                     <td className="px-4 py-2.5">
                       <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center text-amber-700 font-bold text-[10px]">
+                        <div className="w-7 h-7 rounded-lg bg-sky-100 flex items-center justify-center text-sky-700 font-bold text-[10px]">
                           {(t.name || 'U')[0].toUpperCase()}
                         </div>
                         <span className="font-medium text-gray-900 truncate max-w-[220px]">{t.name || 'Unnamed'}</span>
@@ -158,7 +158,7 @@ export default function SaaSAdminDashboard() {
                     <td className="px-4 py-2.5 text-right">
                       <button
                         onClick={() => setLoginAsTarget(t)}
-                        className="inline-flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors"
+                        className="inline-flex items-center gap-1 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors"
                         data-testid={`login-as-btn-${t.id}`}
                       >
                         <LogIn className="w-3 h-3" /> Login as
@@ -176,7 +176,7 @@ export default function SaaSAdminDashboard() {
               <div className="p-6 text-center text-gray-400 text-sm">No businesses found.</div>
             ) : filteredTenants.map(t => (
               <div key={t.id} className="p-3 flex items-center gap-3" data-testid={`tenant-card-${t.id}`}>
-                <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center text-amber-700 font-bold">
+                <div className="w-10 h-10 rounded-lg bg-sky-100 flex items-center justify-center text-sky-700 font-bold">
                   {(t.name || 'U')[0].toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -192,7 +192,7 @@ export default function SaaSAdminDashboard() {
                 </div>
                 <button
                   onClick={() => setLoginAsTarget(t)}
-                  className="flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-lg flex-shrink-0"
+                  className="flex items-center gap-1 bg-sky-500 hover:bg-sky-600 text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-lg flex-shrink-0"
                   data-testid={`login-as-btn-mobile-${t.id}`}
                 >
                   <LogIn className="w-3 h-3" /> Login
@@ -215,10 +215,10 @@ export default function SaaSAdminDashboard() {
               <button
                 key={i}
                 onClick={() => navigate(l.path)}
-                className="flex flex-col items-center gap-1.5 bg-white border border-gray-100 rounded-xl py-3 px-2 hover:border-amber-200 hover:shadow-sm transition-all"
+                className="flex flex-col items-center gap-1.5 bg-white border border-gray-100 rounded-xl py-3 px-2 hover:border-sky-200 hover:shadow-sm transition-all"
                 data-testid={`admin-link-${i}`}
               >
-                <l.icon className="w-5 h-5 text-amber-600" />
+                <l.icon className="w-5 h-5 text-sky-600" />
                 <span className="text-xs font-medium text-gray-700">{l.label}</span>
               </button>
             ))}
@@ -241,8 +241,8 @@ export default function SaaSAdminDashboard() {
 function KPI({ icon: Icon, label, value }) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-3">
-      <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center mb-1.5">
-        <Icon className="w-4 h-4 text-amber-600" />
+      <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center mb-1.5">
+        <Icon className="w-4 h-4 text-sky-600" />
       </div>
       <p className="text-xl font-bold text-gray-900 leading-tight">{value ?? 0}</p>
       <p className="text-[10px] text-gray-400 font-medium">{label}</p>
@@ -254,7 +254,7 @@ function ActivityCard({ icon: Icon, label, value, color }) {
   const colorMap = {
     emerald: 'bg-emerald-50 text-emerald-600',
     blue: 'bg-blue-50 text-blue-600',
-    amber: 'bg-amber-50 text-amber-600',
+    amber: 'bg-sky-50 text-sky-600',
   };
   const cls = colorMap[color] || colorMap.amber;
   return (

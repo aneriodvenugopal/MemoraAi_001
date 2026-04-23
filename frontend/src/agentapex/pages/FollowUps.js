@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 const STATUS_OPTIONS = [
   { id: 'interested', label: 'Interested', icon: ThumbsUp, color: 'text-green-600', bg: 'bg-green-100' },
   { id: 'not_interested', label: 'Not Interested', icon: ThumbsDown, color: 'text-red-600', bg: 'bg-red-100' },
-  { id: 'reschedule', label: 'Reschedule', icon: RefreshCw, color: 'text-amber-600', bg: 'bg-amber-100' },
+  { id: 'reschedule', label: 'Reschedule', icon: RefreshCw, color: 'text-sky-600', bg: 'bg-sky-100' },
   { id: 'followup_again', label: 'Follow-up Again', icon: Bell, color: 'text-blue-600', bg: 'bg-blue-100' },
 ];
 
@@ -200,7 +200,7 @@ const FollowUps = () => {
     const now = new Date();
     const diff = Math.floor((date - now) / (1000 * 60 * 60 * 24));
     if (diff < 0) return { label: 'Overdue', color: 'text-red-500', bg: 'bg-red-50' };
-    if (diff === 0) return { label: 'Today', color: 'text-amber-600', bg: 'bg-amber-50' };
+    if (diff === 0) return { label: 'Today', color: 'text-sky-600', bg: 'bg-sky-50' };
     if (diff === 1) return { label: 'Tomorrow', color: 'text-green-500', bg: 'bg-green-50' };
     if (diff <= 7) return { label: `In ${diff} days`, color: 'text-blue-500', bg: 'bg-blue-50' };
     return { 
@@ -664,8 +664,8 @@ const FollowUps = () => {
               </div>
               
               {(newNote.status === 'reschedule' || newNote.status === 'followup_again') && (
-                <div className="mb-6 p-4 bg-amber-50 rounded-xl border border-amber-100">
-                  <p className="text-sm font-medium text-amber-800 mb-3 flex items-center gap-2">
+                <div className="mb-6 p-4 bg-sky-50 rounded-xl border border-sky-100">
+                  <p className="text-sm font-medium text-sky-800 mb-3 flex items-center gap-2">
                     <Calendar className="w-4 h-4" /> Schedule Next Follow-up
                   </p>
                   <div className="grid grid-cols-2 gap-3">

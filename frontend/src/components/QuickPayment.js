@@ -252,10 +252,10 @@ const QuickPayment = ({ isOpen, onClose, onSuccess }) => {
           )}
 
           {phoneNumber.length >= 10 && bookings.length === 0 && !searching && (
-            <Card className="bg-yellow-50 border-yellow-200">
+            <Card className="bg-blue-50 border-blue-200">
               <CardContent className="p-4 text-center">
-                <AlertCircle className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                <p className="text-yellow-700">No active bookings found for this phone number</p>
+                <AlertCircle className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                <p className="text-blue-700">No active bookings found for this phone number</p>
               </CardContent>
             </Card>
           )}

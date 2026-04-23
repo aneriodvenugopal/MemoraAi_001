@@ -36,7 +36,7 @@ export default function ImpersonationLog() {
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <History className="w-5 h-5 text-amber-600" />
+              <History className="w-5 h-5 text-sky-600" />
               Impersonation Audit Log
             </h1>
             <p className="text-xs text-gray-500">Every "Login as Business" session is recorded here</p>
@@ -47,7 +47,7 @@ export default function ImpersonationLog() {
       <main className="max-w-4xl mx-auto px-4 py-5">
         {loading ? (
           <div className="bg-white rounded-2xl p-8 text-center">
-            <Loader2 className="w-6 h-6 text-amber-500 animate-spin mx-auto" />
+            <Loader2 className="w-6 h-6 text-sky-500 animate-spin mx-auto" />
           </div>
         ) : log.length === 0 ? (
           <div className="bg-white rounded-2xl p-8 text-center border border-gray-100" data-testid="log-empty">
@@ -58,14 +58,14 @@ export default function ImpersonationLog() {
           <div className="bg-white rounded-2xl border border-gray-100 divide-y divide-gray-50" data-testid="log-list">
             {log.map((entry, i) => (
               <div key={entry.id || i} className="p-3 flex items-start gap-3" data-testid={`log-entry-${i}`}>
-                <div className="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
-                  <User className="w-4 h-4 text-amber-700" />
+                <div className="w-9 h-9 rounded-lg bg-sky-100 flex items-center justify-center flex-shrink-0">
+                  <User className="w-4 h-4 text-sky-700" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 truncate">
                     {entry.admin_email || entry.admin_user_id}
                     <span className="text-gray-400 font-normal mx-1">acted as</span>
-                    <span className="text-amber-700 inline-flex items-center gap-1">
+                    <span className="text-sky-700 inline-flex items-center gap-1">
                       <Building className="w-3 h-3" /> {entry.tenant_name || entry.tenant_id}
                     </span>
                   </p>

@@ -109,7 +109,7 @@ export default function AppointmentsManager() {
         {todaySummary && (
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6" data-testid="today-summary">
             <Card><CardContent className="p-3 text-center"><div className="text-xl font-bold text-blue-600">{todaySummary.total}</div><div className="text-xs text-gray-500">Today Total</div></CardContent></Card>
-            <Card><CardContent className="p-3 text-center"><div className="text-xl font-bold text-amber-600">{todaySummary.scheduled}</div><div className="text-xs text-gray-500">Scheduled</div></CardContent></Card>
+            <Card><CardContent className="p-3 text-center"><div className="text-xl font-bold text-sky-600">{todaySummary.scheduled}</div><div className="text-xs text-gray-500">Scheduled</div></CardContent></Card>
             <Card><CardContent className="p-3 text-center"><div className="text-xl font-bold text-green-600">{todaySummary.completed}</div><div className="text-xs text-gray-500">Completed</div></CardContent></Card>
             <Card><CardContent className="p-3 text-center"><div className="text-xl font-bold text-red-500">{todaySummary.cancelled}</div><div className="text-xs text-gray-500">Cancelled</div></CardContent></Card>
             <Card><CardContent className="p-3 text-center"><div className="text-xl font-bold text-gray-500">{todaySummary.no_show}</div><div className="text-xs text-gray-500">No Show</div></CardContent></Card>
@@ -201,7 +201,7 @@ export default function AppointmentsManager() {
                         <Button size="sm" variant="outline" className="text-green-600 gap-1" onClick={() => updateStatus(apt.id, "completed")} data-testid={`complete-${apt.id}`}>
                           <CheckCircle className="w-3 h-3" /> Done
                         </Button>
-                        <Button size="sm" variant="ghost" className="text-amber-600" onClick={() => updateStatus(apt.id, "no_show")} data-testid={`noshow-${apt.id}`}>
+                        <Button size="sm" variant="ghost" className="text-sky-600" onClick={() => updateStatus(apt.id, "no_show")} data-testid={`noshow-${apt.id}`}>
                           <AlertTriangle className="w-3 h-3" />
                         </Button>
                         <Button size="sm" variant="ghost" className="text-red-500" onClick={() => updateStatus(apt.id, "cancelled")} data-testid={`cancel-${apt.id}`}>

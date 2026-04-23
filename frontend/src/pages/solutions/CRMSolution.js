@@ -207,7 +207,7 @@ const CRMSolution = () => {
             </section>
 
             {/* ROI Calculator */}
-            <section className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-8">
+            <section className="bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl p-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Calculate Your ROI
               </h2>

@@ -27,7 +27,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Status colors
 const STATUS_COLORS = {
-  pending: 'bg-yellow-100 text-yellow-800',
+  pending: 'bg-blue-100 text-blue-800',
   registered: 'bg-blue-100 text-blue-800',
   qualified: 'bg-purple-100 text-purple-800',
   rewarded: 'bg-green-100 text-green-800',
@@ -415,7 +415,7 @@ const ReferralWalletManagement = () => {
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-yellow-100 rounded-lg"><Clock className="w-5 h-5 text-yellow-600" /></div>
+                    <div className="p-2 bg-blue-100 rounded-lg"><Clock className="w-5 h-5 text-blue-600" /></div>
                     <div>
                       <p className="text-sm text-gray-500">Pending Rewards</p>
                       <p className="text-xl font-bold">{formatCurrency(referralStats.pending_rewards)}</p>
@@ -498,8 +498,8 @@ const ReferralWalletManagement = () => {
                         <span className="text-xl font-bold text-green-600">{referralStats.conversion_rate}%</span>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="p-3 bg-yellow-50 rounded-lg text-center">
-                          <p className="text-2xl font-bold text-yellow-600">{referralStats.by_status?.pending || 0}</p>
+                        <div className="p-3 bg-blue-50 rounded-lg text-center">
+                          <p className="text-2xl font-bold text-blue-600">{referralStats.by_status?.pending || 0}</p>
                           <p className="text-sm text-gray-600">Pending</p>
                         </div>
                         <div className="p-3 bg-blue-50 rounded-lg text-center">

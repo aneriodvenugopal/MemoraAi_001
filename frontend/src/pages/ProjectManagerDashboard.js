@@ -186,7 +186,7 @@ function ProjectManagerDashboard() {
             <p className="text-4xl font-bold">{overview.total_leads}</p>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-xl p-6 text-white">
+          <div className="bg-gradient-to-br from-indigo-500 to-orange-600 rounded-2xl shadow-xl p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-white/20 p-3 rounded-xl">
                 <Package size={28} />
@@ -323,7 +323,7 @@ function ProjectManagerDashboard() {
                       </td>
                       <td className="py-3 px-4 text-center">
                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                          request.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                          request.status === 'pending' ? 'bg-blue-100 text-blue-700' :
                           request.status === 'approved' ? 'bg-green-100 text-green-700' :
                           'bg-red-100 text-red-700'
                         }`}>

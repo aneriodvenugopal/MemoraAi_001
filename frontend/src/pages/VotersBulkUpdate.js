@@ -331,7 +331,7 @@ const MissingVotersModal = ({ isOpen, onClose, missingNumbers, village, wardNo, 
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="p-4 border-b border-gray-200 bg-gray-50">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <ListPlus className="w-5 h-5 text-amber-600" />
+            <ListPlus className="w-5 h-5 text-sky-600" />
             Missing Serial Numbers - Ward {wardNo}
           </h2>
           <p className="text-gray-500 text-sm">{missingNumbers.length} serial numbers missing</p>
@@ -378,7 +378,7 @@ const MissingVotersModal = ({ isOpen, onClose, missingNumbers, village, wardNo, 
           </Button>
           <Button
             onClick={handleAddSelected}
-            className="flex-1 bg-amber-600 hover:bg-amber-700 text-white"
+            className="flex-1 bg-sky-600 hover:bg-sky-700 text-white"
             disabled={saving || selectedNumbers.length === 0}
           >
             {saving ? 'Adding...' : `Add ${selectedNumbers.length} Placeholder Records`}
@@ -818,7 +818,7 @@ const VotersBulkUpdate = () => {
               </Button>
               <div>
                 <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <AlertTriangle className="w-6 h-6 text-amber-500" />
+                  <AlertTriangle className="w-6 h-6 text-sky-500" />
                   Bulk Update - Missing Records
                 </h1>
                 <p className="text-gray-500 text-sm">View and update incomplete voter records</p>
@@ -888,8 +888,8 @@ const VotersBulkUpdate = () => {
           <Card className="bg-white border-gray-200 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-gray-500 text-xs">Partial</p>
@@ -916,12 +916,12 @@ const VotersBulkUpdate = () => {
           <Card className="bg-white border-gray-200 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                  <Hash className="w-5 h-5 text-amber-600" />
+                <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
+                  <Hash className="w-5 h-5 text-sky-600" />
                 </div>
                 <div>
                   <p className="text-gray-500 text-xs">Not Imported</p>
-                  <p className="text-xl font-bold text-amber-600">{actualMissing}</p>
+                  <p className="text-xl font-bold text-sky-600">{actualMissing}</p>
                 </div>
               </div>
             </CardContent>
@@ -930,27 +930,27 @@ const VotersBulkUpdate = () => {
 
         {/* Expected Total Input and Missing Alert */}
         {selectedWard !== 'all' && (
-          <Card className="bg-amber-50 border-amber-200">
+          <Card className="bg-sky-50 border-sky-200">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                <AlertTriangle className="w-5 h-5 text-sky-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-4 mb-3">
-                    <p className="font-medium text-amber-800">Ward {selectedWard} - Missing Voters Calculator</p>
+                    <p className="font-medium text-sky-800">Ward {selectedWard} - Missing Voters Calculator</p>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-amber-700">Total in PDF:</span>
+                      <span className="text-sm text-sky-700">Total in PDF:</span>
                       <Input
                         type="number"
                         value={expectedTotal}
                         onChange={(e) => setExpectedTotal(e.target.value)}
                         placeholder="e.g., 943"
-                        className="w-24 h-8 text-sm bg-white border-amber-300"
+                        className="w-24 h-8 text-sm bg-white border-sky-300"
                         onKeyDown={(e) => e.key === 'Enter' && fetchMissingSlNumbers()}
                       />
                       <Button
                         variant="outline"
                         size="sm"
-                        className="border-amber-300 text-amber-700 hover:bg-amber-100"
+                        className="border-sky-300 text-sky-700 hover:bg-sky-100"
                         onClick={fetchMissingSlNumbers}
                       >
                         Calculate
@@ -959,7 +959,7 @@ const VotersBulkUpdate = () => {
                   </div>
                   
                   {/* Results */}
-                  <div className="bg-white rounded-lg p-3 border border-amber-200 mb-3">
+                  <div className="bg-white rounded-lg p-3 border border-sky-200 mb-3">
                     <div className="flex items-center gap-6 text-sm">
                       <div>
                         <span className="text-gray-500">Imported:</span>
@@ -984,7 +984,7 @@ const VotersBulkUpdate = () => {
                   
                   {missingSlNumbers.length > 0 && (
                     <>
-                      <p className="text-sm text-amber-700 mb-2">
+                      <p className="text-sm text-sky-700 mb-2">
                         <span className="font-semibold">{missingSlNumbers.length}</span> missing serial numbers: 
                         <span className="font-mono ml-2">{missingSlNumbers.slice(0, 10).join(', ')}</span>
                         {missingSlNumbers.length > 10 && (
@@ -998,7 +998,7 @@ const VotersBulkUpdate = () => {
                       </p>
                       <Button
                         size="sm"
-                        className="bg-amber-600 hover:bg-amber-700 text-white"
+                        className="bg-sky-600 hover:bg-sky-700 text-white"
                         onClick={() => setMissingModalOpen(true)}
                       >
                         <ListPlus className="w-4 h-4 mr-2" />
@@ -1008,7 +1008,7 @@ const VotersBulkUpdate = () => {
                   )}
                   
                   {!expectedTotal && (
-                    <p className="text-xs text-amber-600 italic">
+                    <p className="text-xs text-sky-600 italic">
                       Enter the total voters count from your PDF header (e.g., 943) to calculate missing records accurately.
                     </p>
                   )}
@@ -1118,7 +1118,7 @@ const VotersBulkUpdate = () => {
                         <td className="px-4 py-3">
                           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
                             completeness.color === 'green' ? 'bg-green-100 text-green-700' :
-                            completeness.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' :
+                            completeness.color === 'yellow' ? 'bg-blue-100 text-blue-700' :
                             'bg-red-100 text-red-700'
                           }`}>
                             {completeness.color === 'green' ? <Check className="w-3 h-3" /> :

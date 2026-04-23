@@ -100,7 +100,7 @@ const PropertyCard = ({ property, isBuying, onFavorite, isFavorite }) => {
           className="w-full h-full object-cover"
         />
         <div className="absolute top-3 left-3">
-          <span className={`px-2.5 py-1 rounded-full text-xs font-semibold text-white ${isBuying ? 'bg-blue-500' : 'bg-amber-500'}`}>
+          <span className={`px-2.5 py-1 rounded-full text-xs font-semibold text-white ${isBuying ? 'bg-blue-500' : 'bg-sky-500'}`}>
             {isBuying ? 'WANTED' : 'FOR SALE'}
           </span>
         </div>
@@ -362,9 +362,9 @@ const MapSearch = () => {
           </div>
           
           {/* Wallet Display */}
-          <div className="flex items-center gap-1 px-3 py-2 bg-amber-50 rounded-full">
-            <Wallet className="w-4 h-4 text-amber-600" />
-            <span className="text-sm font-bold text-amber-700">{wallet.points}</span>
+          <div className="flex items-center gap-1 px-3 py-2 bg-sky-50 rounded-full">
+            <Wallet className="w-4 h-4 text-sky-600" />
+            <span className="text-sm font-bold text-sky-700">{wallet.points}</span>
           </div>
           
           <HelpButton screen="map" />
@@ -620,7 +620,7 @@ const MapSearch = () => {
 
             {/* Radius Badge */}
             <div className="absolute top-4 left-4 z-[1000] bg-white/90 backdrop-blur rounded-full px-3 py-1.5 shadow-md border border-gray-200 flex items-center gap-1.5">
-              <div className={`w-2 h-2 rounded-full ${listingMode === 'sell' ? 'bg-amber-500' : 'bg-blue-500'}`} />
+              <div className={`w-2 h-2 rounded-full ${listingMode === 'sell' ? 'bg-sky-500' : 'bg-blue-500'}`} />
               <span className="text-xs font-semibold text-gray-700">{radius} km radius</span>
               <span className="text-xs text-gray-400">|</span>
               <span className="text-xs font-medium text-gray-600">
@@ -633,7 +633,7 @@ const MapSearch = () => {
               <button
                 onClick={() => setViewMode('list')}
                 className={`w-full py-3.5 rounded-full font-semibold text-white shadow-lg ${
-                  listingMode === 'sell' ? 'bg-amber-500' : 'bg-blue-500'
+                  listingMode === 'sell' ? 'bg-sky-500' : 'bg-blue-500'
                 }`}
               >
                 View {data.length} {listingMode === 'sell' ? 'Properties' : 'Requirements'}
@@ -784,7 +784,7 @@ const MapSearch = () => {
             </button>
             
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center text-3xl">
+              <div className="w-16 h-16 bg-gradient-to-br from-sky-400 to-orange-500 rounded-2xl flex items-center justify-center text-3xl">
                 {selectedProperty.property_type === 'Land' ? '🌾' : '📐'}
               </div>
               <div className="flex-1">
@@ -811,7 +811,7 @@ const MapSearch = () => {
                   setSelectedProperty(null);
                   navigate(`/agentapex/property/${selectedProperty.id}`);
                 }}
-                className="py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-xl shadow-lg"
+                className="py-4 bg-gradient-to-r from-sky-500 to-orange-500 text-white font-semibold rounded-xl shadow-lg"
               >
                 View Details
               </button>

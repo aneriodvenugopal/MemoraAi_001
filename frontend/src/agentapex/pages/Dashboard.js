@@ -258,7 +258,7 @@ const Dashboard = () => {
           <StatCard
             icon={Building2} label="Properties"
             value={loading ? '-' : stats.properties}
-            color="text-white" bgColor="bg-amber-500"
+            color="text-white" bgColor="bg-sky-500"
             onClick={() => navigate('/agentapex/my-properties')}
           />
           <StatCard
@@ -310,10 +310,10 @@ const Dashboard = () => {
           onClick={() => navigate('/agentapex/search')}
         />
         <MenuItem
-          icon={Building2} iconColor="text-amber-600" iconBg="bg-amber-50"
+          icon={Building2} iconColor="text-sky-600" iconBg="bg-sky-50"
           label="My Properties" sublabel={`${stats.properties} listed`}
           onClick={() => navigate('/agentapex/my-properties')}
-          badge={stats.properties > 0 ? stats.properties : null} badgeColor="bg-amber-500"
+          badge={stats.properties > 0 ? stats.properties : null} badgeColor="bg-sky-500"
         />
         <MenuItem
           icon={Clock} iconColor="text-indigo-600" iconBg="bg-indigo-50"

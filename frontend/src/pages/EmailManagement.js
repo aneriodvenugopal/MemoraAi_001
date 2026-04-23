@@ -163,12 +163,12 @@ const EmailManagement = () => {
       <div className="max-w-7xl mx-auto p-6 space-y-6">
         {/* Service Status Banner */}
         {serviceStatus && !serviceStatus.configured && (
-          <Card className="border-amber-200 bg-amber-50">
+          <Card className="border-sky-200 bg-sky-50">
             <CardContent className="p-4 flex items-center gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-600" />
+              <AlertTriangle className="w-5 h-5 text-sky-600" />
               <div>
-                <p className="font-medium text-amber-800">Email Service in MOCK Mode</p>
-                <p className="text-sm text-amber-700">
+                <p className="font-medium text-sky-800">Email Service in MOCK Mode</p>
+                <p className="text-sm text-sky-700">
                   Configure RESEND_API_KEY in backend/.env to enable real email sending.
                   Get your API key from <a href="https://resend.com" target="_blank" rel="noopener noreferrer" className="underline">resend.com</a>
                 </p>

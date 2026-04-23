@@ -63,7 +63,7 @@ const FollowUps = () => {
     const now = new Date();
     const diff = Math.floor((date - now) / (1000 * 60 * 60 * 24));
     if (diff < 0) return { label: 'Overdue', color: 'text-red-500', bg: 'bg-red-50' };
-    if (diff === 0) return { label: 'Today', color: 'text-amber-600', bg: 'bg-amber-50' };
+    if (diff === 0) return { label: 'Today', color: 'text-sky-600', bg: 'bg-sky-50' };
     if (diff === 1) return { label: 'Tomorrow', color: 'text-green-500', bg: 'bg-green-50' };
     if (diff <= 7) return { label: `In ${diff} days`, color: 'text-blue-500', bg: 'bg-blue-50' };
     return { label: date.toLocaleDateString(), color: 'text-gray-500', bg: 'bg-gray-100' };

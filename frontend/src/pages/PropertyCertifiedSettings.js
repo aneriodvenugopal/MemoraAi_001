@@ -444,7 +444,7 @@ const PropertyCertifiedSettings = () => {
                         Project location ({project.location}) will be used.
                       </p>
                     ) : (
-                      <p className="text-sm text-amber-600">
+                      <p className="text-sm text-sky-600">
                         No fallback location available. Consider setting one.
                       </p>
                     )}

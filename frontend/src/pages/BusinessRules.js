@@ -74,9 +74,9 @@ export default function BusinessRules() {
           <Badge className="bg-green-100 text-green-700">{activeCount} Active</Badge>
         </div>
 
-        <div className="bg-amber-50 rounded-xl p-4 border border-amber-200 mb-6" data-testid="rules-info">
-          <h3 className="font-semibold text-amber-800 text-sm mb-1">How Rules Work</h3>
-          <p className="text-xs text-amber-700">Active rules are injected into every AI conversation. The AI will follow these rules when responding to customers on WhatsApp. You can add, edit, enable/disable rules anytime.</p>
+        <div className="bg-sky-50 rounded-xl p-4 border border-sky-200 mb-6" data-testid="rules-info">
+          <h3 className="font-semibold text-sky-800 text-sm mb-1">How Rules Work</h3>
+          <p className="text-xs text-sky-700">Active rules are injected into every AI conversation. The AI will follow these rules when responding to customers on WhatsApp. You can add, edit, enable/disable rules anytime.</p>
         </div>
 
         <Button onClick={() => setShowAdd(true)} className="mb-4 gap-1" data-testid="add-rule-btn">

@@ -67,13 +67,13 @@ export default function ChatCorrections() {
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <Brain className="w-5 h-5 text-amber-600" />
+              <Brain className="w-5 h-5 text-sky-600" />
               Chat Learning
             </h1>
             <p className="text-xs text-gray-500">Train your AI with corrections — it learns from every one</p>
           </div>
           <button onClick={() => { setEditing(null); setShowForm(true); }}
-            className="flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-lg text-sm font-medium"
+            className="flex items-center gap-1.5 bg-sky-500 hover:bg-sky-600 text-white px-3 py-2 rounded-lg text-sm font-medium"
             data-testid="new-correction-btn">
             <Plus className="w-4 h-4" /> Add
           </button>
@@ -91,16 +91,16 @@ export default function ChatCorrections() {
         {/* Summary Cards */}
         {summary && (
           <div className="grid grid-cols-3 gap-3" data-testid="summary-cards">
-            <SummaryCard label="Corrections" value={summary.total} icon={Brain} color="bg-amber-50 text-amber-700" />
+            <SummaryCard label="Corrections" value={summary.total} icon={Brain} color="bg-sky-50 text-sky-700" />
             <SummaryCard label="Active" value={summary.active} icon={CheckCircle2} color="bg-green-50 text-green-700" />
             <SummaryCard label="Times Applied" value={summary.times_applied} icon={TrendingUp} color="bg-blue-50 text-blue-700" />
           </div>
         )}
 
         {/* How it works */}
-        <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-2xl p-4 flex gap-3" data-testid="info-banner">
-          <Sparkles className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-          <div className="text-xs text-amber-900 leading-relaxed">
+        <div className="bg-gradient-to-r from-sky-50 to-blue-50 border border-sky-200 rounded-2xl p-4 flex gap-3" data-testid="info-banner">
+          <Sparkles className="w-5 h-5 text-sky-600 flex-shrink-0 mt-0.5" />
+          <div className="text-xs text-sky-900 leading-relaxed">
             <strong>How it works:</strong> When the AI replies incorrectly in Team Inbox, click <em>Correct AI</em> on
             that message and explain the right answer. MemoraAI injects your corrections into every future reply —
             so the bot gets smarter about <em>your business</em> automatically.
@@ -113,14 +113,14 @@ export default function ChatCorrections() {
           <input
             type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Search corrections by keyword, topic..."
-            className="w-full pl-9 pr-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+            className="w-full pl-9 pr-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
           />
         </div>
 
         {/* List */}
         {loading ? (
           <div className="bg-white rounded-2xl p-8 text-center">
-            <Loader2 className="w-6 h-6 text-amber-500 animate-spin mx-auto" />
+            <Loader2 className="w-6 h-6 text-sky-500 animate-spin mx-auto" />
           </div>
         ) : items.length === 0 ? (
           <div className="bg-white rounded-2xl p-8 text-center border border-gray-100" data-testid="empty-state">
@@ -128,7 +128,7 @@ export default function ChatCorrections() {
             <h3 className="text-sm font-semibold text-gray-700">No corrections yet</h3>
             <p className="text-xs text-gray-400 mt-1">Start in Team Inbox — click "Correct AI" on any AI reply.</p>
             <button onClick={() => navigate('/team-inbox')}
-              className="mt-4 bg-amber-500 text-white text-xs font-medium px-4 py-2 rounded-lg"
+              className="mt-4 bg-sky-500 text-white text-xs font-medium px-4 py-2 rounded-lg"
               data-testid="go-inbox-btn">
               Open Team Inbox
             </button>
@@ -185,7 +185,7 @@ function CorrectionCard({ correction: c, onEdit, onDelete, onToggle }) {
   return (
     <div className={`bg-white rounded-2xl p-4 border ${c.is_active ? 'border-gray-100' : 'border-gray-200 opacity-60'}`} data-testid={`correction-${c.id}`}>
       <div className="flex items-start gap-2 mb-2">
-        <span className={`text-[9px] px-2 py-0.5 rounded-full font-semibold uppercase ${c.is_active ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'}`}>
+        <span className={`text-[9px] px-2 py-0.5 rounded-full font-semibold uppercase ${c.is_active ? 'bg-sky-100 text-sky-700' : 'bg-gray-100 text-gray-500'}`}>
           {CATEGORY_LABELS[c.category] || c.category || 'General'}
         </span>
         {c.times_applied > 0 && (
@@ -194,10 +194,10 @@ function CorrectionCard({ correction: c, onEdit, onDelete, onToggle }) {
           </span>
         )}
         <div className="flex-1" />
-        <button onClick={onToggle} className="text-gray-400 hover:text-amber-600" title={c.is_active ? 'Pause' : 'Activate'} data-testid={`toggle-${c.id}`}>
+        <button onClick={onToggle} className="text-gray-400 hover:text-sky-600" title={c.is_active ? 'Pause' : 'Activate'} data-testid={`toggle-${c.id}`}>
           {c.is_active ? <PauseCircle className="w-4 h-4" /> : <PlayCircle className="w-4 h-4" />}
         </button>
-        <button onClick={onEdit} className="text-gray-400 hover:text-amber-600" data-testid={`edit-${c.id}`}>
+        <button onClick={onEdit} className="text-gray-400 hover:text-sky-600" data-testid={`edit-${c.id}`}>
           <Edit3 className="w-4 h-4" />
         </button>
         <button onClick={onDelete} className="text-gray-400 hover:text-red-600" data-testid={`delete-${c.id}`}>
@@ -220,8 +220,8 @@ function CorrectionCard({ correction: c, onEdit, onDelete, onToggle }) {
       )}
 
       <div className="mb-2">
-        <p className="text-[10px] text-amber-600 uppercase font-semibold mb-1">Correction</p>
-        <p className="text-xs text-gray-800 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">{c.correction_note}</p>
+        <p className="text-[10px] text-sky-600 uppercase font-semibold mb-1">Correction</p>
+        <p className="text-xs text-gray-800 bg-sky-50 border border-sky-100 rounded-lg px-3 py-2">{c.correction_note}</p>
       </div>
 
       {c.suggested_response && (
@@ -322,7 +322,7 @@ function CorrectionForm({ editing, onClose, onSave }) {
             Cancel
           </button>
           <button type="submit" disabled={saving || !form.correction_note.trim()}
-            className="flex-1 flex items-center justify-center gap-1.5 bg-amber-500 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-amber-600 disabled:opacity-50" data-testid="save-correction-btn">
+            className="flex-1 flex items-center justify-center gap-1.5 bg-sky-500 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-sky-600 disabled:opacity-50" data-testid="save-correction-btn">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {editing ? 'Save Changes' : 'Save & Teach AI'}
           </button>

@@ -164,7 +164,7 @@ const PWADashboard = () => {
       title: 'Reports',
       subtitle: 'View analytics',
       url: '/analytics',
-      color: 'from-orange-500 to-orange-600'
+      color: 'from-indigo-500 to-orange-600'
     }
   ];
 

@@ -90,7 +90,7 @@ const PropertyImageManager = ({ propertyId, images, coverIndex, api, onUpdate, o
                 data-testid={`image-item-${idx}`}
                 className={`flex items-center gap-3 p-2 rounded-xl border-2 transition-all ${
                   dragIdx === idx ? 'border-blue-400 bg-blue-50' : 
-                  localCover === idx ? 'border-amber-400 bg-amber-50' : 'border-gray-100'
+                  localCover === idx ? 'border-sky-400 bg-sky-50' : 'border-gray-100'
                 }`}
               >
                 <GripVertical className="w-5 h-5 text-gray-300 cursor-grab flex-shrink-0" />
@@ -102,7 +102,7 @@ const PropertyImageManager = ({ propertyId, images, coverIndex, api, onUpdate, o
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-700">Photo {idx + 1}</p>
                   {localCover === idx && (
-                    <span className="text-[10px] text-amber-600 font-semibold bg-amber-100 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] text-sky-600 font-semibold bg-sky-100 px-2 py-0.5 rounded-full">
                       Cover Image
                     </span>
                   )}
@@ -112,7 +112,7 @@ const PropertyImageManager = ({ propertyId, images, coverIndex, api, onUpdate, o
                     onClick={() => handleSetCover(idx)}
                     data-testid={`set-cover-${idx}`}
                     className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                      localCover === idx ? 'bg-amber-400 text-white' : 'bg-gray-100 text-gray-400'
+                      localCover === idx ? 'bg-sky-400 text-white' : 'bg-gray-100 text-gray-400'
                     }`}
                     title="Set as cover"
                   >

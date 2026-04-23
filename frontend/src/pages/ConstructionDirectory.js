@@ -77,7 +77,7 @@ const ConstructionDirectory = () => {
     <div className="min-h-screen bg-gray-50">
       <StickyNavbar />
       
-      <div className="pt-24 pb-8 bg-gradient-to-r from-orange-500 to-red-500">
+      <div className="pt-24 pb-8 bg-gradient-to-r from-indigo-500 to-red-500">
         <div className="container mx-auto px-6">
           <div className="text-center text-white mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -118,7 +118,7 @@ const ConstructionDirectory = () => {
               <div className="flex items-end">
                 <button
                   onClick={handleSearch}
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center"
+                  className="w-full bg-gradient-to-r from-indigo-500 to-red-500 hover:from-indigo-600 hover:to-red-600 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center"
                 >
                   <Search className="w-5 h-5 mr-2" />
                   Search Now
@@ -170,7 +170,7 @@ const ConstructionDirectory = () => {
                   <div className="grid grid-cols-3 gap-4 mb-4 bg-orange-50 p-3 rounded-lg">
                     <div className="text-center">
                       <div className="flex items-center justify-center mb-1">
-                        <Star className="w-5 h-5 text-yellow-500 fill-current" />
+                        <Star className="w-5 h-5 text-blue-500 fill-current" />
                         <span className="ml-1 font-bold text-gray-900">{worker.rating}</span>
                       </div>
                       <p className="text-xs text-gray-600">Rating</p>

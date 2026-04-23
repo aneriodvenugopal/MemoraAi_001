@@ -111,7 +111,7 @@ const TestimonialDetail = () => {
                 <p className="text-lg text-gray-600 mb-3">{testimonial.location}</p>
                 <div className="flex gap-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                    <Star key={i} className="w-5 h-5 fill-blue-400 text-blue-400" />
                   ))}
                 </div>
               </div>
@@ -213,7 +213,7 @@ const TestimonialDetail = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex gap-0.5">
                       {[...Array(other.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <Star key={i} className="w-4 h-4 fill-blue-400 text-blue-400" />
                       ))}
                     </div>
                     <span className="text-blue-600 text-sm font-semibold flex items-center gap-1">

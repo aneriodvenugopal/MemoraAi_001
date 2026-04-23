@@ -36,7 +36,7 @@ const ColoredProgress = ({ value, color = "green", className = "" }) => {
   const colorClasses = {
     green: "bg-green-500",
     blue: "bg-blue-500",
-    yellow: "bg-yellow-500",
+    yellow: "bg-blue-500",
     red: "bg-red-500",
     purple: "bg-purple-500",
     orange: "bg-orange-500"
@@ -57,10 +57,10 @@ const StatCard = ({ title, value, subtitle, icon: Icon, color = "blue", trend, o
   const bgColors = {
     green: "from-green-500 to-emerald-600",
     blue: "from-blue-500 to-indigo-600",
-    yellow: "from-yellow-500 to-orange-500",
+    yellow: "from-blue-500 to-orange-500",
     red: "from-red-500 to-rose-600",
     purple: "from-purple-500 to-violet-600",
-    orange: "from-orange-500 to-amber-600"
+    orange: "from-indigo-500 to-sky-600"
   };
   
   return (
@@ -99,7 +99,7 @@ const StatCard = ({ title, value, subtitle, icon: Icon, color = "blue", trend, o
 // Leaderboard Item Component
 const LeaderboardItem = ({ rank, name, amount, count, onClick }) => {
   const rankIcons = {
-    1: { icon: Crown, color: "text-yellow-500", bg: "bg-yellow-50" },
+    1: { icon: Crown, color: "text-blue-500", bg: "bg-blue-50" },
     2: { icon: Medal, color: "text-gray-400", bg: "bg-gray-50" },
     3: { icon: Award, color: "text-orange-400", bg: "bg-orange-50" }
   };
@@ -477,7 +477,7 @@ const CommissionAnalyticsDashboard = () => {
                         const total = dashboard.overview.total_transactions || 1;
                         const percentage = Math.round((data.count / total) * 100);
                         const colors = {
-                          pending: { bar: "yellow", text: "text-yellow-700" },
+                          pending: { bar: "yellow", text: "text-blue-700" },
                           approved: { bar: "blue", text: "text-blue-700" },
                           paid: { bar: "green", text: "text-green-700" },
                           cancelled: { bar: "red", text: "text-red-700" },
@@ -678,7 +678,7 @@ const CommissionAnalyticsDashboard = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-yellow-500" />
+                  <Trophy className="w-5 h-5 text-blue-500" />
                   Top Performers
                 </CardTitle>
                 <CardDescription>

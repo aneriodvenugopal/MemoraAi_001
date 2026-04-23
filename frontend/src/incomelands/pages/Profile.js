@@ -89,7 +89,7 @@ const Profile = () => {
       <div className="px-4 py-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
-          <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center">
+          <div className="w-20 h-20 bg-gradient-to-br from-sky-400 to-orange-500 rounded-full flex items-center justify-center">
             <User className="w-10 h-10 text-white" />
           </div>
           

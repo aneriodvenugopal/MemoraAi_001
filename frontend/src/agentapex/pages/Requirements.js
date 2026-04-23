@@ -295,12 +295,12 @@ const Requirements = () => {
                   {showPlotOptions && (
                     <button type="button" onClick={() => setForm({ ...form, is_corner_plot: !form.is_corner_plot })}
                       className={`w-full py-3 rounded-xl flex items-center justify-center gap-2 ${
-                        form.is_corner_plot ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-700'
+                        form.is_corner_plot ? 'bg-sky-500 text-white' : 'bg-gray-100 text-gray-700'
                       }`}>
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                         form.is_corner_plot ? 'bg-white border-white' : 'border-gray-400'
                       }`}>
-                        {form.is_corner_plot && <Check className="w-3 h-3 text-amber-500" />}
+                        {form.is_corner_plot && <Check className="w-3 h-3 text-sky-500" />}
                       </div>
                       <span className="font-bold">Corner Plot Preferred</span>
                     </button>
@@ -313,7 +313,7 @@ const Requirements = () => {
                       {['Lakhs', 'Crores'].map(u => (
                         <button key={u} type="button" onClick={() => setForm({ ...form, budget_unit: u })} 
                           className={`flex-1 py-3 rounded-xl font-bold ${
-                            form.budget_unit === u ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-600'
+                            form.budget_unit === u ? 'bg-sky-500 text-white' : 'bg-gray-100 text-gray-600'
                           }`}>
                           {u}
                         </button>

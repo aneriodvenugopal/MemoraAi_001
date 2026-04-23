@@ -86,7 +86,7 @@ const Requirements = () => {
                   <div><p className="text-[10px] text-gray-400 mb-1">Max</p><input type="number" value={form.budget_max} onChange={(e) => setForm({ ...form, budget_max: e.target.value })} data-testid="input-budget-max" className="w-full px-2 py-2 border border-gray-200 rounded-lg text-sm" required /></div>
                 </div>
                 <div className="flex gap-1">
-                  {['Lakhs', 'Crore'].map(u => <button key={u} type="button" onClick={() => setForm({ ...form, budget_unit: u })} className={`flex-1 py-2 rounded-lg text-xs ${form.budget_unit === u ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-500'}`}>{u}</button>)}
+                  {['Lakhs', 'Crore'].map(u => <button key={u} type="button" onClick={() => setForm({ ...form, budget_unit: u })} className={`flex-1 py-2 rounded-lg text-xs ${form.budget_unit === u ? 'bg-sky-500 text-white' : 'bg-gray-100 text-gray-500'}`}>{u}</button>)}
                 </div>
                 <div><p className="text-[10px] text-gray-400 mb-1">Location</p><input type="text" value={form.location_preference} onChange={(e) => setForm({ ...form, location_preference: e.target.value })} data-testid="input-location" placeholder="e.g., Kukatpally" className="w-full px-2 py-2 border border-gray-200 rounded-lg text-sm" required /></div>
                 <div><p className="text-[10px] text-gray-400 mb-1">Details</p><textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} data-testid="input-description" rows={2} className="w-full px-2 py-2 border border-gray-200 rounded-lg text-sm resize-none" /></div>

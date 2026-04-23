@@ -184,7 +184,7 @@ const BankAccounts = () => {
 
   const getBalanceColor = (balance) => {
     if (balance > 100000) return 'text-green-600';
-    if (balance > 10000) return 'text-yellow-600';
+    if (balance > 10000) return 'text-blue-600';
     return 'text-red-600';
   };
 
@@ -253,13 +253,13 @@ const BankAccounts = () => {
             </div>
           </div>
           
-          <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
+          <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Cash Balance</p>
-                <p className="text-2xl font-bold text-yellow-600 mt-1">₹{summary.cash_balance.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-blue-600 mt-1">₹{summary.cash_balance.toLocaleString()}</p>
               </div>
-              <Wallet className="w-10 h-10 text-yellow-500 opacity-20" />
+              <Wallet className="w-10 h-10 text-blue-500 opacity-20" />
             </div>
           </div>
           

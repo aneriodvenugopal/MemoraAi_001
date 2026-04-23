@@ -8,7 +8,7 @@ const SlowProcessesExample = () => {
     <div className="min-h-screen bg-gray-50">
       <StickyNavbar />
       
-      <div className="pt-24 pb-16 bg-gradient-to-r from-orange-600 to-yellow-600">
+      <div className="pt-24 pb-16 bg-gradient-to-r from-indigo-600 to-blue-600">
         <div className="container mx-auto px-6">
           <Link to="/" className="inline-flex items-center text-white hover:text-gray-200 mb-8">
             <ArrowLeft className="w-5 h-5 mr-2" />

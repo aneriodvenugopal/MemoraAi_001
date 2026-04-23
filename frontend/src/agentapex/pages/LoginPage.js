@@ -137,7 +137,7 @@ const LoginPage = () => {
         <motion.div 
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg"
+          className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-sky-500 to-orange-500 text-white shadow-lg"
         >
           {isIOS ? (
             // iOS-specific detailed instructions
@@ -202,7 +202,7 @@ const LoginPage = () => {
             transition={{ duration: 0.3 }}
             className="mb-6"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg mx-auto">
+            <div className="w-20 h-20 bg-gradient-to-br from-sky-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg mx-auto">
               <Building2 className="w-10 h-10 text-white" />
             </div>
           </motion.div>
@@ -281,8 +281,8 @@ const LoginPage = () => {
               />
               
               {demoOtp && !keyboardVisible && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
-                  <p className="text-amber-700 text-sm">Demo OTP: <span className="font-bold">{demoOtp}</span></p>
+                <div className="bg-sky-50 border border-sky-200 rounded-xl p-3 text-center">
+                  <p className="text-sky-700 text-sm">Demo OTP: <span className="font-bold">{demoOtp}</span></p>
                 </div>
               )}
               

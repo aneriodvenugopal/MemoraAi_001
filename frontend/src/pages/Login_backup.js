@@ -160,15 +160,15 @@ const Login = () => {
             <form onSubmit={handleVerifyOTP} className="space-y-4">
               {/* Development Mode: Show OTP */}
               {generatedOtp && (
-                <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4 mb-4">
+                <div className="bg-blue-50 border-2 border-blue-400 rounded-lg p-4 mb-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-yellow-700 font-semibold">🔧 Development Mode</span>
+                    <span className="text-blue-700 font-semibold">🔧 Development Mode</span>
                   </div>
-                  <p className="text-sm text-yellow-700 mb-2">
+                  <p className="text-sm text-blue-700 mb-2">
                     Your OTP (in production, this will be sent via SMS):
                   </p>
-                  <div className="bg-white border-2 border-yellow-400 rounded p-3 text-center">
-                    <span className="text-3xl font-bold text-yellow-700 tracking-wider">
+                  <div className="bg-white border-2 border-blue-400 rounded p-3 text-center">
+                    <span className="text-3xl font-bold text-blue-700 tracking-wider">
                       {generatedOtp}
                     </span>
                   </div>
@@ -179,7 +179,7 @@ const Login = () => {
                       navigator.clipboard.writeText(generatedOtp);
                       toast.success('OTP copied to clipboard!');
                     }}
-                    className="mt-2 text-sm text-yellow-700 underline hover:text-yellow-900"
+                    className="mt-2 text-sm text-blue-700 underline hover:text-blue-900"
                   >
                     Click to auto-fill OTP
                   </button>

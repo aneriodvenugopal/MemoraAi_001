@@ -102,7 +102,7 @@ const SMSManagement = () => {
       sent: 'bg-blue-500',
       delivered: 'bg-green-500',
       failed: 'bg-red-500',
-      pending: 'bg-yellow-500',
+      pending: 'bg-blue-500',
     };
     return colors[status] || 'bg-gray-500';
   };

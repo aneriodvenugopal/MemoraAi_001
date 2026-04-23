@@ -316,8 +316,8 @@ const DocumentLocker = () => {
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-amber-100 rounded-xl">
-              <Archive className="w-8 h-8 text-amber-600" />
+            <div className="p-3 bg-sky-100 rounded-xl">
+              <Archive className="w-8 h-8 text-sky-600" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-slate-800">Document Locker</h1>
@@ -337,7 +337,7 @@ const DocumentLocker = () => {
             )}
             <Button
               onClick={() => setShowUploadModal(true)}
-              className="gap-2 bg-amber-600 hover:bg-amber-700"
+              className="gap-2 bg-sky-600 hover:bg-sky-700"
             >
               <Upload className="w-4 h-4" />
               Upload Document
@@ -403,14 +403,14 @@ const DocumentLocker = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <FileText className="w-5 h-5 text-amber-600" />
+            <FileText className="w-5 h-5 text-sky-600" />
             Documents ({documents.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
             <div className="text-center py-12">
-              <div className="animate-spin w-8 h-8 border-2 border-amber-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+              <div className="animate-spin w-8 h-8 border-2 border-sky-600 border-t-transparent rounded-full mx-auto mb-4"></div>
               <p className="text-slate-500">Loading documents...</p>
             </div>
           ) : documents.length === 0 ? (
@@ -439,8 +439,8 @@ const DocumentLocker = () => {
                     <tr key={doc.id} className="border-t hover:bg-slate-50">
                       <td className="p-3">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-amber-50 rounded">
-                            <FileText className="w-5 h-5 text-amber-600" />
+                          <div className="p-2 bg-sky-50 rounded">
+                            <FileText className="w-5 h-5 text-sky-600" />
                           </div>
                           <div>
                             <p className="font-medium text-slate-800">{doc.document_name}</p>
@@ -471,8 +471,8 @@ const DocumentLocker = () => {
                       {canSeePhysicalLocation && (
                         <td className="p-3">
                           <div className="flex items-center gap-1 text-sm">
-                            <MapPin className="w-4 h-4 text-amber-600" />
-                            <span className="font-mono font-medium text-amber-700">
+                            <MapPin className="w-4 h-4 text-sky-600" />
+                            <span className="font-mono font-medium text-sky-700">
                               {doc.physical_code}
                             </span>
                           </div>
@@ -527,7 +527,7 @@ const DocumentLocker = () => {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Upload className="w-5 h-5 text-amber-600" />
+              <Upload className="w-5 h-5 text-sky-600" />
               Upload Document
             </DialogTitle>
           </DialogHeader>
@@ -703,7 +703,7 @@ const DocumentLocker = () => {
               <Button
                 onClick={handleSubmitDocument}
                 disabled={!uploadForm.file_url || !uploadForm.customer_name || !uploadForm.customer_mobile || !uploadForm.physical_location_id}
-                className="bg-amber-600 hover:bg-amber-700"
+                className="bg-sky-600 hover:bg-sky-700"
               >
                 Save Document
               </Button>
@@ -717,7 +717,7 @@ const DocumentLocker = () => {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-amber-600" />
+              <MapPin className="w-5 h-5 text-sky-600" />
               Physical Storage Locations
             </DialogTitle>
           </DialogHeader>
@@ -761,7 +761,7 @@ const DocumentLocker = () => {
                 <Button
                   onClick={handleCreateLocation}
                   disabled={!newLocation.name.trim()}
-                  className="w-full bg-amber-600 hover:bg-amber-700"
+                  className="w-full bg-sky-600 hover:bg-sky-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Create Location
@@ -777,7 +777,7 @@ const DocumentLocker = () => {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Mail className="w-5 h-5 text-amber-600" />
+              <Mail className="w-5 h-5 text-sky-600" />
               Share Document via Email
             </DialogTitle>
           </DialogHeader>
@@ -810,7 +810,7 @@ const DocumentLocker = () => {
                 <Button
                   onClick={handleShareEmail}
                   disabled={!emailTo}
-                  className="bg-amber-600 hover:bg-amber-700"
+                  className="bg-sky-600 hover:bg-sky-700"
                 >
                   <Mail className="w-4 h-4 mr-2" />
                   Send

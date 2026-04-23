@@ -653,7 +653,7 @@ const MemoraAIDemos = () => {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
-            <div className="p-4 bg-gradient-to-r from-orange-500 to-pink-500 rounded-2xl shadow-lg">
+            <div className="p-4 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-2xl shadow-lg">
               <Sparkles className="w-10 h-10 text-white" />
             </div>
             <div>
@@ -835,7 +835,7 @@ const MemoraAIDemos = () => {
                   </div>
 
                   <Button 
-                    className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold"
+                    className="w-full bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white font-semibold"
                     onClick={handleGenerateScript}
                     disabled={isGeneratingScript || !conceptTitle || !videoType || !targetAudience}
                     data-testid="generate-script-btn"

@@ -17,13 +17,13 @@ const MemoraAILogo = ({ size = 'md', showCaption = true, showBrand = true, class
         <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           <defs>
             <linearGradient id="memoraGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#d97706" />
-              <stop offset="50%" stopColor="#f59e0b" />
-              <stop offset="100%" stopColor="#eab308" />
+              <stop offset="0%" stopColor="#0369a1" />
+              <stop offset="50%" stopColor="#0ea5e9" />
+              <stop offset="100%" stopColor="#38bdf8" />
             </linearGradient>
             <linearGradient id="memoraGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#eab308" />
-              <stop offset="100%" stopColor="#f59e0b" />
+              <stop offset="0%" stopColor="#38bdf8" />
+              <stop offset="100%" stopColor="#0ea5e9" />
             </linearGradient>
           </defs>
           <circle cx="24" cy="24" r="22" fill="url(#memoraGrad1)" />
@@ -46,8 +46,8 @@ const MemoraAILogo = ({ size = 'md', showCaption = true, showBrand = true, class
         <div className="flex flex-col">
           {showBrand && (
             <span className={`${s.text} font-bold tracking-tight`}>
-              <span className="text-amber-700">Memora</span>
-              <span className="text-amber-500">AI</span>
+              <span className="text-sky-700">Memora</span>
+              <span className="text-sky-500">AI</span>
             </span>
           )}
           {showCaption && (

@@ -164,7 +164,7 @@ export default function TeamInbox() {
                           {m.direction === 'outgoing' && !m.is_manual && (
                             <button
                               onClick={() => setCorrectingMsg({ msg: m, customerMsg: prevCustomerMsg })}
-                              className="absolute -top-2 -left-2 bg-amber-500 hover:bg-amber-600 text-white text-[9px] px-1.5 py-0.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5"
+                              className="absolute -top-2 -left-2 bg-sky-500 hover:bg-sky-600 text-white text-[9px] px-1.5 py-0.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5"
                               data-testid={`correct-ai-btn-${i}`}
                               title="Teach AI the correct response"
                             >
@@ -264,7 +264,7 @@ function CorrectAIModal({ aiMsg, customerMsg, conversationId, onClose, onSaved, 
         className="bg-white w-full max-w-lg rounded-2xl max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
           <h2 className="font-bold text-gray-900 flex items-center gap-2">
-            <Brain className="w-4 h-4 text-amber-600" /> Teach AI the Correct Response
+            <Brain className="w-4 h-4 text-sky-600" /> Teach AI the Correct Response
           </h2>
           <button type="button" onClick={onClose} className="p-1 text-gray-400 hover:text-gray-700" data-testid="close-correct-modal">
             <X className="w-5 h-5" />
@@ -316,7 +316,7 @@ function CorrectAIModal({ aiMsg, customerMsg, conversationId, onClose, onSaved, 
             Cancel
           </button>
           <button type="submit" disabled={saving || !note.trim()}
-            className="flex-1 flex items-center justify-center gap-1.5 bg-amber-500 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-amber-600 disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-1.5 bg-sky-500 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-sky-600 disabled:opacity-50"
             data-testid="save-correct-btn">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Save & Teach AI

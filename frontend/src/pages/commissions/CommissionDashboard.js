@@ -134,7 +134,7 @@ const CommissionDashboard = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: { color: 'bg-yellow-100 text-yellow-800 border-yellow-300', icon: <Clock size={14} />, label: 'Pending' },
+      pending: { color: 'bg-blue-100 text-blue-800 border-blue-300', icon: <Clock size={14} />, label: 'Pending' },
       approved: { color: 'bg-green-100 text-green-800 border-green-300', icon: <CheckCircle size={14} />, label: 'Approved' },
       paid: { color: 'bg-blue-100 text-blue-800 border-blue-300', icon: <Wallet size={14} />, label: 'Paid' },
       cancelled: { color: 'bg-red-100 text-red-800 border-red-300', icon: <XCircle size={14} />, label: 'Cancelled' },
@@ -194,15 +194,15 @@ const CommissionDashboard = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-yellow-100">Pending</p>
+                  <p className="text-sm text-blue-100">Pending</p>
                   <p className="text-2xl font-bold mt-1">
                     ₹{(summary.by_status?.pending?.total_net || 0).toLocaleString('en-IN')}
                   </p>
                 </div>
-                <Clock size={32} className="text-yellow-200" />
+                <Clock size={32} className="text-blue-200" />
               </div>
             </div>
 

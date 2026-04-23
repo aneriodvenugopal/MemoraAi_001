@@ -250,7 +250,7 @@ const PaymentSchemes = () => {
                         Finalized
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
                         <Unlock size={12} />
                         Draft
                       </span>

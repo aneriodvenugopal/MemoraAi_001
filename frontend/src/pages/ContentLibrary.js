@@ -27,7 +27,7 @@ const COLOR_CLASSES = {
   emerald: "bg-emerald-50 text-emerald-600 border-emerald-100",
   gray:    "bg-gray-50 text-gray-600 border-gray-100",
   purple:  "bg-purple-50 text-purple-600 border-purple-100",
-  amber:   "bg-amber-50 text-amber-600 border-amber-100",
+  amber:   "bg-sky-50 text-sky-600 border-sky-100",
   indigo:  "bg-indigo-50 text-indigo-600 border-indigo-100",
 };
 
@@ -95,14 +95,14 @@ export default function ContentLibrary() {
           </button>
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-amber-500" />
+              <Sparkles className="w-5 h-5 text-sky-500" />
               Content Library
             </h1>
             <p className="text-xs text-gray-500 truncate">Brochures, images, videos & links — all ready for WhatsApp</p>
           </div>
           <button
             onClick={() => { setEditItem(null); setShowAdd(true); }}
-            className="flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-lg text-sm font-semibold"
+            className="flex items-center gap-1.5 bg-sky-500 hover:bg-sky-600 text-white px-3 py-2 rounded-lg text-sm font-semibold"
             data-testid="add-content-btn"
           >
             <Plus className="w-4 h-4" /> Add
@@ -134,7 +134,7 @@ export default function ContentLibrary() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input type="text" value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search content by title, tag, description…"
-              className="w-full pl-9 pr-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+              className="w-full pl-9 pr-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
               data-testid="search-input" />
           </div>
           <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
@@ -151,7 +151,7 @@ export default function ContentLibrary() {
         {/* List */}
         {loading ? (
           <div className="bg-white rounded-2xl p-8 text-center">
-            <Loader2 className="w-6 h-6 text-amber-500 animate-spin mx-auto" />
+            <Loader2 className="w-6 h-6 text-sky-500 animate-spin mx-auto" />
           </div>
         ) : filteredItems.length === 0 ? (
           <EmptyState onAdd={() => { setEditItem(null); setShowAdd(true); }} />
@@ -195,7 +195,7 @@ function StatCard({ label, value, subLabel, color = "amber" }) {
 function FilterPill({ active, label, icon: Icon, onClick, testId }) {
   return (
     <button onClick={onClick}
-      className={`flex items-center gap-1 whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${active ? 'bg-amber-500 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-amber-300'}`}
+      className={`flex items-center gap-1 whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${active ? 'bg-sky-500 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-sky-300'}`}
       data-testid={testId}>
       {Icon && <Icon className="w-3 h-3" />}{label}
     </button>
@@ -204,16 +204,16 @@ function FilterPill({ active, label, icon: Icon, onClick, testId }) {
 
 function EmptyState({ onAdd }) {
   return (
-    <div className="bg-white rounded-2xl p-8 text-center border-2 border-dashed border-amber-200" data-testid="empty-state">
-      <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-3">
-        <FileUp className="w-7 h-7 text-amber-500" />
+    <div className="bg-white rounded-2xl p-8 text-center border-2 border-dashed border-sky-200" data-testid="empty-state">
+      <div className="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center mx-auto mb-3">
+        <FileUp className="w-7 h-7 text-sky-500" />
       </div>
       <h3 className="font-semibold text-gray-900 mb-1">No content here yet</h3>
       <p className="text-xs text-gray-500 max-w-xs mx-auto mb-4">
         Upload brochures, price lists, photos, or videos — your AI will share them with customers on WhatsApp instantly.
       </p>
       <button onClick={onAdd}
-        className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm px-4 py-2 rounded-lg"
+        className="inline-flex items-center gap-1.5 bg-sky-500 hover:bg-sky-600 text-white font-semibold text-sm px-4 py-2 rounded-lg"
         data-testid="empty-add-btn">
         <Plus className="w-4 h-4" /> Add First Content
       </button>
@@ -228,7 +228,7 @@ function ContentCard({ item, onEdit, onDelete, onShare }) {
   const isImg = item.content_type === "image" && item.url;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-amber-200 hover:shadow-sm transition-all" data-testid={`content-${item.id}`}>
+    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-sky-200 hover:shadow-sm transition-all" data-testid={`content-${item.id}`}>
       {/* Preview strip */}
       {isImg ? (
         <div className="h-28 bg-gray-50 overflow-hidden flex items-center justify-center">
@@ -258,7 +258,7 @@ function ContentCard({ item, onEdit, onDelete, onShare }) {
         {item.tags && item.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-2">
             {item.tags.slice(0, 4).map((t, i) => (
-              <span key={i} className="text-[9px] bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded-full">#{t}</span>
+              <span key={i} className="text-[9px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded-full">#{t}</span>
             ))}
           </div>
         )}
@@ -391,7 +391,7 @@ function AddContentModal({ editItem, onClose, onSaved, onError, headers }) {
         className="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl max-h-[94vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
           <h2 className="font-bold text-gray-900 flex items-center gap-2">
-            {step === "details" && cfg && <cfg.icon className="w-5 h-5 text-amber-600" />}
+            {step === "details" && cfg && <cfg.icon className="w-5 h-5 text-sky-600" />}
             {step === "type" ? "What are you adding?" : (isEdit ? "Edit Content" : `Add ${cfg?.label || "Content"}`)}
           </h2>
           <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-700" data-testid="close-add-modal">
@@ -407,7 +407,7 @@ function AddContentModal({ editItem, onClose, onSaved, onError, headers }) {
                 const cls = COLOR_CLASSES[t.color] || COLOR_CLASSES.gray;
                 return (
                   <button key={t.key} onClick={() => handlePickType(t.key)}
-                    className={`border-2 rounded-xl p-3 text-left hover:shadow-sm transition-all hover:border-amber-300 ${cls.split(' ')[2]}`}
+                    className={`border-2 rounded-xl p-3 text-left hover:shadow-sm transition-all hover:border-sky-300 ${cls.split(' ')[2]}`}
                     data-testid={`pick-type-${t.key}`}>
                     <div className={`w-9 h-9 rounded-lg ${cls.split(' ')[0]} flex items-center justify-center mb-2`}>
                       <t.icon className={`w-5 h-5 ${cls.split(' ')[1]}`} />
@@ -447,19 +447,19 @@ function AddContentModal({ editItem, onClose, onSaved, onError, headers }) {
                     <button type="button"
                       onClick={() => fileRef.current?.click()}
                       disabled={uploading}
-                      className="w-full border-2 border-dashed border-amber-300 bg-amber-50/50 rounded-xl py-8 px-4 flex flex-col items-center justify-center gap-2 hover:border-amber-400 hover:bg-amber-50 transition-colors disabled:opacity-60"
+                      className="w-full border-2 border-dashed border-sky-300 bg-sky-50/50 rounded-xl py-8 px-4 flex flex-col items-center justify-center gap-2 hover:border-sky-400 hover:bg-sky-50 transition-colors disabled:opacity-60"
                       data-testid="upload-dropzone">
                       {uploading ? (
                         <>
-                          <Loader2 className="w-6 h-6 text-amber-500 animate-spin" />
-                          <p className="text-sm font-medium text-amber-700">Uploading… {uploadProgress}%</p>
-                          <div className="w-full bg-amber-100 rounded-full h-1.5 mt-1">
-                            <div className="bg-amber-500 h-1.5 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
+                          <Loader2 className="w-6 h-6 text-sky-500 animate-spin" />
+                          <p className="text-sm font-medium text-sky-700">Uploading… {uploadProgress}%</p>
+                          <div className="w-full bg-sky-100 rounded-full h-1.5 mt-1">
+                            <div className="bg-sky-500 h-1.5 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
                           </div>
                         </>
                       ) : (
                         <>
-                          <Upload className="w-6 h-6 text-amber-500" />
+                          <Upload className="w-6 h-6 text-sky-500" />
                           <p className="text-sm font-semibold text-gray-800">Tap to pick file</p>
                           <p className="text-[10px] text-gray-500">Accepts: {cfg.accept}</p>
                         </>
@@ -550,7 +550,7 @@ function AddContentModal({ editItem, onClose, onSaved, onError, headers }) {
                 Cancel
               </button>
               <button type="submit" disabled={saving || !form.title.trim()}
-                className="flex-1 flex items-center justify-center gap-1.5 bg-amber-500 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-amber-600 disabled:opacity-50" data-testid="save-content-btn">
+                className="flex-1 flex items-center justify-center gap-1.5 bg-sky-500 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-sky-600 disabled:opacity-50" data-testid="save-content-btn">
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                 {isEdit ? "Save Changes" : "Save"}
               </button>

@@ -369,10 +369,10 @@ const CustomersManagement = () => {
               <p className="text-2xl font-bold text-purple-800">{stats.nri_count || 0}</p>
             </CardContent>
           </Card>
-          <Card className="bg-amber-50 border-amber-200">
+          <Card className="bg-sky-50 border-sky-200">
             <CardContent className="p-4">
-              <p className="text-sm text-amber-600">Wallet Balance</p>
-              <p className="text-xl font-bold text-amber-800">{formatCurrency(stats.total_wallet_balance)}</p>
+              <p className="text-sm text-sky-600">Wallet Balance</p>
+              <p className="text-xl font-bold text-sky-800">{formatCurrency(stats.total_wallet_balance)}</p>
             </CardContent>
           </Card>
         </div>
@@ -521,7 +521,7 @@ const CustomersManagement = () => {
                         </div>
                       </td>
                       <td className="p-3">
-                        <p className="text-sm font-medium text-amber-700">
+                        <p className="text-sm font-medium text-sky-700">
                           ₹{(customer.wallet_balance || 0).toLocaleString()}
                         </p>
                       </td>
@@ -825,9 +825,9 @@ const CustomersManagement = () => {
                 </div>
               </div>
               
-              <div className="p-4 bg-amber-50 rounded-lg">
-                <p className="text-xs text-amber-600">Wallet Balance</p>
-                <p className="text-2xl font-bold text-amber-700">
+              <div className="p-4 bg-sky-50 rounded-lg">
+                <p className="text-xs text-sky-600">Wallet Balance</p>
+                <p className="text-2xl font-bold text-sky-700">
                   ₹{(selectedCustomer.wallet_balance || 0).toLocaleString()}
                 </p>
               </div>
@@ -912,16 +912,16 @@ const CustomersManagement = () => {
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Wallet className="w-5 h-5 text-amber-600" />
+              <Wallet className="w-5 h-5 text-sky-600" />
               Customer Wallet
             </DialogTitle>
           </DialogHeader>
           {walletData && (
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-4 p-4 bg-amber-50 rounded-lg">
+              <div className="grid grid-cols-3 gap-4 p-4 bg-sky-50 rounded-lg">
                 <div>
-                  <p className="text-xs text-amber-600">Balance</p>
-                  <p className="text-xl font-bold text-amber-700">₹{walletData.wallet.balance.toLocaleString()}</p>
+                  <p className="text-xs text-sky-600">Balance</p>
+                  <p className="text-xl font-bold text-sky-700">₹{walletData.wallet.balance.toLocaleString()}</p>
                 </div>
                 <div>
                   <p className="text-xs text-green-600">Earned</p>

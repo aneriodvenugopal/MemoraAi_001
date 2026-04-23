@@ -73,7 +73,7 @@ const OurStory = () => {
               <div className="md:flex items-center justify-between">
                 <div className="md:w-5/12 mb-6 md:mb-0 md:text-right md:pr-12">
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-cyan-500/30 hover:border-cyan-500 transition-all">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-yellow-500 rounded-full mb-4 md:float-right md:ml-4">
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-500 rounded-full mb-4 md:float-right md:ml-4">
                       <Lightbulb className="w-6 h-6 text-white" />
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-3">Phase 3: The Insight</h3>

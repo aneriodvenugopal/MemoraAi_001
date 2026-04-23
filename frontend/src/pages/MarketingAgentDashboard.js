@@ -206,7 +206,7 @@ function MarketingAgentDashboard() {
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-xl p-6 text-white">
+          <div className="bg-gradient-to-br from-indigo-500 to-orange-600 rounded-2xl shadow-xl p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-white/20 p-3 rounded-xl">
                 <Clock size={28} />
@@ -328,7 +328,7 @@ function MarketingAgentDashboard() {
                       className={`p-4 rounded-lg border-l-4 ${
                         followup.is_overdue
                           ? 'border-red-500 bg-red-50'
-                          : 'border-yellow-500 bg-yellow-50'
+                          : 'border-blue-500 bg-blue-50'
                       }`}
                     >
                       <div className="flex items-start justify-between">
@@ -347,7 +347,7 @@ function MarketingAgentDashboard() {
                           <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                             followup.is_overdue
                               ? 'bg-red-100 text-red-700'
-                              : 'bg-yellow-100 text-yellow-700'
+                              : 'bg-blue-100 text-blue-700'
                           }`}>
                             {followup.is_overdue ? 'OVERDUE' : 'DUE SOON'}
                           </span>
@@ -397,9 +397,9 @@ function MarketingAgentDashboard() {
                   ₹{(overview.paid_commission / 1000).toFixed(0)}K
                 </p>
               </div>
-              <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-                <p className="text-sm text-yellow-700 font-medium mb-1">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600">
+              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                <p className="text-sm text-blue-700 font-medium mb-1">Pending</p>
+                <p className="text-2xl font-bold text-blue-600">
                   ₹{(overview.pending_commission / 1000).toFixed(0)}K
                 </p>
               </div>
@@ -435,7 +435,7 @@ function MarketingAgentDashboard() {
                           commission.status === 'paid'
                             ? 'bg-green-100 text-green-700'
                             : commission.status === 'pending'
-                            ? 'bg-yellow-100 text-yellow-700'
+                            ? 'bg-blue-100 text-blue-700'
                             : 'bg-gray-100 text-gray-700'
                         }`}>
                           {commission.status?.toUpperCase()}

@@ -439,7 +439,7 @@ const AdvancedLayoutViewer = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Booked:</span>
-                  <span className="font-bold text-yellow-600">
+                  <span className="font-bold text-blue-600">
                     {layout.plots?.filter(p => p.status === 'booked').length || 0}
                   </span>
                 </div>
@@ -1062,9 +1062,9 @@ const AdvancedLayoutViewer = () => {
                       />
                     </div>
                     
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-sm">
-                      <p className="font-semibold text-yellow-800 mb-1">Note:</p>
-                      <p className="text-yellow-700">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm">
+                      <p className="font-semibold text-blue-800 mb-1">Note:</p>
+                      <p className="text-blue-700">
                         This is a booking request. Our team will contact you to complete the booking process and collect the token amount.
                       </p>
                     </div>

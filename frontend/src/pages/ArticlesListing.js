@@ -10,7 +10,7 @@ const CATEGORY_COLORS = {
   market_updates: 'bg-orange-100 text-orange-700',
   investment_guide: 'bg-purple-100 text-purple-700',
   legal_tips: 'bg-red-100 text-red-700',
-  success_stories: 'bg-yellow-100 text-yellow-700'
+  success_stories: 'bg-blue-100 text-blue-700'
 };
 
 const CATEGORY_NAMES = {

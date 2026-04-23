@@ -188,7 +188,7 @@ const AgentPayouts = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: { color: 'bg-yellow-100 text-yellow-800 border-yellow-300', icon: <Clock size={14} />, label: 'Pending' },
+      pending: { color: 'bg-blue-100 text-blue-800 border-blue-300', icon: <Clock size={14} />, label: 'Pending' },
       completed: { color: 'bg-green-100 text-green-800 border-green-300', icon: <CheckCircle size={14} />, label: 'Completed' },
       processing: { color: 'bg-blue-100 text-blue-800 border-blue-300', icon: <Send size={14} />, label: 'Processing' }
     };

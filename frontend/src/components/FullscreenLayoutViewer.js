@@ -224,7 +224,7 @@ const FullscreenLayoutViewer = ({ layout, project, onPlotSelect }) => {
               <span className="text-gray-600 hidden sm:inline">Available</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div className="w-3 h-3 rounded-full bg-blue-500"></div>
               <span className="font-semibold">{bookedCount}</span>
               <span className="text-gray-600 hidden sm:inline">Booked</span>
             </div>
@@ -302,7 +302,7 @@ const FullscreenLayoutViewer = ({ layout, project, onPlotSelect }) => {
                       <span className="text-gray-600">Status:</span>
                       <span className={`font-semibold ${
                         selectedPlot.status?.toLowerCase() === 'available' ? 'text-green-600' :
-                        selectedPlot.status?.toLowerCase() === 'booked' ? 'text-yellow-600' : 'text-red-600'
+                        selectedPlot.status?.toLowerCase() === 'booked' ? 'text-blue-600' : 'text-red-600'
                       }`}>
                         {selectedPlot.status || 'Available'}
                       </span>

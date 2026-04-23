@@ -85,7 +85,7 @@ const CertifiedPropertyPage = () => {
     
     // Fallback to initials
     const initials = data?.company?.initials || 'RE';
-    const colors = ['bg-blue-600', 'bg-indigo-600', 'bg-purple-600', 'bg-emerald-600', 'bg-amber-600'];
+    const colors = ['bg-blue-600', 'bg-indigo-600', 'bg-purple-600', 'bg-emerald-600', 'bg-sky-600'];
     const colorIndex = initials.charCodeAt(0) % colors.length;
     
     return (
@@ -160,7 +160,7 @@ const CertifiedPropertyPage = () => {
                   <CheckCircle2 className="w-4 h-4 mr-1" /> Verified & Certified
                 </Badge>
               ) : (
-                <Badge className="bg-amber-500 text-white border-0 px-3 py-1">
+                <Badge className="bg-sky-500 text-white border-0 px-3 py-1">
                   <Clock className="w-4 h-4 mr-1" /> Verification Pending
                 </Badge>
               )}
@@ -249,7 +249,7 @@ const CertifiedPropertyPage = () => {
                     <Badge className={
                       property.status === 'available' ? 'bg-green-100 text-green-700' :
                       property.status === 'sold' ? 'bg-red-100 text-red-700' :
-                      'bg-amber-100 text-amber-700'
+                      'bg-sky-100 text-sky-700'
                     }>
                       {property.status?.charAt(0).toUpperCase() + property.status?.slice(1) || 'Available'}
                     </Badge>

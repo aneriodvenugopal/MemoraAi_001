@@ -28,7 +28,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 const STATUS_COLORS = {
   scheduled: 'bg-blue-100 text-blue-800',
   confirmed: 'bg-purple-100 text-purple-800',
-  in_progress: 'bg-yellow-100 text-yellow-800',
+  in_progress: 'bg-blue-100 text-blue-800',
   completed: 'bg-green-100 text-green-800',
   cancelled: 'bg-red-100 text-red-800',
   no_show: 'bg-gray-100 text-gray-800',
@@ -39,7 +39,7 @@ const STATUS_COLORS = {
 const OUTCOME_COLORS = {
   interested: 'bg-green-100 text-green-800',
   not_interested: 'bg-red-100 text-red-800',
-  needs_followup: 'bg-yellow-100 text-yellow-800',
+  needs_followup: 'bg-blue-100 text-blue-800',
   booking_initiated: 'bg-purple-100 text-purple-800',
   negotiating: 'bg-blue-100 text-blue-800',
   pending: 'bg-gray-100 text-gray-800'
@@ -520,7 +520,7 @@ const SiteVisits = () => {
                 Google Calendar Connected
               </Badge>
             ) : (
-              <Badge className="bg-yellow-100 text-yellow-800 flex items-center gap-1" title="Connect in Settings to sync visits">
+              <Badge className="bg-blue-100 text-blue-800 flex items-center gap-1" title="Connect in Settings to sync visits">
                 <AlertCircle className="w-3 h-3" />
                 Calendar Not Connected
               </Badge>
@@ -1054,8 +1054,8 @@ const SiteVisits = () => {
               )}
               
               {selectedVisit.followup_required && (
-                <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <p className="text-sm font-medium text-yellow-800">
+                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <p className="text-sm font-medium text-blue-800">
                     <AlertCircle className="w-4 h-4 inline mr-1" />
                     Follow-up required
                     {selectedVisit.followup_date && ` on ${formatDate(selectedVisit.followup_date)}`}

@@ -270,7 +270,7 @@ const LayoutViewer = () => {
                         <Badge 
                           className={
                             plot.status === 'available' ? 'bg-green-500' :
-                            plot.status === 'booked' ? 'bg-yellow-500' :
+                            plot.status === 'booked' ? 'bg-blue-500' :
                             plot.status === 'sold' ? 'bg-purple-500' :
                             'bg-red-500'
                           }

@@ -96,7 +96,7 @@ const ResaleManagement = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: 'bg-yellow-100 text-yellow-800',
+      pending: 'bg-blue-100 text-blue-800',
       approved: 'bg-green-100 text-green-800',
       rejected: 'bg-red-100 text-red-800'
     };
@@ -150,7 +150,7 @@ const ResaleManagement = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">Pending Requests</p>
-                <p className="text-3xl font-bold text-yellow-600 mt-2">{stats.pending_count}</p>
+                <p className="text-3xl font-bold text-blue-600 mt-2">{stats.pending_count}</p>
               </div>
               <div className="text-4xl">⏳</div>
             </div>

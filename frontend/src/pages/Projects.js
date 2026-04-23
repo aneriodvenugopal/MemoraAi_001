@@ -167,7 +167,7 @@ const Projects = () => {
       plot: 'from-green-500 to-emerald-600',
       flat: 'from-blue-500 to-indigo-600',
       villa: 'from-purple-500 to-pink-600',
-      commercial: 'from-orange-500 to-red-600',
+      commercial: 'from-indigo-500 to-red-600',
     };
     return colors[type] || 'from-gray-500 to-gray-600';
   };

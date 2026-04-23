@@ -141,7 +141,7 @@ const Billing = () => {
     switch (packageId) {
       case 'starter': return 'from-blue-500 to-cyan-500';
       case 'pro': return 'from-purple-500 to-pink-500';
-      case 'enterprise': return 'from-amber-500 to-orange-500';
+      case 'enterprise': return 'from-sky-500 to-orange-500';
       default: return 'from-slate-500 to-slate-600';
     }
   };
@@ -473,7 +473,7 @@ const Billing = () => {
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-slate-900">{formatCurrency(invoice.amount)}</p>
-                          <Badge className={invoice.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}>
+                          <Badge className={invoice.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-sky-100 text-sky-700'}>
                             {invoice.status}
                           </Badge>
                         </div>

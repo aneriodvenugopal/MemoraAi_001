@@ -207,7 +207,7 @@ const PublicLayoutView = () => {
   const getStatusBadge = (status) => {
     const config = {
       available: { color: 'bg-green-500', icon: Check, label: 'Available' },
-      booked: { color: 'bg-yellow-500', icon: Clock, label: 'Booked' },
+      booked: { color: 'bg-blue-500', icon: Clock, label: 'Booked' },
       blocked: { color: 'bg-orange-500', icon: AlertCircle, label: 'Blocked' },
       sold: { color: 'bg-red-500', icon: AlertCircle, label: 'Sold' }
     };
@@ -430,8 +430,8 @@ const PublicLayoutView = () => {
           </div>
           <div className="w-px h-5 bg-gray-300"></div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <span className="text-gray-700 text-sm"><span className="font-bold text-yellow-600">{bookedPlots.length}</span> Booked</span>
+            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+            <span className="text-gray-700 text-sm"><span className="font-bold text-blue-600">{bookedPlots.length}</span> Booked</span>
           </div>
           <div className="w-px h-5 bg-gray-300"></div>
           <div className="flex items-center gap-2">

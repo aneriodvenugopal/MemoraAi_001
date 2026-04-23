@@ -155,8 +155,8 @@ function ContentCMS() {
               <div className="text-2xl font-bold text-green-600">{stats.published}</div>
               <div className="text-sm text-gray-600">Published</div>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-yellow-600">{stats.draft}</div>
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="text-2xl font-bold text-blue-600">{stats.draft}</div>
               <div className="text-sm text-gray-600">Drafts</div>
             </div>
             <div className="bg-purple-50 p-4 rounded-lg">
@@ -263,7 +263,7 @@ function ContentCMS() {
                       <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                         article.status === 'published' 
                           ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
+                          : 'bg-blue-100 text-blue-800'
                       }`}>
                         {article.status}
                       </span>

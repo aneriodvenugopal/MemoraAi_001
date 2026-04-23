@@ -30,7 +30,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 const STATUS_COLORS = {
   open: 'bg-blue-100 text-blue-800',
   acknowledged: 'bg-cyan-100 text-cyan-800',
-  in_progress: 'bg-yellow-100 text-yellow-800',
+  in_progress: 'bg-blue-100 text-blue-800',
   pending_customer: 'bg-purple-100 text-purple-800',
   resolved: 'bg-green-100 text-green-800',
   closed: 'bg-gray-100 text-gray-800',
@@ -520,7 +520,7 @@ const ComplaintManagement = () => {
               icon={Clock} 
               color="yellow"
               onClick={() => setActiveTab('open')}
-              className={activeTab === 'open' ? 'ring-2 ring-yellow-500' : ''}
+              className={activeTab === 'open' ? 'ring-2 ring-blue-500' : ''}
             />
             <ClickableStatCard 
               title="Resolved" 
@@ -663,7 +663,7 @@ const ComplaintManagement = () => {
                               {complaint.sla_due_date && <span>SLA Due: {formatDate(complaint.sla_due_date)}</span>}
                               {complaint.satisfaction_rating && (
                                 <span className="flex items-center gap-1">
-                                  <Star className="w-3 h-3 text-yellow-500" />{complaint.satisfaction_rating}/5
+                                  <Star className="w-3 h-3 text-blue-500" />{complaint.satisfaction_rating}/5
                                 </span>
                               )}
                             </div>
@@ -837,7 +837,7 @@ const ComplaintManagement = () => {
                   </div>
                   <div className="space-y-2 max-h-48 overflow-y-auto">
                     {complaintDetails.comments?.map((comment) => (
-                      <div key={comment.id} className={`p-3 rounded-lg ${comment.is_internal ? 'bg-yellow-50 border border-yellow-200' : 'bg-gray-50'}`}>
+                      <div key={comment.id} className={`p-3 rounded-lg ${comment.is_internal ? 'bg-blue-50 border border-blue-200' : 'bg-gray-50'}`}>
                         <div className="flex justify-between text-sm">
                           <span className="font-medium">{comment.user_name}</span>
                           <span className="text-gray-500">{formatDate(comment.created_at)}</span>
@@ -846,7 +846,7 @@ const ComplaintManagement = () => {
                         {comment.status_changed_to && (
                           <Badge variant="outline" className="mt-1">Status: {comment.status_changed_to}</Badge>
                         )}
-                        {comment.is_internal && <Badge className="mt-1 bg-yellow-200 text-yellow-800">Internal Note</Badge>}
+                        {comment.is_internal && <Badge className="mt-1 bg-blue-200 text-blue-800">Internal Note</Badge>}
                       </div>
                     ))}
                   </div>
@@ -1033,7 +1033,7 @@ const ComplaintManagement = () => {
                       size="sm"
                       variant={feedbackForm.rating === rating ? 'default' : 'outline'}
                       onClick={() => setFeedbackForm({ ...feedbackForm, rating })}
-                      className={feedbackForm.rating === rating ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
+                      className={feedbackForm.rating === rating ? 'bg-blue-500 hover:bg-blue-600' : ''}
                     >
                       <Star className={`w-4 h-4 ${feedbackForm.rating >= rating ? 'fill-current' : ''}`} />
                     </Button>

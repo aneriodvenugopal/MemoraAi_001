@@ -407,7 +407,7 @@ export default function ResaleReleaseManagement() {
   // Get status badge color
   const getStatusBadge = (status) => {
     const colors = {
-      pending_approval: "bg-yellow-100 text-yellow-800",
+      pending_approval: "bg-blue-100 text-blue-800",
       approved: "bg-blue-100 text-blue-800",
       listed: "bg-green-100 text-green-800",
       under_negotiation: "bg-purple-100 text-purple-800",
@@ -494,8 +494,8 @@ export default function ResaleReleaseManagement() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-yellow-100 rounded-lg">
-                    <Clock className="w-5 h-5 text-yellow-600" />
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <Clock className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Pending Approval</p>

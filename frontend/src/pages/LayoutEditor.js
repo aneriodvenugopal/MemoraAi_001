@@ -722,11 +722,11 @@ const LayoutEditor = ({ mode = 'edit' }) => {
                           File type: <span className="font-semibold uppercase">{fileType}</span>
                         </p>
                         {fileType === 'pdf' && (
-                          <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded p-2">
-                            <p className="text-xs text-yellow-800">
+                          <div className="mt-2 bg-blue-50 border border-blue-200 rounded p-2">
+                            <p className="text-xs text-blue-800">
                               ⚠️ PDF viewing: If PDF doesn't display, <a href={svgUrl} target="_blank" rel="noopener noreferrer" className="underline font-semibold">open in new tab</a>
                             </p>
-                            <p className="text-xs text-yellow-700 mt-1">
+                            <p className="text-xs text-blue-700 mt-1">
                               💡 For plot drawing, please upload SVG, PNG, or JPG format
                             </p>
                           </div>

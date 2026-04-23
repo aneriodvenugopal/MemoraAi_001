@@ -113,10 +113,10 @@ const PaymentSuccess = () => {
           
           {status === 'error' && (
             <>
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-yellow-100 flex items-center justify-center">
-                <RefreshCw className="w-12 h-12 text-yellow-600" />
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-blue-100 flex items-center justify-center">
+                <RefreshCw className="w-12 h-12 text-blue-600" />
               </div>
-              <CardTitle className="text-2xl text-yellow-700">Status Unknown</CardTitle>
+              <CardTitle className="text-2xl text-blue-700">Status Unknown</CardTitle>
             </>
           )}
         </CardHeader>

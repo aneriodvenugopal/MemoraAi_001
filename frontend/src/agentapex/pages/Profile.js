@@ -175,7 +175,7 @@ _AgentApex - Your Property Partner_`;
               {profileImageUrl ? (
                 <img src={profileImageUrl} alt="Profile" className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                <div className="w-full h-full bg-gradient-to-br from-sky-400 to-orange-500 flex items-center justify-center">
                   <User className="w-10 h-10 text-white" />
                 </div>
               )}

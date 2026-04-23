@@ -199,7 +199,7 @@ function PackageManagement() {
                     <span>{pkg.features.max_users === 999999 ? 'Unlimited' : pkg.features.max_users} Users</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Zap size={16} className="text-yellow-600" />
+                    <Zap size={16} className="text-blue-600" />
                     <span>{pkg.features.sms_credits} SMS, {pkg.features.email_credits} Email, {pkg.features.whatsapp_credits} WhatsApp</span>
                   </div>
                 </div>

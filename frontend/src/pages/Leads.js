@@ -452,7 +452,7 @@ const Leads = () => {
     const status = leadStatuses.find(s => s.id === statusId);
     const colors = {
       new: 'bg-blue-500',
-      contacted: 'bg-yellow-500',
+      contacted: 'bg-blue-500',
       interested: 'bg-green-500',
       'site-visit-scheduled': 'bg-purple-500',
       negotiation: 'bg-orange-500',
@@ -800,7 +800,7 @@ const Leads = () => {
                     {lead.rating && (
                       <div className="flex gap-0.5">
                         {Array.from({ length: lead.rating }).map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <Star key={i} className="w-4 h-4 fill-blue-400 text-blue-400" />
                         ))}
                       </div>
                     )}
@@ -990,7 +990,7 @@ const Leads = () => {
             {chatMessages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.type === 'agent' ? 'justify-end' : msg.type === 'system' ? 'justify-center' : 'justify-start'}`}>
                 {msg.type === 'system' ? (
-                  <div className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs">
+                  <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs">
                     {msg.text}
                   </div>
                 ) : msg.type === 'agent' ? (

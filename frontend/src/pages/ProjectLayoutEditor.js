@@ -741,7 +741,7 @@ const ProjectLayoutEditor = () => {
                 )}
                 
                 {currentPoints.length > 0 && (
-                  <div className="p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-800">
+                  <div className="p-2 bg-blue-50 border border-blue-200 rounded text-xs text-blue-800">
                     💡 Click on any marked point to remove it
                   </div>
                 )}
@@ -793,7 +793,7 @@ const ProjectLayoutEditor = () => {
                         key={plot.id} 
                         className={`flex items-start justify-between p-3 rounded-lg border transition-colors ${
                           needsDetails 
-                            ? 'bg-yellow-50 border-yellow-300 hover:border-yellow-400' 
+                            ? 'bg-blue-50 border-blue-300 hover:border-blue-400' 
                             : 'bg-white hover:border-ocean-primary'
                         }`}
                       >
@@ -801,13 +801,13 @@ const ProjectLayoutEditor = () => {
                           <div className="flex items-center gap-2">
                             <p className="font-semibold text-gray-900">{plot.display_name}</p>
                             {needsDetails && (
-                              <Badge className="bg-yellow-500 text-white text-xs">
+                              <Badge className="bg-blue-500 text-white text-xs">
                                 Needs Details
                               </Badge>
                             )}
                           </div>
                           {needsDetails ? (
-                            <p className="text-xs text-yellow-700 mt-1">
+                            <p className="text-xs text-blue-700 mt-1">
                               Click &quot;Details&quot; to add price &amp; area
                             </p>
                           ) : (
@@ -822,7 +822,7 @@ const ProjectLayoutEditor = () => {
                             onClick={() => handleEditPlotDetails(plot)}
                             variant="ghost"
                             size="sm"
-                            className={`text-xs justify-start ${needsDetails ? 'text-yellow-600 hover:bg-yellow-100 font-medium' : 'text-blue-600 hover:bg-blue-50'}`}
+                            className={`text-xs justify-start ${needsDetails ? 'text-blue-600 hover:bg-blue-100 font-medium' : 'text-blue-600 hover:bg-blue-50'}`}
                             title="Edit plot details"
                           >
                             <Edit2 className="w-3 h-3 mr-1" />
@@ -857,8 +857,8 @@ const ProjectLayoutEditor = () => {
               
               {/* Summary of plots needing details */}
               {plots.length > 0 && plots.some(p => !p.price || !p.area || p.price === 0 || p.area === 0) && (
-                <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <p className="text-xs text-yellow-800">
+                <div className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-xs text-blue-800">
                     ⚠️ {plots.filter(p => !p.price || !p.area || p.price === 0 || p.area === 0).length} plot(s) need details filled
                   </p>
                 </div>

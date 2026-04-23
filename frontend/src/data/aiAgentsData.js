@@ -620,7 +620,7 @@ export const getAgentsData = (language = 'english') => {
       id: 'virtual-tour-agent',
       ...lang.virtualTourAgent,
       icon: 'Eye',
-      color: 'from-orange-500 to-orange-600',
+      color: 'from-indigo-500 to-orange-600',
       status: 'coming_soon',
       category: ['customer', 'marketing', 'project'],
       level: 'operational'
@@ -665,7 +665,7 @@ export const getAgentsData = (language = 'english') => {
       id: 'lead-scoring-agent',
       ...lang.leadScoringAgent,
       icon: 'Target',
-      color: 'from-amber-500 to-amber-600',
+      color: 'from-sky-500 to-sky-600',
       status: 'coming_soon',
       category: ['agent', 'company'],
       level: 'strategic'

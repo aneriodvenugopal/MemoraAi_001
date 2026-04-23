@@ -126,7 +126,7 @@ const ImplementationSupport = () => {
             </div>
 
             {/* Backup & Export */}
-            <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 border border-orange-100">
+            <div className="bg-gradient-to-br from-indigo-50 to-sky-50 rounded-2xl p-8 border border-orange-100">
               <div className="flex items-start gap-4">
                 <div className="bg-orange-600 rounded-full p-3">
                   <Database className="w-6 h-6 text-white" />

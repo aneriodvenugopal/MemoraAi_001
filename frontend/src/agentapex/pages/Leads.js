@@ -15,7 +15,7 @@ const PIPELINE_STAGES = [
   { id: 'new', label: 'New', icon: UserPlus, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
   { id: 'contacted', label: 'Contacted', icon: Phone, color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-200' },
   { id: 'hot', label: 'Hot', icon: Flame, color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200' },
-  { id: 'warm', label: 'Warm', icon: Thermometer, color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
+  { id: 'warm', label: 'Warm', icon: Thermometer, color: 'text-sky-600', bg: 'bg-sky-50', border: 'border-sky-200' },
   { id: 'cold', label: 'Cold', icon: Snowflake, color: 'text-blue-400', bg: 'bg-blue-50', border: 'border-blue-100' },
   { id: 'closed', label: 'Closed', icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
 ];
@@ -111,7 +111,7 @@ const Leads = () => {
         <div className="flex gap-2 min-w-max">
           {[
             { label: 'Hot', count: stats.hot || 0, icon: Flame, color: 'text-red-500', bg: 'bg-red-50' },
-            { label: 'Warm', count: stats.warm || 0, icon: Thermometer, color: 'text-amber-500', bg: 'bg-amber-50' },
+            { label: 'Warm', count: stats.warm || 0, icon: Thermometer, color: 'text-sky-500', bg: 'bg-sky-50' },
             { label: 'Cold', count: stats.cold || 0, icon: Snowflake, color: 'text-blue-400', bg: 'bg-blue-50' },
             { label: 'New', count: stats.new || 0, icon: UserPlus, color: 'text-blue-600', bg: 'bg-blue-50' },
             { label: 'Closed', count: stats.closed || 0, icon: CheckCircle2, color: 'text-green-500', bg: 'bg-green-50' },

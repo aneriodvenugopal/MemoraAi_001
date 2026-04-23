@@ -728,15 +728,15 @@ const PropertyEditTabs = ({
                   <CardTitle className="text-lg">Pricing Information</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center gap-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <Switch
                       data-testid="contact-for-price-switch"
                       checked={formData.contact_for_price}
                       onCheckedChange={(v) => handleInputChange('contact_for_price', v)}
                     />
                     <div>
-                      <Label className="text-yellow-800 font-medium">Contact for Price</Label>
-                      <p className="text-sm text-yellow-600">Hide price and show &quot;Contact for Price&quot; instead</p>
+                      <Label className="text-blue-800 font-medium">Contact for Price</Label>
+                      <p className="text-sm text-blue-600">Hide price and show &quot;Contact for Price&quot; instead</p>
                     </div>
                   </div>
 

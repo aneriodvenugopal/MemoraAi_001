@@ -105,7 +105,7 @@ const FeatureHighlights = () => {
     blue: 'from-blue-500 to-blue-600',
     green: 'from-green-500 to-green-600',
     purple: 'from-purple-500 to-purple-600',
-    orange: 'from-orange-500 to-orange-600',
+    orange: 'from-indigo-500 to-orange-600',
     cyan: 'from-cyan-500 to-cyan-600',
     pink: 'from-pink-500 to-pink-600',
     indigo: 'from-indigo-500 to-indigo-600',

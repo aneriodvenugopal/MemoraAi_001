@@ -14,7 +14,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const STATUS_STYLES = {
   draft: "bg-gray-100 text-gray-700",
-  pending_review: "bg-yellow-100 text-yellow-700",
+  pending_review: "bg-blue-100 text-blue-700",
   submitted: "bg-blue-100 text-blue-700",
   approved: "bg-green-100 text-green-700",
   rejected: "bg-red-100 text-red-700",

@@ -26,7 +26,7 @@ const Leads = () => {
   const getStatusStyle = (s) => {
     switch (s) {
       case 'hot': return 'bg-red-100 text-red-600';
-      case 'warm': return 'bg-amber-100 text-amber-600';
+      case 'warm': return 'bg-sky-100 text-sky-600';
       case 'cold': return 'bg-blue-100 text-blue-600';
       case 'closed': return 'bg-green-100 text-green-600';
       case 'contacted': return 'bg-purple-100 text-purple-600';
@@ -49,7 +49,7 @@ const Leads = () => {
       <div className="px-3 py-2 flex gap-2">
         {[
           { label: 'Hot', count: leads.filter(l => l.status === 'hot').length, color: 'text-red-500' },
-          { label: 'Warm', count: leads.filter(l => l.status === 'warm').length, color: 'text-amber-500' },
+          { label: 'Warm', count: leads.filter(l => l.status === 'warm').length, color: 'text-sky-500' },
           { label: 'Closed', count: leads.filter(l => l.status === 'closed').length, color: 'text-green-500' },
         ].map(s => (
           <div key={s.label} className="flex-1 bg-white rounded-lg p-2 text-center border border-gray-100">

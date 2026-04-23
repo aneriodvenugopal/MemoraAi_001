@@ -57,7 +57,7 @@ const LoginPage = () => {
           transition={{ duration: 0.3 }}
           className="mb-8"
         >
-          <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+          <div className="w-20 h-20 bg-gradient-to-br from-sky-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
             <Building2 className="w-10 h-10 text-white" />
           </div>
         </motion.div>
@@ -133,8 +133,8 @@ const LoginPage = () => {
               />
               
               {demoOtp && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
-                  <p className="text-amber-700 text-sm">Demo OTP: <span className="font-bold">{demoOtp}</span></p>
+                <div className="bg-sky-50 border border-sky-200 rounded-xl p-3 text-center">
+                  <p className="text-sky-700 text-sm">Demo OTP: <span className="font-bold">{demoOtp}</span></p>
                 </div>
               )}
               

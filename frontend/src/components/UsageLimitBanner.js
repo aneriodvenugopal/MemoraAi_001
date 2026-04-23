@@ -38,7 +38,7 @@ const UsageLimitBanner = ({ error, onDismiss }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-in fade-in zoom-in duration-200">
         {/* Header */}
-        <div className="bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-sky-500 to-orange-500 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 text-white">
             <AlertTriangle className="w-6 h-6" />
             <h3 className="font-semibold text-lg">Plan Limit Reached</h3>
@@ -138,11 +138,11 @@ export const UsageWarningBanner = ({ warningType, used, limit, percentage }) => 
     <div className={`rounded-lg p-3 flex items-center justify-between ${
       percentage >= 100 
         ? 'bg-red-50 border border-red-200' 
-        : 'bg-amber-50 border border-amber-200'
+        : 'bg-sky-50 border border-sky-200'
     }`}>
       <div className="flex items-center gap-2">
-        <AlertTriangle className={`w-4 h-4 ${percentage >= 100 ? 'text-red-500' : 'text-amber-500'}`} />
-        <span className={`text-sm ${percentage >= 100 ? 'text-red-700' : 'text-amber-700'}`}>
+        <AlertTriangle className={`w-4 h-4 ${percentage >= 100 ? 'text-red-500' : 'text-sky-500'}`} />
+        <span className={`text-sm ${percentage >= 100 ? 'text-red-700' : 'text-sky-700'}`}>
           {percentage >= 100 
             ? `You've reached your ${getLimitTypeLabel(warningType)} limit (${used}/${limit})`
             : `You're using ${percentage}% of your ${getLimitTypeLabel(warningType)} (${used}/${limit})`

@@ -357,7 +357,7 @@ const MarketingAgentsManagement = () => {
               </CardContent>
             </Card>
             
-            <Card className="bg-gradient-to-br from-orange-500 to-amber-600 text-white border-0">
+            <Card className="bg-gradient-to-br from-indigo-500 to-sky-600 text-white border-0">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -439,7 +439,7 @@ const MarketingAgentsManagement = () => {
                   </div>
                   <Badge className={`${
                     agent.status === 'active' ? 'bg-green-100 text-green-700' :
-                    agent.status === 'inactive' ? 'bg-yellow-100 text-yellow-700' :
+                    agent.status === 'inactive' ? 'bg-blue-100 text-blue-700' :
                     'bg-red-100 text-red-700'
                   }`}>
                     {agent.status}
@@ -773,7 +773,7 @@ const MarketingAgentsManagement = () => {
                             <td className="p-3 text-center">
                               <Badge className={`${
                                 sale.status === 'paid' ? 'bg-green-100 text-green-700' :
-                                sale.status === 'partial' ? 'bg-yellow-100 text-yellow-700' :
+                                sale.status === 'partial' ? 'bg-blue-100 text-blue-700' :
                                 'bg-orange-100 text-orange-700'
                               }`}>
                                 {sale.status}

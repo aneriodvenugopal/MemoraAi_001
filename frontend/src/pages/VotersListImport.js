@@ -287,7 +287,7 @@ const VotersListImport = () => {
                 className="border-gray-300 text-gray-700 hover:bg-gray-100"
                 onClick={() => navigate('/voters-bulk-update')}
               >
-                <AlertTriangle className="w-4 h-4 mr-2 text-amber-500" />
+                <AlertTriangle className="w-4 h-4 mr-2 text-sky-500" />
                 Fix Missing Data
               </Button>
               <Button
@@ -296,7 +296,7 @@ const VotersListImport = () => {
                 className="border-gray-300 text-gray-700 hover:bg-gray-100"
                 onClick={() => navigate('/voters-admin')}
               >
-                <Shield className="w-4 h-4 mr-2 text-amber-500" />
+                <Shield className="w-4 h-4 mr-2 text-sky-500" />
                 Admin Settings
               </Button>
             </div>
@@ -374,12 +374,12 @@ const VotersListImport = () => {
                 onClick={() => navigate('/voters-bulk-update')}>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                  <AlertTriangle className="w-5 h-5 text-amber-600" />
+                <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-sky-600" />
                 </div>
                 <div>
                   <p className="text-gray-500 text-xs">Incomplete</p>
-                  <p className="text-2xl font-bold text-amber-600">
+                  <p className="text-2xl font-bold text-sky-600">
                     {incompleteStats?.incomplete || 0}
                   </p>
                 </div>
@@ -535,7 +535,7 @@ const VotersListImport = () => {
                           <FileUp className="w-8 h-8 text-red-600" />
                           <div className="text-left">
                             <p className="font-medium text-gray-900">{selectedFile.name}</p>
-                            <p className={`text-sm ${selectedFile.size / 1024 / 1024 > 15 ? 'text-amber-600' : 'text-gray-500'}`}>
+                            <p className={`text-sm ${selectedFile.size / 1024 / 1024 > 15 ? 'text-sky-600' : 'text-gray-500'}`}>
                               {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                             </p>
                           </div>
@@ -636,15 +636,15 @@ const VotersListImport = () => {
                         <div className="text-sm text-gray-600 mt-2 space-y-1">
                           <p>Extracted: <span className="font-semibold text-gray-900">{uploadResult.extracted_count}</span> voters</p>
                           {uploadResult.skipped_count > 0 && (
-                            <p>Skipped: <span className="text-amber-600 font-semibold">{uploadResult.skipped_count}</span> duplicates</p>
+                            <p>Skipped: <span className="text-sky-600 font-semibold">{uploadResult.skipped_count}</span> duplicates</p>
                           )}
                           {uploadResult.metadata?.total_pages && (
                             <p>Pages processed: <span className="font-semibold">{uploadResult.metadata.total_pages}</span></p>
                           )}
                           {uploadResult.missing_sl_numbers && uploadResult.missing_sl_numbers.length > 0 && (
-                            <div className="mt-2 p-2 bg-amber-50 rounded border border-amber-200">
-                              <p className="text-amber-700 font-medium text-xs mb-1">Missing Serial Numbers:</p>
-                              <p className="text-amber-600 text-xs">{uploadResult.missing_sl_numbers.slice(0, 20).join(', ')}{uploadResult.missing_sl_numbers.length > 20 ? '...' : ''}</p>
+                            <div className="mt-2 p-2 bg-sky-50 rounded border border-sky-200">
+                              <p className="text-sky-700 font-medium text-xs mb-1">Missing Serial Numbers:</p>
+                              <p className="text-sky-600 text-xs">{uploadResult.missing_sl_numbers.slice(0, 20).join(', ')}{uploadResult.missing_sl_numbers.length > 20 ? '...' : ''}</p>
                             </div>
                           )}
                         </div>
@@ -709,7 +709,7 @@ const VotersListImport = () => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-amber-600 hover:text-amber-700 hover:bg-amber-50"
+                          className="text-sky-600 hover:text-sky-700 hover:bg-sky-50"
                           onClick={() => navigate(`/voters-bulk-update?ward=${ward.ward_no}`)}
                           title="Check incomplete records"
                         >
@@ -757,8 +757,8 @@ const VotersListImport = () => {
                   <li>Enter ward number and upload the PDF for that ward</li>
                   <li>For large files (&gt;20MB), use &quot;From URL&quot; option</li>
                   <li>Check &quot;Replace existing&quot; to overwrite previous data</li>
-                  <li>After import, click <span className="text-amber-600 font-medium">Check Incomplete Records</span> to view missing data</li>
-                  <li>Use <span className="text-amber-600 font-medium">Admin Settings</span> to enable/disable ward visibility and export</li>
+                  <li>After import, click <span className="text-sky-600 font-medium">Check Incomplete Records</span> to view missing data</li>
+                  <li>Use <span className="text-sky-600 font-medium">Admin Settings</span> to enable/disable ward visibility and export</li>
                 </ul>
               </div>
             </div>

@@ -126,17 +126,17 @@ const PlotReviewer = ({ detectedPlots, setDetectedPlots, selectedMethod, saving,
           </div>
           
           {plotsWithoutPrice > 0 && (
-            <div className="mt-4 bg-yellow-100 border border-yellow-300 rounded-lg p-3 flex items-center justify-between">
+            <div className="mt-4 bg-blue-100 border border-blue-300 rounded-lg p-3 flex items-center justify-between">
               <div className="flex items-start gap-2">
-                <AlertCircle className="w-5 h-5 text-yellow-700 mt-0.5" />
-                <p className="text-sm text-yellow-800">
+                <AlertCircle className="w-5 h-5 text-blue-700 mt-0.5" />
+                <p className="text-sm text-blue-800">
                   <strong>{plotsWithoutPrice} plots</strong> need pricing
                 </p>
               </div>
               <Button 
                 onClick={() => setShowBulkPriceModal(true)}
                 size="sm"
-                className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <DollarSign className="w-4 h-4 mr-1" />
                 Bulk Price
@@ -163,11 +163,11 @@ const PlotReviewer = ({ detectedPlots, setDetectedPlots, selectedMethod, saving,
           const hasPrice = plot.price && plot.price > 0;
           
           return (
-            <Card key={plot.id} className={`glass-card ${hasPrice ? 'border-green-300' : 'border-yellow-300'}`}>
+            <Card key={plot.id} className={`glass-card ${hasPrice ? 'border-green-300' : 'border-blue-300'}`}>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg text-ocean-primary">Plot {plot.display_name}</CardTitle>
-                  <Badge className={hasPrice ? 'bg-green-500' : 'bg-yellow-500'}>
+                  <Badge className={hasPrice ? 'bg-green-500' : 'bg-blue-500'}>
                     {hasPrice ? '✓' : '⚠'}
                   </Badge>
                 </div>

@@ -317,7 +317,7 @@ const ArticleManagement = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                         article.status === 'published' ? 'bg-green-100 text-green-700' :
-                        'bg-yellow-100 text-yellow-700'
+                        'bg-blue-100 text-blue-700'
                       }`}>
                         {article.status}
                       </span>

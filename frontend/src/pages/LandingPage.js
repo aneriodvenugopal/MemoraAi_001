@@ -325,7 +325,7 @@ const LandingPage = () => {
                 <span>Bank-grade Security</span>
               </div>
               <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-yellow-500" />
+                <Zap className="w-5 h-5 text-blue-500" />
                 <span>Setup in 5 Minutes</span>
               </div>
               <div className="flex items-center gap-2">
@@ -341,7 +341,7 @@ const LandingPage = () => {
               <div className="bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
                 <div className="bg-gray-800 px-4 py-3 flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <div className="w-3 h-3 rounded-full bg-blue-500" />
                   <div className="w-3 h-3 rounded-full bg-green-500" />
                   <span className="text-gray-400 text-sm ml-4">MemoraAI Dashboard</span>
                 </div>
@@ -495,7 +495,7 @@ const LandingPage = () => {
       <section id="testimonials" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-yellow-100 text-yellow-800">Testimonials</Badge>
+            <Badge className="mb-4 bg-blue-100 text-blue-800">Testimonials</Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Loved by Real Estate Professionals
             </h2>
@@ -507,7 +507,7 @@ const LandingPage = () => {
                 <CardContent className="p-6">
                   <div className="flex gap-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-5 h-5 fill-blue-400 text-blue-400" />
                     ))}
                   </div>
                   <p className="text-gray-600 mb-6 italic">"{testimonial.content}"</p>

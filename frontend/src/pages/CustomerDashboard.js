@@ -504,12 +504,12 @@ const CustomerDashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Pending Payment</p>
-                  <p className="text-3xl font-bold mt-2 text-yellow-600">
+                  <p className="text-3xl font-bold mt-2 text-blue-600">
                     ₹{formatCurrency(dashboardData.overview.total_pending)}
                   </p>
                   <p className="text-xs text-gray-600 mt-1">Paid: ₹{formatCurrency(dashboardData.overview.total_paid)}</p>
                 </div>
-                <div className="p-4 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 shadow-lg">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-blue-500 to-orange-500 shadow-lg">
                   <CreditCard className="w-7 h-7 text-white" />
                 </div>
               </div>
@@ -859,7 +859,7 @@ const CustomerDashboard = () => {
                                   ? 'bg-green-500' 
                                   : paymentProgress > 50 
                                   ? 'bg-blue-500' 
-                                  : 'bg-yellow-500'
+                                  : 'bg-blue-500'
                               }`}
                             >
                               {property.payment_status === 'completed' || paymentProgress >= 100 ? 'Fully Paid' : `${paymentProgress}% Paid`}
@@ -1084,7 +1084,7 @@ const CustomerDashboard = () => {
                           <Badge className={`mt-1 ${
                             schedule.status === 'paid' ? 'bg-green-500' : 
                             schedule.status === 'overdue' ? 'bg-red-500' : 
-                            'bg-yellow-500'
+                            'bg-blue-500'
                           }`}>
                             {schedule.status}
                           </Badge>
@@ -1314,9 +1314,9 @@ const CustomerDashboard = () => {
                       <p className="text-sm text-gray-600">Amount Paid</p>
                       <p className="text-2xl font-bold text-green-600">₹{formatCurrency(selectedBooking.paid_amount)}</p>
                     </div>
-                    <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                    <div className="text-center p-4 bg-blue-50 rounded-lg">
                       <p className="text-sm text-gray-600">Balance Due</p>
-                      <p className="text-2xl font-bold text-yellow-600">₹{formatCurrency(selectedBooking.total_amount - selectedBooking.paid_amount)}</p>
+                      <p className="text-2xl font-bold text-blue-600">₹{formatCurrency(selectedBooking.total_amount - selectedBooking.paid_amount)}</p>
                     </div>
                   </div>
                 </CardContent>

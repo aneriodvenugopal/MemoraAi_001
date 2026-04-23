@@ -274,7 +274,7 @@ const WhatsAppSimulator = () => {
               </div>
               <button
                 onClick={resetConversation}
-                className="w-full mt-3 px-3 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg flex items-center justify-center gap-2 text-sm transition-colors"
+                className="w-full mt-3 px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center justify-center gap-2 text-sm transition-colors"
                 data-testid="reset-conversation-btn"
               >
                 <RotateCcw className="w-4 h-4" />
@@ -379,7 +379,7 @@ const WhatsAppSimulator = () => {
                             <div>Intent: <span className="text-blue-400">{msg.metadata.intent}</span></div>
                           )}
                           {msg.metadata.state && (
-                            <div>State: <span className="text-yellow-400">{msg.metadata.state}</span></div>
+                            <div>State: <span className="text-blue-400">{msg.metadata.state}</span></div>
                           )}
                           {msg.metadata.action && (
                             <div>Action: <span className="text-green-400">{msg.metadata.action}</span></div>

@@ -232,7 +232,7 @@ const DemoGuideOverlay = ({ screen, onClose, onComplete }) => {
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-5 py-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-yellow-300" />
+              <Sparkles className="w-5 h-5 text-blue-300" />
               <span className="text-white font-semibold text-sm">Demo Guide</span>
             </div>
             <button onClick={handleSkip} className="text-white/80 hover:text-white">

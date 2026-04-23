@@ -494,10 +494,10 @@ const BookingWizard = ({ isOpen, onClose, onSuccess }) => {
                   </label>
                   
                   {properties.length === 0 ? (
-                    <Card className="mt-2 bg-yellow-50 border-yellow-200">
+                    <Card className="mt-2 bg-blue-50 border-blue-200">
                       <CardContent className="p-4 text-center">
-                        <AlertCircle className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                        <p className="text-yellow-700">No available properties in this project</p>
+                        <AlertCircle className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                        <p className="text-blue-700">No available properties in this project</p>
                       </CardContent>
                     </Card>
                   ) : (
@@ -752,8 +752,8 @@ const BookingWizard = ({ isOpen, onClose, onSuccess }) => {
                 </CardContent>
               </Card>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
-                <p className="text-yellow-800 font-medium">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                <p className="text-blue-800 font-medium">
                   ⚠️ Please verify all details before confirming the booking
                 </p>
               </div>

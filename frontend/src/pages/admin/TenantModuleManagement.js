@@ -20,7 +20,7 @@ const CATEGORY_ICONS = {
 const CATEGORY_COLORS = {
   core: 'bg-blue-100 text-blue-700 border-blue-200',
   sales: 'bg-green-100 text-green-700 border-green-200',
-  finance: 'bg-amber-100 text-amber-700 border-amber-200',
+  finance: 'bg-sky-100 text-sky-700 border-sky-200',
   communication: 'bg-purple-100 text-purple-700 border-purple-200',
   tools: 'bg-gray-100 text-gray-700 border-gray-200',
   marketing: 'bg-pink-100 text-pink-700 border-pink-200',

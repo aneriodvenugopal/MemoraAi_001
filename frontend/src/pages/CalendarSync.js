@@ -107,12 +107,12 @@ export default function CalendarSync() {
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-amber-600" />
+              <Calendar className="w-5 h-5 text-sky-600" />
               Google Calendar Sync
             </h1>
             <p className="text-xs text-gray-500">Auto-push appointments to your Google Calendar</p>
           </div>
-          <button onClick={loadAll} disabled={loading} className="p-2 text-gray-500 hover:text-amber-600" data-testid="refresh-btn">
+          <button onClick={loadAll} disabled={loading} className="p-2 text-gray-500 hover:text-sky-600" data-testid="refresh-btn">
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
         </div>
@@ -128,20 +128,20 @@ export default function CalendarSync() {
       <main className="max-w-2xl mx-auto px-4 py-5 space-y-5">
         {loading && !status ? (
           <div className="bg-white rounded-2xl p-8 text-center border border-gray-100">
-            <Loader2 className="w-8 h-8 text-amber-500 animate-spin mx-auto" />
+            <Loader2 className="w-8 h-8 text-sky-500 animate-spin mx-auto" />
             <p className="text-sm text-gray-500 mt-3">Loading...</p>
           </div>
         ) : (
           <>
             {/* Not configured banner */}
             {!isConfigured && (
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex gap-3" data-testid="not-configured-banner">
-                <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div className="bg-sky-50 border border-sky-200 rounded-2xl p-4 flex gap-3" data-testid="not-configured-banner">
+                <AlertTriangle className="w-5 h-5 text-sky-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-amber-900 text-sm">Google Calendar not configured yet</h3>
-                  <p className="text-xs text-amber-800 mt-1 leading-relaxed">
-                    Your admin needs to add <code className="bg-amber-100 px-1 rounded">GOOGLE_CLIENT_ID</code> and
-                    <code className="bg-amber-100 px-1 rounded ml-1">GOOGLE_CLIENT_SECRET</code> in the server .env file.
+                  <h3 className="font-semibold text-sky-900 text-sm">Google Calendar not configured yet</h3>
+                  <p className="text-xs text-sky-800 mt-1 leading-relaxed">
+                    Your admin needs to add <code className="bg-sky-100 px-1 rounded">GOOGLE_CLIENT_ID</code> and
+                    <code className="bg-sky-100 px-1 rounded ml-1">GOOGLE_CLIENT_SECRET</code> in the server .env file.
                     Once added, business owners will be able to connect their Google accounts here.
                   </p>
                 </div>
@@ -188,7 +188,7 @@ export default function CalendarSync() {
                   <button
                     onClick={handleConnect}
                     disabled={busy || !isConfigured}
-                    className="w-full flex items-center justify-center gap-2 bg-amber-500 text-white font-medium py-2.5 rounded-xl hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-2 bg-sky-500 text-white font-medium py-2.5 rounded-xl hover:bg-sky-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     data-testid="connect-btn"
                   >
                     {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link2 className="w-4 h-4" />}
@@ -202,10 +202,10 @@ export default function CalendarSync() {
             <div className="bg-white rounded-2xl p-5 border border-gray-100" data-testid="how-it-works">
               <h3 className="font-semibold text-gray-900 text-sm mb-3">How it works</h3>
               <ul className="space-y-2 text-xs text-gray-600">
-                <li className="flex gap-2"><span className="text-amber-600">1.</span> Connect once — we store secure OAuth tokens, never your password.</li>
-                <li className="flex gap-2"><span className="text-amber-600">2.</span> Every new appointment (dashboard or WhatsApp AI booking) auto-creates a Google Calendar event.</li>
-                <li className="flex gap-2"><span className="text-amber-600">3.</span> Deleted MemoraAI appointments are also removed from Google Calendar.</li>
-                <li className="flex gap-2"><span className="text-amber-600">4.</span> Disconnect anytime — your existing events stay, future ones stop syncing.</li>
+                <li className="flex gap-2"><span className="text-sky-600">1.</span> Connect once — we store secure OAuth tokens, never your password.</li>
+                <li className="flex gap-2"><span className="text-sky-600">2.</span> Every new appointment (dashboard or WhatsApp AI booking) auto-creates a Google Calendar event.</li>
+                <li className="flex gap-2"><span className="text-sky-600">3.</span> Deleted MemoraAI appointments are also removed from Google Calendar.</li>
+                <li className="flex gap-2"><span className="text-sky-600">4.</span> Disconnect anytime — your existing events stay, future ones stop syncing.</li>
               </ul>
             </div>
 
@@ -222,15 +222,15 @@ export default function CalendarSync() {
                   <ul className="space-y-2">
                     {upcoming.map(ev => (
                       <li key={ev.id} className="flex items-center gap-3 p-2.5 bg-gray-50 rounded-lg" data-testid={`event-${ev.id}`}>
-                        <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
-                          <Calendar className="w-4 h-4 text-amber-600" />
+                        <div className="w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center flex-shrink-0">
+                          <Calendar className="w-4 h-4 text-sky-600" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-900 truncate">{ev.summary || 'Untitled'}</p>
                           <p className="text-[10px] text-gray-500">{new Date(ev.start).toLocaleString()}</p>
                         </div>
                         {ev.link && (
-                          <a href={ev.link} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-amber-600" data-testid={`event-link-${ev.id}`}>
+                          <a href={ev.link} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-sky-600" data-testid={`event-link-${ev.id}`}>
                             <ExternalLink className="w-4 h-4" />
                           </a>
                         )}

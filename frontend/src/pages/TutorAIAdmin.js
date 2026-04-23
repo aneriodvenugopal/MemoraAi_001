@@ -280,7 +280,7 @@ const TutorAIAdmin = () => {
       case 'failed':
         return <Badge className="bg-red-500"><XCircle className="w-3 h-3 mr-1" />Failed</Badge>;
       case 'script_ready':
-        return <Badge className="bg-yellow-500"><FileText className="w-3 h-3 mr-1" />Script Ready</Badge>;
+        return <Badge className="bg-blue-500"><FileText className="w-3 h-3 mr-1" />Script Ready</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }

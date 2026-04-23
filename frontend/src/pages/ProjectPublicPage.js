@@ -50,7 +50,7 @@ const PropertyCard = ({ property, onClick }) => {
   const statusColors = {
     available: 'bg-green-500',
     booked: 'bg-blue-500',
-    reserved: 'bg-yellow-500',
+    reserved: 'bg-blue-500',
     sold: 'bg-red-500'
   };
   
@@ -431,7 +431,7 @@ const ProjectPublicPage = () => {
               <Badge className={`text-sm ${
                 project.status === 'completed' ? 'bg-green-100 text-green-800' :
                 project.status === 'ongoing' ? 'bg-blue-100 text-blue-800' :
-                'bg-yellow-100 text-yellow-800'
+                'bg-blue-100 text-blue-800'
               }`}>
                 {project.status || 'Ongoing'}
               </Badge>
@@ -456,7 +456,7 @@ const ProjectPublicPage = () => {
               title="Available"
             />
             <div 
-              className="bg-yellow-500 transition-all duration-500" 
+              className="bg-blue-500 transition-all duration-500" 
               style={{ width: `${((stats.reserved || 0) / (stats.total_properties || 1)) * 100}%` }}
               title="Reserved"
             />
@@ -473,7 +473,7 @@ const ProjectPublicPage = () => {
           </div>
           <div className="flex justify-center gap-6 mt-3 text-xs">
             <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-green-500"></span> Available ({stats.available || 0})</span>
-            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-yellow-500"></span> Reserved ({stats.reserved || 0})</span>
+            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-blue-500"></span> Reserved ({stats.reserved || 0})</span>
             <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-blue-500"></span> Booked ({stats.booked || 0})</span>
             <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-red-500"></span> Sold ({stats.sold || 0})</span>
           </div>
@@ -734,7 +734,7 @@ const ProjectPublicPage = () => {
                               property.status === 'available' ? 'bg-green-100 text-green-800' :
                               property.status === 'booked' ? 'bg-blue-100 text-blue-800' :
                               property.status === 'sold' ? 'bg-red-100 text-red-800' :
-                              'bg-yellow-100 text-yellow-800'
+                              'bg-blue-100 text-blue-800'
                             }`}>
                               {property.status || 'Available'}
                             </Badge>

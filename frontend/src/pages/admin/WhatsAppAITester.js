@@ -157,7 +157,7 @@ const WhatsAppAITester = () => {
           <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-3">
             <Bot className="w-8 h-8 text-purple-400" />
             WhatsApp AI Tester
-            <Sparkles className="w-6 h-6 text-yellow-400" />
+            <Sparkles className="w-6 h-6 text-blue-400" />
           </h1>
           <p className="text-gray-400 mt-2">Test all 7 AI agents without real WhatsApp</p>
         </div>
@@ -187,7 +187,7 @@ const WhatsAppAITester = () => {
             {/* Quick Messages */}
             <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
               <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-                <Zap className="w-4 h-4 text-yellow-400" />
+                <Zap className="w-4 h-4 text-blue-400" />
                 Quick Test Messages
               </h3>
               <div className="space-y-2">
@@ -374,7 +374,7 @@ const WhatsAppAITester = () => {
                         <span className={`text-xs px-2 py-1 rounded ${
                           result.actual_intent === result.expected_intent
                             ? 'bg-green-600/30 text-green-400'
-                            : 'bg-yellow-600/30 text-yellow-400'
+                            : 'bg-blue-600/30 text-blue-400'
                         }`}>
                           Intent: {result.actual_intent}
                         </span>

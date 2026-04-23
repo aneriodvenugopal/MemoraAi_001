@@ -14,7 +14,7 @@ const CATEGORIES = [
   { slug: "doctor_clinic", name: "Hospital / Clinic", icon: Stethoscope, color: "from-emerald-500 to-emerald-600" },
   { slug: "astrology", name: "Astrology", icon: Star, color: "from-purple-500 to-purple-600" },
   { slug: "beauty_salon", name: "Beauty Salon", icon: Scissors, color: "from-pink-500 to-pink-600" },
-  { slug: "function_hall", name: "Function Hall", icon: PartyPopper, color: "from-amber-500 to-amber-600" },
+  { slug: "function_hall", name: "Function Hall", icon: PartyPopper, color: "from-sky-500 to-sky-600" },
   { slug: "coaching_center", name: "Coaching Center", icon: GraduationCap, color: "from-indigo-500 to-indigo-600" },
   { slug: "pesticides_fertilizer", name: "Agriculture / Pesticides", icon: Sprout, color: "from-lime-500 to-lime-600" },
 ];

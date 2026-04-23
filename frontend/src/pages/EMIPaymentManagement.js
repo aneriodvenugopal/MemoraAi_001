@@ -30,7 +30,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Status colors
 const STATUS_COLORS = {
-  pending: 'bg-yellow-100 text-yellow-800',
+  pending: 'bg-blue-100 text-blue-800',
   paid: 'bg-green-100 text-green-800',
   partial: 'bg-blue-100 text-blue-800',
   overdue: 'bg-red-100 text-red-800',
@@ -433,7 +433,7 @@ const EMIPaymentManagement = () => {
               icon={Clock} 
               color="yellow"
               onClick={() => setActiveTab('due-soon')}
-              className={activeTab === 'due-soon' ? 'ring-2 ring-yellow-500' : ''}
+              className={activeTab === 'due-soon' ? 'ring-2 ring-blue-500' : ''}
             />
             <ClickableStatCard 
               title="Overdue" 
@@ -555,7 +555,7 @@ const EMIPaymentManagement = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Bell className="w-5 h-5 text-yellow-500" />
+                    <Bell className="w-5 h-5 text-blue-500" />
                     Due This Week
                   </CardTitle>
                 </CardHeader>
@@ -565,12 +565,12 @@ const EMIPaymentManagement = () => {
                   ) : (
                     <div className="space-y-3">
                       {dueSoon.slice(0, 5).map((emi) => (
-                        <div key={emi.id} className="p-3 border rounded-lg bg-yellow-50">
+                        <div key={emi.id} className="p-3 border rounded-lg bg-blue-50">
                           <div className="flex justify-between items-start">
                             <div>
                               <p className="font-medium">{emi.customer_name || 'Customer'}</p>
                               <p className="text-sm text-gray-600">EMI #{emi.installment_number}</p>
-                              <p className="text-xs text-yellow-600">
+                              <p className="text-xs text-blue-600">
                                 Due in {emi.days_until_due} days
                               </p>
                             </div>
@@ -779,7 +779,7 @@ const EMIPaymentManagement = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Bell className="w-5 h-5 text-yellow-500" />
+                  <Bell className="w-5 h-5 text-blue-500" />
                   EMIs Due Within 7 Days
                 </CardTitle>
               </CardHeader>
@@ -794,7 +794,7 @@ const EMIPaymentManagement = () => {
                     {dueSoon.map((emi) => (
                       <div
                         key={emi.id}
-                        className="p-4 border border-yellow-200 rounded-lg bg-yellow-50"
+                        className="p-4 border border-blue-200 rounded-lg bg-blue-50"
                         data-testid={`due-soon-item-${emi.id}`}
                       >
                         <div className="flex justify-between items-start">
@@ -809,7 +809,7 @@ const EMIPaymentManagement = () => {
                             </div>
                             <p className="text-sm text-gray-600">{emi.customer_phone}</p>
                             <p className="text-sm">
-                              <span className="text-yellow-600 font-medium">
+                              <span className="text-blue-600 font-medium">
                                 Due in {emi.days_until_due} days
                               </span>
                               <span className="text-gray-500 ml-2">
@@ -1105,7 +1105,7 @@ const EMIPaymentManagement = () => {
                       <p className="text-xs text-gray-500">Paid</p>
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-yellow-600">{selectedBookingDetail.summary.pending_installments}</p>
+                      <p className="text-2xl font-bold text-blue-600">{selectedBookingDetail.summary.pending_installments}</p>
                       <p className="text-xs text-gray-500">Pending</p>
                     </div>
                     <div>

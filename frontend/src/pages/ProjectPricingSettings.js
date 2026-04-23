@@ -746,9 +746,9 @@ const ProjectPricingSettings = () => {
                   </div>
 
                   {/* Balance */}
-                  <div className="flex justify-between text-sm bg-amber-50 p-2 rounded">
-                    <span className="text-amber-700">Balance Amount</span>
-                    <span className="font-bold text-amber-700">
+                  <div className="flex justify-between text-sm bg-sky-50 p-2 rounded">
+                    <span className="text-sky-700">Balance Amount</span>
+                    <span className="font-bold text-sky-700">
                       {formatCurrency(calculatedPreview.balanceAmount)}
                     </span>
                   </div>

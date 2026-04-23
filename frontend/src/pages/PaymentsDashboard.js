@@ -337,7 +337,7 @@ const PaymentsDashboard = () => {
                         const percentage = Math.round((count / total) * 100);
                         const colors = {
                           paid: { bg: 'bg-green-100', bar: 'bg-green-500', text: 'text-green-700' },
-                          pending: { bg: 'bg-yellow-100', bar: 'bg-yellow-500', text: 'text-yellow-700' },
+                          pending: { bg: 'bg-blue-100', bar: 'bg-blue-500', text: 'text-blue-700' },
                           partial: { bg: 'bg-blue-100', bar: 'bg-blue-500', text: 'text-blue-700' },
                           overdue: { bg: 'bg-red-100', bar: 'bg-red-500', text: 'text-red-700' },
                           waived: { bg: 'bg-gray-100', bar: 'bg-gray-500', text: 'text-gray-700' }
@@ -386,7 +386,7 @@ const PaymentsDashboard = () => {
                   </Button>
                   
                   <Button 
-                    className="w-full justify-start bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border border-yellow-200"
+                    className="w-full justify-start bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200"
                     onClick={() => setActiveTab('due-soon')}
                   >
                     <Bell className="w-4 h-4 mr-3" />
@@ -426,7 +426,7 @@ const PaymentsDashboard = () => {
               {/* Due This Week */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-yellow-600">
+                  <CardTitle className="flex items-center gap-2 text-blue-600">
                     <Clock className="w-5 h-5" />
                     Due This Week
                   </CardTitle>
@@ -443,13 +443,13 @@ const PaymentsDashboard = () => {
                   ) : (
                     <div className="space-y-3 max-h-64 overflow-y-auto">
                       {dueSoon.filter(e => e.days_until_due <= 7).slice(0, 5).map((emi) => (
-                        <div key={emi.id} className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <div key={emi.id} className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                           <div className="flex justify-between items-start">
                             <div>
                               <p className="font-medium text-gray-900">{emi.customer_name || 'Customer'}</p>
                               <p className="text-sm text-gray-600">EMI #{emi.installment_number}</p>
                               <div className="flex items-center gap-2 mt-1">
-                                <Badge variant="outline" className="text-yellow-700 border-yellow-300">
+                                <Badge variant="outline" className="text-blue-700 border-blue-300">
                                   {emi.days_until_due === 0 ? 'Due Today' : `${emi.days_until_due}d left`}
                                 </Badge>
                               </div>
@@ -596,7 +596,7 @@ const PaymentsDashboard = () => {
           <TabsContent value="due-soon" className="mt-4">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-yellow-600">
+                <CardTitle className="flex items-center gap-2 text-blue-600">
                   <Bell className="w-5 h-5" />
                   EMIs Due Within 14 Days
                 </CardTitle>
@@ -619,7 +619,7 @@ const PaymentsDashboard = () => {
                         className={`p-4 border rounded-lg transition-colors ${
                           emi.days_until_due <= 3 
                             ? 'border-orange-300 bg-orange-50 hover:bg-orange-100' 
-                            : 'border-yellow-200 bg-yellow-50 hover:bg-yellow-100'
+                            : 'border-blue-200 bg-blue-50 hover:bg-blue-100'
                         }`}
                         data-testid={`due-soon-item-${emi.id}`}
                       >
@@ -631,7 +631,7 @@ const PaymentsDashboard = () => {
                               </span>
                               <Badge 
                                 variant="outline" 
-                                className={emi.days_until_due <= 3 ? 'border-orange-400 text-orange-700' : 'border-yellow-400 text-yellow-700'}
+                                className={emi.days_until_due <= 3 ? 'border-orange-400 text-orange-700' : 'border-blue-400 text-blue-700'}
                               >
                                 {emi.days_until_due === 0 ? 'Due Today' : `${emi.days_until_due} days left`}
                               </Badge>
@@ -708,7 +708,7 @@ const PaymentsDashboard = () => {
                             </div>
                             <div>
                               <p className="text-gray-500">Pending</p>
-                              <p className="font-semibold text-yellow-600">{formatCurrency(projectStat.total_pending)}</p>
+                              <p className="font-semibold text-blue-600">{formatCurrency(projectStat.total_pending)}</p>
                             </div>
                             <div>
                               <p className="text-gray-500">Overdue</p>

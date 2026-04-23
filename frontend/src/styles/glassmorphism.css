@@ -1,17 +1,17 @@
-/* Glassmorphism Design System - MemoraAI Yellow Theme */
+/* Glassmorphism Design System - MemoraAI Sky Blue Theme */
 
 :root {
-  /* MemoraAI Yellow Theme Colors */
-  --ocean-primary: #d97706;      /* Amber-600 - Main actions, CTAs */
-  --ocean-primary-light: #f59e0b; /* Amber-500 - Hover states */
-  --ocean-primary-dark: #b45309;  /* Amber-700 - Active states */
+  /* MemoraAI Sky Blue Theme Colors */
+  --ocean-primary: #0284c7;      /* Sky-600 - Main actions, CTAs */
+  --ocean-primary-light: #0ea5e9; /* Sky-500 - Hover states */
+  --ocean-primary-dark: #0369a1;  /* Sky-700 - Active states */
   
-  --ocean-secondary: #eab308;     /* Yellow-500 - Highlights */
-  --ocean-secondary-light: #facc15; /* Yellow-400 - Hover */
-  --ocean-secondary-dark: #ca8a04; /* Yellow-600 - Active */
+  --ocean-secondary: #3b82f6;     /* Blue-500 - Highlights */
+  --ocean-secondary-light: #60a5fa; /* Blue-400 - Hover */
+  --ocean-secondary-dark: #2563eb; /* Blue-600 - Active */
   
-  --ocean-accent: #f59e0b;        /* Amber-500 - Interactive elements */
-  --ocean-accent-light: #fbbf24;  /* Amber-400 - Hover */
+  --ocean-accent: #0ea5e9;        /* Sky-500 - Interactive elements */
+  --ocean-accent-light: #38bdf8;  /* Sky-400 - Hover */
   
   --ocean-success: #10b981;       /* Emerald-500 - Success states */
   --ocean-success-light: #34d399; /* Emerald-400 */
@@ -20,18 +20,18 @@
   --glass-bg: rgba(255, 255, 255, 0.7);
   --glass-bg-dark: rgba(255, 255, 255, 0.9);
   --glass-border: rgba(255, 255, 255, 0.18);
-  --glass-shadow: 0 8px 32px 0 rgba(217, 119, 6, 0.1);
-  --glass-shadow-hover: 0 12px 40px 0 rgba(217, 119, 6, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(2, 132, 199, 0.1);
+  --glass-shadow-hover: 0 12px 40px 0 rgba(2, 132, 199, 0.15);
   
   /* Gradient Backgrounds */
-  --ocean-gradient: linear-gradient(135deg, #d97706 0%, #eab308 100%);
-  --ocean-gradient-light: linear-gradient(135deg, #f59e0b 0%, #facc15 100%);
-  --ocean-gradient-subtle: linear-gradient(135deg, rgba(217, 119, 6, 0.05) 0%, rgba(234, 179, 8, 0.05) 100%);
+  --ocean-gradient: linear-gradient(135deg, #0284c7 0%, #3b82f6 100%);
+  --ocean-gradient-light: linear-gradient(135deg, #0ea5e9 0%, #60a5fa 100%);
+  --ocean-gradient-subtle: linear-gradient(135deg, rgba(2, 132, 199, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
 }
 
 /* Global Background */
 body {
-  background: linear-gradient(135deg, #fffbeb 0%, #fef9c3 50%, #fefce8 100%);
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
   background-attachment: fixed;
   min-height: 100vh;
 }

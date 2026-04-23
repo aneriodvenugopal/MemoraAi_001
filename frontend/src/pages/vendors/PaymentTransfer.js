@@ -185,7 +185,7 @@ const PaymentTransfer = () => {
 
           {/* Bill Info */}
           {selectedBill && (
-            <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <p className="text-sm text-gray-600">Committed</p>

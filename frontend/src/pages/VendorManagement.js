@@ -31,7 +31,7 @@ const STATUS_COLORS = {
   active: 'bg-green-100 text-green-800',
   inactive: 'bg-gray-100 text-gray-800',
   blacklisted: 'bg-red-100 text-red-800',
-  pending: 'bg-yellow-100 text-yellow-800',
+  pending: 'bg-blue-100 text-blue-800',
   partial: 'bg-blue-100 text-blue-800',
   paid: 'bg-green-100 text-green-800',
   overdue: 'bg-red-100 text-red-800',
@@ -565,7 +565,7 @@ const VendorManagement = () => {
                               <span>Billed: {formatCurrency(vendor.total_billed)}</span>
                               <span className="text-green-600">Paid: {formatCurrency(vendor.total_paid)}</span>
                               {vendor.outstanding > 0 && <span className="text-red-600">Due: {formatCurrency(vendor.outstanding)}</span>}
-                              {vendor.pending_bills > 0 && <span className="text-yellow-600">{vendor.pending_bills} pending bills</span>}
+                              {vendor.pending_bills > 0 && <span className="text-blue-600">{vendor.pending_bills} pending bills</span>}
                             </div>
                           </div>
                           <div className="flex gap-2">
@@ -911,7 +911,7 @@ const VendorManagement = () => {
                       <p className="text-xs text-gray-500">Outstanding</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-yellow-600">{selectedVendor.summary.pending_bills}</p>
+                      <p className="text-2xl font-bold text-blue-600">{selectedVendor.summary.pending_bills}</p>
                       <p className="text-xs text-gray-500">Pending Bills</p>
                     </div>
                   </div>

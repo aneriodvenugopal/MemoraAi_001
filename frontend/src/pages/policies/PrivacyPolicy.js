@@ -110,9 +110,9 @@ const PrivacyPolicy = () => {
           </section>
 
           {/* ==================== AGENTAPEX SECTION ==================== */}
-          <section className="border-t-4 border-amber-400 pt-8 mt-8" id="agentapex">
+          <section className="border-t-4 border-sky-400 pt-8 mt-8" id="agentapex">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-sky-400 to-orange-500 rounded-xl flex items-center justify-center">
                 <span className="text-white font-bold text-lg">A</span>
               </div>
               <h2 className="text-2xl font-bold text-gray-900">AgentApex - Privacy Policy</h2>
@@ -257,7 +257,7 @@ const PrivacyPolicy = () => {
             <p className="text-gray-700 leading-relaxed">
               For any questions about AgentApex's privacy practices:
             </p>
-            <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <div className="mt-4 p-4 bg-sky-50 rounded-lg border border-sky-200">
               <p className="text-gray-900 font-semibold">AgentApex (A Product of MemoraAI)</p>
               <p className="text-gray-700">
                 Email: <a href="mailto:info@agentapex.in" className="text-blue-600 hover:underline">info@agentapex.in</a>
