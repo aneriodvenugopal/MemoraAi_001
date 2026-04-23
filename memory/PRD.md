@@ -1,80 +1,55 @@
 # MemoraAI - Product Requirements Document
 
 ## Original Problem Statement
-Fork the existing RealApex SaaS (WhatsApp Automation SaaS for Real Estate) from GitHub and create MemoraAI - Multi-Category WhatsApp Business Automation SaaS with AI Memory. Convert into multi-tenant, multi-category SaaS supporting Real Estate, Astrology, Doctor/Clinic, Function Hall, Pesticides/Fertilizer, Beauty Salon, and Coaching Centers.
+Fork RealApex SaaS and create MemoraAI - Multi-Category WhatsApp Business Automation SaaS with AI Memory. Support 7 business categories with category-aware AI, memory system, hot sales detection.
 
 ## Architecture
-- **Backend**: FastAPI (Python) on port 8001
-- **Frontend**: React (CRA with Craco) on port 3000
-- **Database**: MongoDB (`memoraai` database)
-- **AI/LLM**: Emergent LLM Key (Gemini + GPT-4o-mini)
-- **WhatsApp**: Meta WhatsApp Cloud API (WABA integration)
-- **Auth**: OTP-based (primary) + Password login (secondary)
+- **Backend**: FastAPI (Python) on port 8001 | **Frontend**: React (CRA) on port 3000
+- **Database**: MongoDB (`memoraai`) | **AI/LLM**: Emergent LLM Key (Gemini + GPT-4o-mini)
+- **WhatsApp**: Meta WABA Cloud API | **Auth**: OTP + Password
 
 ## What's Been Implemented
 
-### Phase 0 - Fork Complete (2026-04-23)
-- Cloned entire RealApex SaaS codebase from GitHub
-- Fresh MongoDB database (`memoraai`), all seed data populated
-- Backend running with 100+ routes, 60+ models
-- Frontend compiled with all components
+### Phase 0 - Fork (2026-04-23)
+- Cloned RealApex SaaS from GitHub, fresh DB, all seeds
 
-### Phase 1 - MemoraAI Core Features (2026-04-23)
-**Backend (All APIs tested - 21/21 PASS):**
-- `models/memoraai.py` - Business categories, services, WABA config, hot sales, sales alerts
-- `routes/memoraai_categories.py` - Category selection + AI service auto-populate + Services CRUD
-- `routes/memoraai_sales.py` - Hot Sales Mode + Abrupt Sales Detection alerts
-- `routes/memoraai_waba.py` - Self-service WABA setup + template generation
-- `routes/memoraai_memory.py` - Business Memory AI (RAG-based customer context)
-- `services/memory_ai_service.py` - Long-term memory storage + customer context building + abrupt sales detection
+### Phase 1 - Multi-Category Core (2026-04-23)
+- 7 business categories with 42 pre-defined AI-suggested services
+- Category Setup UI, Services CRUD (add/edit/delete/toggle)
+- Hot Sales Mode + Abrupt Sales Detection alerts
+- Self-service WABA Setup + AI template generation
+- Business Memory AI (RAG-based customer context)
 
-**Frontend (All 4 pages tested - PASS):**
-- `CategorySetup.js` - Select business categories, auto-setup services, manage services (add/edit/delete/toggle)
-- `HotSalesMode.js` - Hot sales entries, AI-detected alerts, stats dashboard
-- `WABASetup.js` - Self-service WABA config, credential management, template generation
-- `Dashboard.js` - Updated with MemoraAI section (Category Setup, Hot Sales, WhatsApp Setup, WhatsApp CRM)
+### Phase 2 - Rebranding + AI Integration (2026-04-23)
+- **Full UI Rebranding**: RealApex -> MemoraAI across all pages
+  - New MemoraAILogo component (purple/indigo neural network SVG)
+  - Login, Dashboard, Navbar, Landing page, all marketing pages
+  - AppHeader, AuthenticatedLayout, StickyNavbar updated
+  - HTML title, manifest.json, meta tags updated
+- **Memory AI -> WhatsApp Webhook**: Auto-stores customer memories from every WhatsApp conversation. Detects abrupt sales intent and creates alerts + notifications.
+- **Category-Aware WhatsApp AI**: System prompt now dynamically loads tenant's business category, role, services list, and customer memory. AI responds as contextually appropriate assistant (e.g., "Astrology Consultation Assistant" vs "Medical Receptionist").
 
-## Supported Business Categories (7)
-1. **Real Estate** - Property sales, rentals, management (6 services)
-2. **Astrology** - Horoscope, Marriage Matching, Career Prediction, Pooja, Gemstones, Kundli (6 services)
-3. **Doctor/Clinic** - Consultation, Dental, Skin, Eye, Vaccination, Lab Tests (6 services)
-4. **Function Hall/Banquet** - Marriage, Engagement, Birthday, Corporate, Reception, Anniversary (6 services)
-5. **Pesticides/Fertilizer** - Crop Protection, Fertilizer, Seeds, Soil Testing, Weed Control, Spraying (6 services)
-6. **Beauty Salon** - Haircut, Hair Treatment, Facial, Bridal Makeup, Skin Treatment, Mehendi (6 services)
-7. **Coaching Centers** - Entrance Exams, Spoken English, Competitive Exams, Tuitions, Skills, Demo Class (6 services)
+## Business Categories (7)
+1. Real Estate | 2. Astrology | 3. Doctor/Clinic | 4. Function Hall
+5. Pesticides/Fertilizer | 6. Beauty Salon | 7. Coaching Centers
 
-## Key API Endpoints (MemoraAI)
-- `GET /api/memoraai/categories/available` - List all 7 categories
-- `POST /api/memoraai/categories/select` - Select category + auto-populate services
-- `GET /api/memoraai/services` - List services (filterable by category)
-- `POST/PUT/DELETE /api/memoraai/services` - Full CRUD
-- `POST /api/memoraai/sales/hot` - Create hot sale entry
-- `GET /api/memoraai/sales/alerts` - AI-detected sales alerts
-- `POST /api/memoraai/waba/config` - Self-service WABA setup
-- `POST /api/memoraai/waba/generate-templates` - Auto-generate WhatsApp templates
-- `GET /api/memoraai/memory/customer/{phone}` - Customer memory recall
-
-## Inherited Features (from RealApex SaaS)
-- Multi-tenant architecture with data isolation
-- Full property management (CRUD, layouts, projects)
-- Lead pipeline & CRM
-- WhatsApp Agentic AI (webhook, sales engine, auto follow-up)
-- Dual-LLM support (Gemini primary + GPT-4o-mini fallback)
-- Customer portal, Commission management, Accounting
-- SMS/Email notifications, PWA support, Stripe payments
+## Key API Endpoints
+- `/api/memoraai/categories/*` - Category management
+- `/api/memoraai/services` - Services CRUD
+- `/api/memoraai/sales/hot` - Hot Sales Mode
+- `/api/memoraai/sales/alerts` - AI Sales Alerts
+- `/api/memoraai/waba/*` - Self-service WABA
+- `/api/memoraai/memory/*` - Business Memory AI
+- `/api/whatsapp/simulate` - Category-aware WhatsApp test
 
 ## Prioritized Backlog
-### P0 - Next Phase
-1. Rebrand frontend UI from RealApex to MemoraAI (logo, colors, text)
-2. Make WhatsApp AI category-aware (use selected services in AI responses)
-3. Connect Memory AI to WhatsApp webhook (auto-store + auto-detect sales)
-
-### P1 - High Priority
-4. Category-specific dashboard widgets (e.g., appointments for Doctor, bookings for Function Hall)
-5. Enhanced RAG-based memory with vector search
-6. Hybrid B2B2C mode for Pesticides/Fertilizer
-
-### P2 - Medium Priority
-7. Category-specific reports & analytics
-8. Multi-language WhatsApp templates per category
-9. AI-powered service recommendations during chat
+### P0
+1. Category-specific dashboard widgets
+2. Complete remaining minor RealApex text in backup/demo pages
+### P1
+3. Enhanced RAG with vector search
+4. Hybrid B2B2C for Pesticides
+5. Category-specific analytics
+### P2
+6. Multi-language templates per category
+7. AI service recommendations during chat
