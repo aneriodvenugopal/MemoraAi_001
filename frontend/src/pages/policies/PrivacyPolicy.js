@@ -20,13 +20,13 @@ const PrivacyPolicy = () => {
 
           {/* ==================== REALAPEX SECTION ==================== */}
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">RealApex Platform</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">MemoraAI Platform</h2>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-gray-900 mb-4">1. Information We Collect</h2>
             <p className="text-gray-700 leading-relaxed">
-              At RealApex, we collect information that you provide directly to us, including:
+              At MemoraAI, we collect information that you provide directly to us, including:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
               <li>Name, email address, phone number, and company details</li>
@@ -96,9 +96,9 @@ const PrivacyPolicy = () => {
               If you have any questions about this Privacy Policy, please contact us at:
             </p>
             <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-              <p className="text-gray-900 font-semibold">RealApex</p>
+              <p className="text-gray-900 font-semibold">MemoraAI</p>
               <p className="text-gray-700">
-                Email: <a href="mailto:enquiry@realapex.in" className="text-blue-600 hover:underline">enquiry@realapex.in</a>
+                Email: <a href="mailto:enquiry@memoraai.in" className="text-blue-600 hover:underline">enquiry@memoraai.in</a>
               </p>
               <p className="text-gray-700">
                 Phone: <a href="tel:+919948303060" className="text-blue-600 hover:underline">+91-9948303060</a>
@@ -118,7 +118,7 @@ const PrivacyPolicy = () => {
               <h2 className="text-2xl font-bold text-gray-900">AgentApex - Privacy Policy</h2>
             </div>
             <p className="text-gray-600 mb-4">
-              AgentApex is a product of RealApex. This section specifically covers the privacy practices for the AgentApex mobile application and web platform.
+              AgentApex is a product of MemoraAI. This section specifically covers the privacy practices for the AgentApex mobile application and web platform.
             </p>
           </section>
 
@@ -258,7 +258,7 @@ const PrivacyPolicy = () => {
               For any questions about AgentApex's privacy practices:
             </p>
             <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
-              <p className="text-gray-900 font-semibold">AgentApex (A Product of RealApex)</p>
+              <p className="text-gray-900 font-semibold">AgentApex (A Product of MemoraAI)</p>
               <p className="text-gray-700">
                 Email: <a href="mailto:info@agentapex.in" className="text-blue-600 hover:underline">info@agentapex.in</a>
               </p>

@@ -344,7 +344,7 @@ const WhatsAppSimulator = () => {
                 <Bot className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-semibold">RealApex AI Assistant</h3>
+                <h3 className="font-semibold">MemoraAI AI Assistant</h3>
                 <p className="text-xs text-green-400">Online • Simulated Mode</p>
               </div>
             </div>

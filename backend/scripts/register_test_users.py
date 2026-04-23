@@ -24,42 +24,42 @@ TEST_USERS = [
     {
         "phone": "9999999999",
         "name": "Rajesh Kumar",
-        "email": "rajesh.kumar@realapex.in",
+        "email": "rajesh.kumar@memoraai.in",
         "role_slug": "super_admin",
         "description": "Super Admin - All 9s"
     },
     {
         "phone": "8888888888",
         "name": "Priya Sharma",
-        "email": "priya.sharma@realapex.in",
+        "email": "priya.sharma@memoraai.in",
         "role_slug": "tenant_admin",
         "description": "Tenant Admin - All 8s"
     },
     {
         "phone": "7777777777",
         "name": "Amit Patel",
-        "email": "amit.patel@realapex.in",
+        "email": "amit.patel@memoraai.in",
         "role_slug": "staff",
         "description": "Staff Member - All 7s"
     },
     {
         "phone": "6666666666",
         "name": "Sneha Reddy",
-        "email": "sneha.reddy@realapex.in",
+        "email": "sneha.reddy@memoraai.in",
         "role_slug": "customer",
         "description": "Customer - All 6s"
     },
     {
         "phone": "5555555555",
         "name": "Vikram Singh",
-        "email": "vikram.singh@realapex.in",
+        "email": "vikram.singh@memoraai.in",
         "role_slug": "staff",
         "description": "Staff Member 2 - All 5s"
     },
     {
         "phone": "4444444444",
         "name": "Ananya Iyer",
-        "email": "ananya.iyer@realapex.in",
+        "email": "ananya.iyer@memoraai.in",
         "role_slug": "customer",
         "description": "Customer 2 - All 4s"
     },

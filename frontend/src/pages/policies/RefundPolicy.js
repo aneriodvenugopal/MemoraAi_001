@@ -17,7 +17,7 @@ const RefundPolicy = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Cancellation Policy</h2>
             <p className="text-gray-700 leading-relaxed">
-              You may cancel your RealApex subscription at any time:
+              You may cancel your MemoraAI subscription at any time:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
               <li>Cancel anytime from your account settings</li>
@@ -60,7 +60,7 @@ const RefundPolicy = () => {
               To request a refund:
             </p>
             <ol className="list-decimal ml-6 mt-2 text-gray-700 space-y-2">
-              <li>Contact our support team at <a href="mailto:enquiry@realapex.in" className="text-blue-600 hover:underline">enquiry@realapex.in</a></li>
+              <li>Contact our support team at <a href="mailto:enquiry@memoraai.in" className="text-blue-600 hover:underline">enquiry@memoraai.in</a></li>
               <li>Provide your account details and reason for refund</li>
               <li>Our team will review within 2 business days</li>
               <li>Approved refunds processed within 7-10 business days</li>
@@ -98,7 +98,7 @@ const RefundPolicy = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Contact for Refunds</h2>
             <div className="mt-4 p-4 bg-blue-50 rounded-lg">
               <p className="text-gray-900 font-semibold">Refund Support</p>
-              <p className="text-gray-700">Email: <a href="mailto:enquiry@realapex.in" className="text-blue-600 hover:underline">enquiry@realapex.in</a></p>
+              <p className="text-gray-700">Email: <a href="mailto:enquiry@memoraai.in" className="text-blue-600 hover:underline">enquiry@memoraai.in</a></p>
               <p className="text-gray-700">Phone: <a href="tel:+919948303060" className="text-blue-600 hover:underline">+91-9948303060</a></p>
               <p className="text-gray-700 mt-2">Response Time: Within 24 hours</p>
             </div>

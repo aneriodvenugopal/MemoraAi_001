@@ -112,7 +112,7 @@ const AvatarAssistant = () => {
       link: "/dashboard"
     },
     contact: {
-      english: "Contact us anytime! Phone: +91 9948303060, Email: admin at realapex.in. We're here to help!",
+      english: "Contact us anytime! Phone: +91 9948303060, Email: admin at memoraai.in. We're here to help!",
       telugu: "ఎప్పుడైనా మమ్మల్ని సంప్రదించండి! ఫోన్: +91 9948303060!",
       hindi: "किसी भी समय संपर्क करें! फोन: +91 9948303060।",
       link: "/contact"

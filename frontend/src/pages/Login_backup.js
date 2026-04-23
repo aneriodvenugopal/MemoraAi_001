@@ -117,7 +117,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center">RealApex</CardTitle>
+          <CardTitle className="text-3xl font-bold text-center">MemoraAI</CardTitle>
           <CardDescription className="text-center">
             Real Estate Automation Software
           </CardDescription>

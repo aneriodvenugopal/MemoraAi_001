@@ -85,3 +85,42 @@ async def memory_stats(request: Request):
         "by_type": type_counts,
         "unique_customers": len(unique_customers),
     }
+
+
+
+@router.post("/search")
+async def semantic_memory_search(request: Request):
+    """Semantic search across all memories using RAG-like token matching"""
+    user = await get_current_user(request)
+    db = get_db(request)
+    tenant_id = user.get("tenant_id")
+    body = await request.json()
+
+    query = body.get("query", "")
+    phone = body.get("phone")
+    limit = body.get("limit", 5)
+
+    if not query:
+        return {"results": [], "message": "Query is required"}
+
+    memory_ai = BusinessMemoryAI(db)
+    results = await memory_ai.semantic_search(
+        tenant_id=tenant_id,
+        query_text=query,
+        customer_phone=phone,
+        limit=limit,
+    )
+    return {"results": results, "count": len(results), "query": query}
+
+
+@router.get("/customer/{phone}/rag-context")
+async def get_rag_context(phone: str, request: Request):
+    """Get enhanced RAG context for a customer (for AI prompt injection)"""
+    user = await get_current_user(request)
+    db = get_db(request)
+    tenant_id = user.get("tenant_id")
+
+    message = request.query_params.get("message", "")
+    memory_ai = BusinessMemoryAI(db)
+    context = await memory_ai.build_rag_context(tenant_id, phone, message)
+    return {"rag_context": context, "phone": phone}

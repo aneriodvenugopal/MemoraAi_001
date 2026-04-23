@@ -1,5 +1,5 @@
 /**
- * SaaS Marketing Landing Page for RealApex
+ * SaaS Marketing Landing Page for MemoraAI
  * Public page showcasing features, pricing, and testimonials
  * SEO optimized with structured data
  */
@@ -119,14 +119,14 @@ const TESTIMONIALS = [
     name: 'Rajesh Kumar',
     role: 'MD, Kumar Developers',
     image: null,
-    content: 'RealApex transformed how we manage our 12 ongoing projects. The layout editor alone saved us countless hours.',
+    content: 'MemoraAI transformed how we manage our 12 ongoing projects. The layout editor alone saved us countless hours.',
     rating: 5
   },
   {
     name: 'Priya Sharma',
     role: 'Sales Head, Skyline Homes',
     image: null,
-    content: 'Our lead conversion improved by 40% after implementing RealApex. The automated follow-ups are game-changing.',
+    content: 'Our lead conversion improved by 40% after implementing MemoraAI. The automated follow-ups are game-changing.',
     rating: 5
   },
   {
@@ -183,20 +183,20 @@ const LandingPage = () => {
   // FAQ structured data for SEO
   const faqStructuredData = generateFAQStructuredData([
     {
-      question: "What is RealApex?",
-      answer: "RealApex is a comprehensive Real Estate ERP solution designed for property developers, builders, and real estate agencies in India. It includes project management, lead tracking, booking management, EMI payments, and more."
+      question: "What is MemoraAI?",
+      answer: "MemoraAI is a comprehensive Real Estate ERP solution designed for property developers, builders, and real estate agencies in India. It includes project management, lead tracking, booking management, EMI payments, and more."
     },
     {
-      question: "How does RealApex help real estate businesses?",
-      answer: "RealApex automates property sales, tracks leads, manages bookings, handles EMI payments with late fees, generates receipts, and provides analytics dashboards - all in one platform designed for Indian real estate."
+      question: "How does MemoraAI help real estate businesses?",
+      answer: "MemoraAI automates property sales, tracks leads, manages bookings, handles EMI payments with late fees, generates receipts, and provides analytics dashboards - all in one platform designed for Indian real estate."
     },
     {
-      question: "Is RealApex RERA compliant?",
-      answer: "Yes, RealApex supports RERA registration numbers for projects and follows Indian real estate compliance requirements including TDS calculations and proper documentation."
+      question: "Is MemoraAI RERA compliant?",
+      answer: "Yes, MemoraAI supports RERA registration numbers for projects and follows Indian real estate compliance requirements including TDS calculations and proper documentation."
     },
     {
-      question: "Can I try RealApex before purchasing?",
-      answer: "Yes, we offer a free demo and trial period. Contact us through the demo request form to get started with RealApex for your real estate business."
+      question: "Can I try MemoraAI before purchasing?",
+      answer: "Yes, we offer a free demo and trial period. Contact us through the demo request form to get started with MemoraAI for your real estate business."
     }
   ]);
 
@@ -204,8 +204,8 @@ const LandingPage = () => {
     <div className="min-h-screen bg-white">
       {/* SEO Meta Tags */}
       <SEOHead
-        title="RealApex - Best Real Estate ERP Software for India | Property Management CRM"
-        description="RealApex is India's leading Real Estate ERP solution. Manage projects, track leads, handle bookings, process EMI payments, and automate your property business. RERA compliant. Start free trial today!"
+        title="MemoraAI - Best Real Estate ERP Software for India | Property Management CRM"
+        description="MemoraAI is India's leading Real Estate ERP solution. Manage projects, track leads, handle bookings, process EMI payments, and automate your property business. RERA compliant. Start free trial today!"
         keywords="real estate ERP, property management software, real estate CRM India, builder software, developer ERP, plot management, apartment booking, EMI tracking, RERA compliant software, property sales automation"
         url="/saas"
         type="website"
@@ -222,7 +222,7 @@ const LandingPage = () => {
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <div>
-                <span className="text-xl font-bold text-gray-900">RealApex</span>
+                <span className="text-xl font-bold text-gray-900">MemoraAI</span>
                 <span className="hidden sm:block text-xs text-gray-500">Real Estate Automation</span>
               </div>
             </div>
@@ -343,7 +343,7 @@ const LandingPage = () => {
                   <div className="w-3 h-3 rounded-full bg-red-500" />
                   <div className="w-3 h-3 rounded-full bg-yellow-500" />
                   <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="text-gray-400 text-sm ml-4">RealApex Dashboard</span>
+                  <span className="text-gray-400 text-sm ml-4">MemoraAI Dashboard</span>
                 </div>
                 <div className="bg-gradient-to-br from-gray-100 to-gray-200 p-8">
                   <div className="grid grid-cols-4 gap-4 mb-6">
@@ -537,7 +537,7 @@ const LandingPage = () => {
                 Ready to Transform Your Business?
               </h2>
               <p className="text-xl text-blue-100 mb-8">
-                Schedule a personalized demo and see how RealApex can help you grow faster.
+                Schedule a personalized demo and see how MemoraAI can help you grow faster.
               </p>
               
               <div className="space-y-4">
@@ -556,7 +556,7 @@ const LandingPage = () => {
                   </div>
                   <div>
                     <div className="text-sm text-blue-200">Email</div>
-                    <div className="font-semibold">hello@realapex.in</div>
+                    <div className="font-semibold">hello@memoraai.in</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -639,7 +639,7 @@ const LandingPage = () => {
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <span className="text-xl font-bold">RealApex</span>
+                <span className="text-xl font-bold">MemoraAI</span>
               </div>
               <p className="text-gray-400 text-sm">
                 The complete real estate ERP for Indian developers and builders.
@@ -678,7 +678,7 @@ const LandingPage = () => {
           
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2025 RealApex. All rights reserved.
+              © 2025 MemoraAI. All rights reserved.
             </p>
             <div className="flex gap-4 mt-4 md:mt-0">
               <span className="text-gray-400 text-sm">Made with ❤️ in India</span>

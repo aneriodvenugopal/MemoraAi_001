@@ -38,7 +38,7 @@ async def get_tenant_landing_page(tenant_id: str, request: Request):
     """
     Public Tenant Landing Page
     Shows: Company info, projects, statistics
-    Can be accessed via custom domain or realapex.in/public/tenant/{id}
+    Can be accessed via custom domain or memoraai.in/public/tenant/{id}
     """
     db = get_db(request)
     
@@ -113,7 +113,7 @@ async def get_project_landing_page(project_id: str, request: Request):
     """
     Public Project Landing Page
     Shows: Project details, layout, properties, amenities
-    Can be accessed via custom domain or realapex.in/public/project/{id}
+    Can be accessed via custom domain or memoraai.in/public/project/{id}
     """
     db = get_db(request)
     

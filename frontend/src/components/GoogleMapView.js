@@ -162,7 +162,7 @@ const GoogleMapView = ({
       }
     });
 
-    // Add RealApex projects (Blue markers)
+    // Add MemoraAI projects (Blue markers)
     projects.forEach((project) => {
       if (project.latitude && project.longitude) {
         const marker = new window.google.maps.Marker({
@@ -186,7 +186,7 @@ const GoogleMapView = ({
           content: `
             <div style="padding: 10px; max-width: 220px;">
               <div style="background: #2196F3; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; display: inline-block; margin-bottom: 8px;">
-                RealApex PROJECT
+                MemoraAI PROJECT
               </div>
               <h4 style="margin: 0 0 8px; font-size: 14px; color: #333;">${project.name}</h4>
               <p style="margin: 4px 0; font-size: 12px; color: #666;">

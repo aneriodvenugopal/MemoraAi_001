@@ -560,7 +560,7 @@ async def send_payment_link_sms(
 ):
     """
     Send Payment Link SMS
-    Body: {"phone": "9876543210", "customer_name": "Raju", "amount": "50000", "payment_link": "https://pay.realapex.in/xyz"}
+    Body: {"phone": "9876543210", "customer_name": "Raju", "amount": "50000", "payment_link": "https://pay.memoraai.in/xyz"}
     """
     from services.sms_login_service import SMSLoginService
     

@@ -38,7 +38,7 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">RealApex</h1>
+              <h1 className="text-2xl font-bold text-gray-900">MemoraAI</h1>
               <p className="text-sm text-gray-500">Welcome, {user?.name}</p>
             </div>
             <div className="flex items-center gap-4">
@@ -209,7 +209,7 @@ const DefaultDashboard = () => {
       <h2 className="text-2xl font-bold">Dashboard</h2>
       <Card>
         <CardHeader>
-          <CardTitle>Welcome to RealApex</CardTitle>
+          <CardTitle>Welcome to MemoraAI</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-gray-500">Your dashboard is being set up...</p>

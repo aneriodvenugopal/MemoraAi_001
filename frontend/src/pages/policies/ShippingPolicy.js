@@ -17,7 +17,7 @@ const ShippingPolicy = () => {
           <section>
             <div className="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6">
               <p className="text-blue-900 font-semibold">
-                RealApex is a digital SaaS platform. No physical products are shipped.
+                MemoraAI is a digital SaaS platform. No physical products are shipped.
               </p>
             </div>
           </section>
@@ -25,7 +25,7 @@ const ShippingPolicy = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Service Delivery</h2>
             <p className="text-gray-700 leading-relaxed">
-              All RealApex services are delivered digitally:
+              All MemoraAI services are delivered digitally:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
               <li><strong>Instant Access:</strong> Account activated immediately upon successful payment</li>
@@ -38,7 +38,7 @@ const ShippingPolicy = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Onboarding & Setup</h2>
             <p className="text-gray-700 leading-relaxed">
-              Get started with RealApex in minutes:
+              Get started with MemoraAI in minutes:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
               <li><strong>Immediate Access:</strong> Login credentials sent via email within 5 minutes</li>
@@ -118,7 +118,7 @@ const ShippingPolicy = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Contact Information</h2>
             <div className="mt-4 p-4 bg-blue-50 rounded-lg">
               <p className="text-gray-900 font-semibold">Digital Delivery Support</p>
-              <p className="text-gray-700">Email: <a href="mailto:enquiry@realapex.in" className="text-blue-600 hover:underline">enquiry@realapex.in</a></p>
+              <p className="text-gray-700">Email: <a href="mailto:enquiry@memoraai.in" className="text-blue-600 hover:underline">enquiry@memoraai.in</a></p>
               <p className="text-gray-700">Phone: <a href="tel:+919948303060" className="text-blue-600 hover:underline">+91-9948303060</a></p>
               <p className="text-gray-700 mt-2">For immediate access issues, contact our 24×7 support team</p>
             </div>

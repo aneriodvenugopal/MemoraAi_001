@@ -16,7 +16,7 @@ const IncomeLandsSuccess = () => {
               IncomeLands.in: Our Successful Lead Generation Platform
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Before building RealApex SOFTWARE, we built <strong>IncomeLands.in</strong> - a property listing blog that generated <strong>1000+ leads</strong> and reached <strong>72K+ people globally</strong>. Here's the proof we understand real estate lead generation!
+              Before building MemoraAI, we built <strong>IncomeLands.in</strong> - a property listing blog that generated <strong>1000+ leads</strong> and reached <strong>72K+ people globally</strong>. Here's the proof we understand real estate lead generation!
             </p>
           </div>
 
@@ -202,7 +202,7 @@ const IncomeLandsSuccess = () => {
                 We Built Lead Gen Success, Now We Help YOU Build Yours
               </h3>
               <p className="text-gray-700 mb-6 max-w-2xl">
-                IncomeLands taught us what real estate businesses need. RealApex SOFTWARE is the result of that real-world experience - built to help YOU generate leads, manage projects, and close more sales.
+                IncomeLands taught us what real estate businesses need. MemoraAI is the result of that real-world experience - built to help YOU generate leads, manage projects, and close more sales.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <a

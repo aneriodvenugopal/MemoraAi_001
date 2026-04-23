@@ -14,7 +14,7 @@ const TestimonialDetail = () => {
       logo: "🏢",
       rating: 5,
       person: "Managing Director",
-      fullQuote: "RealApex helped us manage our real estate operations more efficiently. The dashboard gives us better visibility and the system is easy to use.",
+      fullQuote: "MemoraAI helped us manage our real estate operations more efficiently. The dashboard gives us better visibility and the system is easy to use.",
       challenges: [
         "Managing multiple projects with Excel was chaotic",
         "No centralized view of all projects",
@@ -173,7 +173,7 @@ const TestimonialDetail = () => {
           {/* CTA */}
           <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl shadow-xl p-8 text-center text-white mb-8">
             <h3 className="text-2xl font-bold mb-4">Ready to Transform Your Business?</h3>
-            <p className="text-lg mb-6 opacity-90">Join successful real estate companies using RealApex</p>
+            <p className="text-lg mb-6 opacity-90">Join successful real estate companies using MemoraAI</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 to="/register"

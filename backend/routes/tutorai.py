@@ -275,7 +275,7 @@ async def get_config(
 async def heygen_webhook(request: Request):
     """
     HeyGen webhook callback - receives video completion notifications
-    Set this URL in HeyGen dashboard: https://www.realapex.in/api/tutorai/webhook/heygen
+    Set this URL in HeyGen dashboard: https://www.memoraai.in/api/tutorai/webhook/heygen
     """
     try:
         body = await request.json()

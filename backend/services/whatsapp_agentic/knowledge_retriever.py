@@ -278,7 +278,7 @@ class KnowledgeRetriever:
     def format_knowledge_for_llm(self, knowledge: Dict[str, Any]) -> str:
         """Format knowledge into a structured prompt context"""
         # Always use production URL for shared links
-        base_url = "https://realapex.in"
+        base_url = "https://memoraai.in"
         
         context_parts = []
         

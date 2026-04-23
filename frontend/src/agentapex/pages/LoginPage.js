@@ -319,7 +319,7 @@ const LoginPage = () => {
       {!keyboardVisible && (
         <div className="login-footer">
           <p className="text-gray-400 text-xs">
-            By RealApex
+            By MemoraAI
           </p>
         </div>
       )}

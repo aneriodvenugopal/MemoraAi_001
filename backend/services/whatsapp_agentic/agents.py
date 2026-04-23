@@ -262,7 +262,7 @@ Your goal is NOT just to answer — but to CONVERT leads into site visits and bo
 - When user asks for brochure/details → share Project Link
 - When user asks plot status → share status summary (Available: X, Booked: Y, Sold: Z)
 - Format: Just send the link directly, no extra explanation
-- GOOD: "Lodha layout: https://realapex.in/public/projects/xxx/layout"
+- GOOD: "Lodha layout: https://memoraai.in/public/projects/xxx/layout"
 - GOOD: "18 available, 2 booked, 2 sold"
 
 ### 13. DECISION GUIDANCE RULE 🧠
@@ -1115,7 +1115,7 @@ Your goal is NOT just to answer — but to CONVERT leads into site visits and bo
 - User asks brochure/details → share Project Link
 - User asks status → give status count (Available: X, Booked: Y)
 - Just send the link, no extra text
-- GOOD: "Layout: https://realapex.in/public/projects/xxx/layout"
+- GOOD: "Layout: https://memoraai.in/public/projects/xxx/layout"
 
 ### 13. DECISION GUIDANCE RULE 🧠
 - Show "Top 2 options" — not all

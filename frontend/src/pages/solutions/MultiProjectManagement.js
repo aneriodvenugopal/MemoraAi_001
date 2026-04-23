@@ -132,7 +132,7 @@ const MultiProjectManagement = () => {
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-red-50 p-6 rounded-xl border-l-4 border-red-500">
-                <h3 className="text-xl font-bold text-red-700 mb-4">Without RealApex</h3>
+                <h3 className="text-xl font-bold text-red-700 mb-4">Without MemoraAI</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li>❌ Juggling multiple spreadsheets and tools</li>
                   <li>❌ Confusion between project data</li>
@@ -143,7 +143,7 @@ const MultiProjectManagement = () => {
                 </ul>
               </div>
               <div className="bg-green-50 p-6 rounded-xl border-l-4 border-green-500">
-                <h3 className="text-xl font-bold text-green-700 mb-4">With RealApex</h3>
+                <h3 className="text-xl font-bold text-green-700 mb-4">With MemoraAI</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li>✅ Single unified platform for all projects</li>
                   <li>✅ Clear project separation with easy switching</li>
@@ -257,7 +257,7 @@ const MultiProjectManagement = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">System Handles Everything</h3>
-                  <p className="text-gray-600">RealApex automatically manages leads, follow-ups, payments, reports, and visualizations for each project</p>
+                  <p className="text-gray-600">MemoraAI automatically manages leads, follow-ups, payments, reports, and visualizations for each project</p>
                 </div>
               </div>
               <div className="flex gap-6">
@@ -291,7 +291,7 @@ const MultiProjectManagement = () => {
               Ready to Manage Multiple Projects Effortlessly?
             </h2>
             <p className="text-xl text-white/90 mb-8">
-              Join 500+ real estate businesses managing unlimited projects with RealApex
+              Join 500+ real estate businesses managing unlimited projects with MemoraAI
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
@@ -319,7 +319,7 @@ const MultiProjectManagement = () => {
               Get a Personalized Demo
             </h2>
             <p className="text-center text-gray-600 mb-8">
-              See how RealApex can help you manage multiple projects seamlessly
+              See how MemoraAI can help you manage multiple projects seamlessly
             </p>
             <EnquiryForm />
           </div>

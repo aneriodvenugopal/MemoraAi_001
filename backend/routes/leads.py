@@ -653,7 +653,7 @@ async def public_add_lead(
     # Send WhatsApp welcome message if enabled
     whatsapp_result = None
     if lead_data.send_welcome_message:
-        company_name = tenant.get('company_name') or tenant.get('name', 'RealApex')
+        company_name = tenant.get('company_name') or tenant.get('name', 'MemoraAI')
         welcome_message = f"""🏠 *Welcome to {company_name}!*
 
 Hi {lead_data.name}! 👋
@@ -669,7 +669,7 @@ How can we help you today?
 
 Just reply with the number or type your query!
 
-_Powered by RealApex_"""
+_Powered by MemoraAI_"""
         
         try:
             whatsapp_result = await meta_whatsapp_client.send_text_message(

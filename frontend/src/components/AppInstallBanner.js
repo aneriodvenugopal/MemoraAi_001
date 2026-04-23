@@ -29,14 +29,14 @@ const AppInstallBanner = () => {
 
           {/* App Cards */}
           <div className="grid md:grid-cols-2 gap-8">
-            {/* RealApex App */}
+            {/* MemoraAI App */}
             <div className="bg-white rounded-2xl shadow-xl border-2 border-blue-200 overflow-hidden transform hover:scale-105 transition-all duration-300">
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="bg-white p-2 rounded-xl">
                     <img 
                       src="/realapex-logo.png" 
-                      alt="RealApex" 
+                      alt="MemoraAI" 
                       className="w-12 h-12 object-contain"
                       onError={(e) => {
                         e.target.onerror = null;
@@ -45,7 +45,7 @@ const AppInstallBanner = () => {
                     />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold">RealApex</h3>
+                    <h3 className="text-2xl font-bold">MemoraAI</h3>
                     <p className="text-sm text-blue-100">Complete ERP for Real Estate</p>
                   </div>
                 </div>
@@ -78,7 +78,7 @@ const AppInstallBanner = () => {
                 <div className="space-y-3">
                   {/* Android/Chrome */}
                   <button
-                    onClick={() => handleInstallClick('RealApex')}
+                    onClick={() => handleInstallClick('MemoraAI')}
                     className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 flex items-center justify-center gap-3 group"
                   >
                     <Download size={24} className="group-hover:animate-bounce" />
@@ -87,7 +87,7 @@ const AppInstallBanner = () => {
 
                   {/* iOS */}
                   <button
-                    onClick={() => handleInstallClick('RealApex')}
+                    onClick={() => handleInstallClick('MemoraAI')}
                     className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 flex items-center justify-center gap-3 group"
                   >
                     <Apple size={24} className="group-hover:animate-bounce" />
@@ -172,7 +172,7 @@ const AppInstallBanner = () => {
           <div className="mt-8 bg-blue-100 border border-blue-300 rounded-xl p-4 text-center">
             <p className="text-sm text-blue-800 font-medium">
               💡 <strong>Pro Tip:</strong> Install both apps for the complete experience! 
-              RealApex for business management, Incomelands for resale marketplace.
+              MemoraAI for business management, Incomelands for resale marketplace.
             </p>
           </div>
         </div>

@@ -1142,7 +1142,7 @@ async def send_direct_message(
     POST /api/whatsapp/send-direct
     {
         "phone": "919948303060",
-        "message": "Hello from RealApex!"
+        "message": "Hello from MemoraAI!"
     }
     """
     try:

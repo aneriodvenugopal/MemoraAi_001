@@ -203,7 +203,7 @@ const MapSearch = () => {
         // Fallback to Nominatim
         const response = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}, India&limit=8&addressdetails=1&countrycodes=in`,
-          { headers: { 'Accept': 'application/json', 'User-Agent': 'RealApex/1.0' } }
+          { headers: { 'Accept': 'application/json', 'User-Agent': 'MemoraAI/1.0' } }
         );
         const data = await response.json();
         setSearchResults(data.map(r => ({

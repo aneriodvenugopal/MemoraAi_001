@@ -28,7 +28,7 @@ class WebPushService:
     VAPID_PUBLIC_KEY = os.environ.get('VAPID_PUBLIC_KEY', '')
     VAPID_PRIVATE_KEY = os.environ.get('VAPID_PRIVATE_KEY', '')
     VAPID_CLAIMS = {
-        'sub': os.environ.get('VAPID_EMAIL', 'mailto:support@realapex.in')
+        'sub': os.environ.get('VAPID_EMAIL', 'mailto:support@memoraai.in')
     }
     
     @classmethod

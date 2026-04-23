@@ -275,8 +275,8 @@ async def whatsapp_webhook(
     # Get tenant config (for multi-tenant, you'd identify tenant from phone number or webhook config)
     # For now, use default config
     tenant_config = {
-        'company_name': 'RealApex',
-        'website_url': 'https://realapex.in',
+        'company_name': 'MemoraAI',
+        'website_url': 'https://memoraai.in',
         'emergency_phone': '+91-9999999999',
         'default_project_name': 'Premium Plots',
         'starting_price': '25,00,000',

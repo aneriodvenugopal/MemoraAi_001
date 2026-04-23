@@ -84,7 +84,7 @@ import AgentApexAdminDashboard from "./pages/admin/AgentApexAdminDashboard";
 import MasterCategoryManagement from "./pages/admin/MasterCategoryManagement";
 import TenantCategoryManagement from "./pages/admin/TenantCategoryManagement";
 import TutorAIAdmin from "./pages/TutorAIAdmin";
-import RealApexDemos from "./pages/RealApexDemos";
+import MemoraAIDemos from "./pages/RealApexDemos";
 import WhatsAppSimulator from "./pages/WhatsAppSimulator";
 import WhatsAppCRM from "./pages/WhatsAppCRM";
 
@@ -236,7 +236,7 @@ function ConditionalAssistant() {
     location.pathname.startsWith('/public/tenant/') || 
     location.pathname.startsWith('/public/project/');
   
-  // Show Property Chatbot on tenant/project pages, RealApex Assistant on ALL other pages (including homepage)
+  // Show Property Chatbot on tenant/project pages, MemoraAI Assistant on ALL other pages (including homepage)
   if (isTenantOrProjectPage) {
     return <PropertyChatbot />;
   } else {
@@ -947,7 +947,7 @@ function App() {
                 path="/realapex-demos"
                 element={
                   <PrivateRoute>
-                    <RealApexDemos />
+                    <MemoraAIDemos />
                   </PrivateRoute>
                 }
               />

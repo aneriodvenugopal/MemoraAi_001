@@ -2,7 +2,7 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
-// Firebase config for RealApex - using environment variables
+// Firebase config for MemoraAI - using environment variables
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyBLdLj5EGwRxHbsCqEbngRWbEFn4RUHQdI",
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "exlainerp-5ff78.firebaseapp.com",

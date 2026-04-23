@@ -83,7 +83,7 @@ const SlowProcessesExample = () => {
           {/* AFTER */}
           <div className="bg-white rounded-2xl shadow-xl p-8 border-4 border-green-500">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-gray-900">Automated with RealApex</h2>
+              <h2 className="text-3xl font-bold text-gray-900">Automated with MemoraAI</h2>
               <Check className="w-12 h-12 text-green-500" />
             </div>
 
@@ -151,7 +151,7 @@ const SlowProcessesExample = () => {
         <div className="mt-16 text-center max-w-4xl mx-auto">
           <h3 className="text-3xl font-bold text-gray-900 mb-6">Automate Your Operations Today</h3>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="https://wa.me/919948303060?text=I want to automate my operations with RealApex!" target="_blank" rel="noopener noreferrer" className="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-xl">
+            <a href="https://wa.me/919948303060?text=I want to automate my operations with MemoraAI!" target="_blank" rel="noopener noreferrer" className="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-xl">
               💬 Chat on WhatsApp
             </a>
             <Link to="/solutions/payments" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-xl">

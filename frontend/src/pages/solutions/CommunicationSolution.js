@@ -163,7 +163,7 @@ const CommunicationSolution = () => {
                 </ul>
               </div>
               <div className="bg-green-50 p-6 rounded-xl border-l-4 border-green-500">
-                <h3 className="text-xl font-bold text-green-700 mb-4">RealApex Automation</h3>
+                <h3 className="text-xl font-bold text-green-700 mb-4">MemoraAI Automation</h3>
                 <ul className="space-y-3 text-gray-700">
                   <li>✅ Automated campaigns - 2 minutes to reach 1000s</li>
                   <li>✅ Personalized messages get 60%+ response rate</li>
@@ -225,11 +225,11 @@ const CommunicationSolution = () => {
                   </h3>
                   <div className="grid md:grid-cols-3 gap-6">
                     <div>
-                      <p className="text-sm font-semibold text-gray-600 mb-2">❌ Before RealApex</p>
+                      <p className="text-sm font-semibold text-gray-600 mb-2">❌ Before MemoraAI</p>
                       <p className="text-gray-700">{useCase.before}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-600 mb-2">✅ After RealApex</p>
+                      <p className="text-sm font-semibold text-gray-600 mb-2">✅ After MemoraAI</p>
                       <p className="text-gray-700">{useCase.after}</p>
                     </div>
                     <div className="flex items-center">
@@ -250,7 +250,7 @@ const CommunicationSolution = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-              Why RealApex Communication Works
+              Why MemoraAI Communication Works
             </h2>
             <div className="grid md:grid-cols-2 gap-4">
               {benefits.map((benefit, index) => (

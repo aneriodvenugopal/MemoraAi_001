@@ -21,7 +21,7 @@ async def setup_test_environment():
         tenant_doc = {
             'id': tenant_id,
             'name': 'Demo Real Estate Company',
-            'domain': 'demo.realapex.in',
+            'domain': 'demo.memoraai.in',
             'package_id': 'premium',
             'is_active': True,
             'created_at': datetime.now(timezone.utc).isoformat(),

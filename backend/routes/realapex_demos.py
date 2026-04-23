@@ -1,5 +1,5 @@
 """
-RealApex Demo Video API Routes - SaaS Demo Content Generation
+MemoraAI Demo Video API Routes - SaaS Demo Content Generation
 """
 
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
@@ -11,7 +11,7 @@ import uuid
 import json
 import base64
 
-router = APIRouter(prefix="/realapex-demos", tags=["RealApex Demos"])
+router = APIRouter(prefix="/realapex-demos", tags=["MemoraAI Demos"])
 
 # Import auth middleware
 from middleware.auth import get_current_user
@@ -56,7 +56,7 @@ def parse_script_to_slides(script: str, concept_title: str, num_screenshots: int
     slides.append({
         "slide_number": 1,
         "type": "title",
-        "title": concept_title.replace(":", " -") if concept_title else "RealApex Demo",
+        "title": concept_title.replace(":", " -") if concept_title else "MemoraAI Demo",
         "subtitle": "Professional Real Estate SaaS Solution",
         "notes": "Welcome the audience"
     })
@@ -158,7 +158,7 @@ def parse_script_to_slides(script: str, concept_title: str, num_screenshots: int
         "slide_number": slide_num,
         "type": "cta",
         "title": "Get Started Today!",
-        "bullets": ["Visit RealApex.in", "Request a Free Demo", "Contact Us"],
+        "bullets": ["Visit MemoraAI.in", "Request a Free Demo", "Contact Us"],
         "notes": "Call to action"
     })
     
@@ -179,7 +179,7 @@ async def generate_demo_script(
     request: GenerateDemoScriptRequest,
     current_user: dict = Depends(get_current_user)
 ):
-    """Generate RealApex SaaS demo video script using Claude AI"""
+    """Generate MemoraAI SaaS demo video script using Claude AI"""
     check_admin(current_user)
     
     try:
@@ -189,7 +189,7 @@ async def generate_demo_script(
         EMERGENT_LLM_KEY = os.getenv('EMERGENT_LLM_KEY', '')
         
         # Build comprehensive prompt for SaaS demo
-        prompt = f"""You are creating a professional YouTube demo video script for RealApex - a PropTech SaaS platform for Indian Real Estate developers and agents.
+        prompt = f"""You are creating a professional YouTube demo video script for MemoraAI - a PropTech SaaS platform for Indian Real Estate developers and agents.
 
 **VIDEO DETAILS:**
 - Feature/Concept: {request.concept_title}
@@ -207,7 +207,7 @@ async def generate_demo_script(
    - Create curiosity about the solution
 
 2. **INTRODUCTION (30 seconds)**
-   - Introduce RealApex and this specific feature
+   - Introduce MemoraAI and this specific feature
    - Explain why this feature matters in 2026's competitive market
 
 3. **FEATURE DEMONSTRATION (2-3 minutes)**
@@ -222,9 +222,9 @@ async def generate_demo_script(
    - Mention ROI or competitive advantage
 
 5. **CALL TO ACTION (20 seconds)**
-   - Invite to try RealApex
+   - Invite to try MemoraAI
    - Mention free demo or trial
-   - Include website: RealApex.in
+   - Include website: MemoraAI.in
 
 **STYLE GUIDELINES:**
 - Use {request.language} naturally (if bilingual, mix smoothly)
@@ -271,7 +271,7 @@ async def get_demo_videos(
     skip: int = 0,
     current_user: dict = Depends(get_current_user)
 ):
-    """Get all generated RealApex demo videos"""
+    """Get all generated MemoraAI demo videos"""
     check_admin(current_user)
     
     from motor.motor_asyncio import AsyncIOMotorClient
@@ -281,9 +281,9 @@ async def get_demo_videos(
     client = AsyncIOMotorClient(MONGO_URL)
     db = client[DB_NAME]
     
-    # Filter for RealApex Demo videos
+    # Filter for MemoraAI Demo videos
     cursor = db.tutorai_generated_videos.find(
-        {"subject": "RealApex Demo"}, 
+        {"subject": "MemoraAI Demo"}, 
         {"_id": 0}
     ).sort("created_at", -1).skip(skip).limit(limit)
     
@@ -295,7 +295,7 @@ async def get_demo_videos(
 async def get_all_concepts(
     current_user: dict = Depends(get_current_user)
 ):
-    """Get all RealApex demo concepts categorized"""
+    """Get all MemoraAI demo concepts categorized"""
     check_admin(current_user)
     
     # This returns the concept structure for reference
@@ -620,7 +620,7 @@ async def generate_presentation(
                 p.alignment = PP_ALIGN.CENTER
                 
                 # CTA details
-                bullets = slide_info.get("bullets", ["Visit RealApex.in", "Request a Free Demo"])
+                bullets = slide_info.get("bullets", ["Visit MemoraAI.in", "Request a Free Demo"])
                 cta_box = slide.shapes.add_textbox(Inches(1), Inches(4.5), Inches(14), Inches(3))
                 tf2 = cta_box.text_frame
                 for i, bullet in enumerate(bullets):

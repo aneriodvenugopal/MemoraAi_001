@@ -26,7 +26,7 @@ class ReceiptGenerator:
             "address": "123 Business Park, Main Road",
             "city": "Hyderabad, Telangana - 500001",
             "phone": "+91 9876543210",
-            "email": "info@realapex.in",
+            "email": "info@memoraai.in",
             "gstin": "36AABCU9603R1ZM"
         }
         self.styles = getSampleStyleSheet()

@@ -200,7 +200,7 @@ const ArticleDetail = () => {
             Ready to Transform Your Real Estate Business?
           </h2>
           <p className="text-xl mb-6 opacity-90">
-            See how RealApex can help you achieve 40X faster growth
+            See how MemoraAI can help you achieve 40X faster growth
           </p>
           <div className="flex justify-center gap-4">
             <Link

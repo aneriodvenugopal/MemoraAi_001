@@ -45,7 +45,7 @@ async def create_tenant():
         name="Default Organization",
         company_name="Default Real Estate Company",
         phone="9999999999",
-        email="admin@realapex.in",
+        email="admin@memoraai.in",
         address="Default Address",
         city="Mumbai",
         state="Maharashtra",

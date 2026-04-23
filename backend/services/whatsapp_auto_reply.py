@@ -209,7 +209,7 @@ Meanwhile, you can:
         is_business = cls.is_business_hours()
         
         # Get tenant configuration
-        company_name = tenant_config.get('company_name', 'RealApex')
+        company_name = tenant_config.get('company_name', 'MemoraAI')
         website_url = tenant_config.get('website_url', '')
         emergency_phone = tenant_config.get('emergency_phone', '')
         

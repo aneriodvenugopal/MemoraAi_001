@@ -47,7 +47,7 @@ const PaymentCancelled = () => {
 
           <div className="text-center">
             <p className="text-xs text-gray-400">
-              Need help? Contact support at support@realapex.in
+              Need help? Contact support at support@memoraai.in
             </p>
           </div>
         </CardContent>

@@ -40,7 +40,7 @@ async def register_user():
     user = User(
         phone=phone,
         name="ExlainERP User",
-        email="user@realapex.in",
+        email="user@memoraai.in",
         role_id=role['id'],
         tenant_id="test-tenant-1"
     )

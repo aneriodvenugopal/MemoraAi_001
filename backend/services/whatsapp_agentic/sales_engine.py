@@ -1,5 +1,5 @@
 """
-Sales Engine v2 - RealApex Property Expert
+Sales Engine v2 - MemoraAI Property Expert
 Cost-optimized WhatsApp AI with Gemini primary + GPT-4o-mini fallback.
 
 FLOW:
@@ -199,7 +199,7 @@ def get_location_highlights(location: str) -> str:
     return ""
 
 
-# System prompt for the RealApex Property Expert
+# System prompt for the MemoraAI Property Expert
 REALAPEX_EXPERT_PROMPT = """You are a warm, friendly, professional {business_role} for {business_name}.
 You sound HUMAN — never robotic, never overly salesy. Build trust naturally.
 
@@ -788,7 +788,7 @@ class SalesEngine:
         """Format a specific project's full details with plot availability table"""
         project_id = project.get("id", "")
         project_name = project.get("name", "Project")
-        base_url = "https://realapex.in"
+        base_url = "https://memoraai.in"
 
         # Get all properties for this project
         properties = await self.db.properties.find(
@@ -1092,10 +1092,10 @@ STYLE (MANDATORY):
             else:
                 services_list = "No specific services configured yet."
 
-            # Load customer memory context
+            # Load customer memory context via enhanced RAG
             from services.memory_ai_service import BusinessMemoryAI
             memory_ai = BusinessMemoryAI(self.db)
-            customer_memory = await memory_ai.build_customer_context(tenant_id, phone)
+            customer_memory = await memory_ai.build_rag_context(tenant_id, phone, message)
         except Exception as cat_err:
             logger.warning(f"Category context load error (non-blocking): {cat_err}")
 

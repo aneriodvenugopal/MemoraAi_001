@@ -164,7 +164,7 @@ const RevenueLossExample = () => {
           <h3 className="text-3xl font-bold text-gray-900 mb-6">Stop Revenue Leakage Now</h3>
           <p className="text-xl text-gray-600 mb-8">Start recovering your lost revenue today</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="https://wa.me/919948303060?text=I want to stop revenue loss with RealApex!" target="_blank" rel="noopener noreferrer" className="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-xl">
+            <a href="https://wa.me/919948303060?text=I want to stop revenue loss with MemoraAI!" target="_blank" rel="noopener noreferrer" className="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-xl">
               💬 Chat on WhatsApp
             </a>
             <a href="tel:+919948303060" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-xl">

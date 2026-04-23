@@ -133,7 +133,7 @@ async def generate_booking_confirmation_pdf(
     # Get tenant info for company details
     tenant = await db.tenants.find_one({"id": booking.get("tenant_id")}, {"_id": 0})
     company_info = {
-        "name": tenant.get("company", {}).get("name") or tenant.get("name", "RealApex") if tenant else "RealApex",
+        "name": tenant.get("company", {}).get("name") or tenant.get("name", "MemoraAI") if tenant else "MemoraAI",
         "address": tenant.get("company", {}).get("address", "") if tenant else "",
         "phone": tenant.get("company", {}).get("phone", "") if tenant else "",
         "email": tenant.get("company", {}).get("email", "") if tenant else "",
@@ -364,7 +364,7 @@ async def generate_payment_schedule_pdf(
     # Get tenant info for company details
     tenant = await db.tenants.find_one({"id": property_doc.get("tenant_id")}, {"_id": 0})
     company_info = {
-        "name": tenant.get("company", {}).get("name") or tenant.get("name", "RealApex") if tenant else "RealApex",
+        "name": tenant.get("company", {}).get("name") or tenant.get("name", "MemoraAI") if tenant else "MemoraAI",
         "address": tenant.get("company", {}).get("address", "") if tenant else "",
         "phone": tenant.get("company", {}).get("phone", "") if tenant else "",
         "email": tenant.get("company", {}).get("email", "") if tenant else "",
@@ -457,7 +457,7 @@ async def generate_allotment_letter_pdf(
     # Get tenant info for company details
     tenant = await db.tenants.find_one({"id": property_doc.get("tenant_id")}, {"_id": 0})
     company_info = {
-        "name": tenant.get("company", {}).get("name") or tenant.get("name", "RealApex") if tenant else "RealApex",
+        "name": tenant.get("company", {}).get("name") or tenant.get("name", "MemoraAI") if tenant else "MemoraAI",
         "address": tenant.get("company", {}).get("address", "") if tenant else "",
         "phone": tenant.get("company", {}).get("phone", "") if tenant else "",
         "email": tenant.get("company", {}).get("email", "") if tenant else "",

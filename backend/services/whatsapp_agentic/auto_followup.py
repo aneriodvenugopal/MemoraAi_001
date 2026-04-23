@@ -30,7 +30,7 @@ MIN_FOLLOWUP_DELAY_HOURS = 2
 # Maximum hours — must be within 24h window from lead's last message
 MAX_FOLLOWUP_WINDOW_HOURS = 22
 
-FOLLOWUP_PROMPT = """You are "RealApex Property Expert" — a warm, senior real estate advisor.
+FOLLOWUP_PROMPT = """You are "MemoraAI Property Expert" — a warm, senior real estate advisor.
 
 A customer showed interest in our properties on WhatsApp but hasn't replied for a while.
 Write a single gentle follow-up message to bring them back.

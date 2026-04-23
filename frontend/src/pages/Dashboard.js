@@ -7,6 +7,7 @@ import { LogOut, Building2, Users, BarChart3, FileText, UserCog, Home, Layers, M
 import NotificationCenter from '../components/notifications/NotificationCenter';
 import PageInfoModal from '../components/PageInfoModal';
 import MemoraAILogo from '../components/MemoraAILogo';
+import CategoryDashboardWidgets from '../components/CategoryDashboardWidgets';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -416,6 +417,9 @@ const TenantAdminDashboard = () => {
           gradient="from-ocean-success to-ocean-primary"
         />
       </div>
+
+      {/* Category-Specific Smart Widgets */}
+      <CategoryDashboardWidgets />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <ActionCard

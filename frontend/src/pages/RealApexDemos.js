@@ -157,7 +157,7 @@ const LANGUAGES = [
   { id: 'bilingual_hi_en', name: 'Hindi + English Mix', flag: '🔀' },
 ];
 
-const RealApexDemos = () => {
+const MemoraAIDemos = () => {
   // Form state
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedConcept, setSelectedConcept] = useState('');
@@ -354,7 +354,7 @@ const RealApexDemos = () => {
       // Fallback to tutorai videos
       try {
         const fallback = await api.get('/tutorai/videos');
-        setGeneratedVideos((fallback.data.videos || []).filter(v => v.subject === 'RealApex Demo'));
+        setGeneratedVideos((fallback.data.videos || []).filter(v => v.subject === 'MemoraAI Demo'));
       } catch (e) {
         console.error('Failed to load videos:', e);
       }
@@ -363,7 +363,7 @@ const RealApexDemos = () => {
     }
   };
 
-  // Generate Script for RealApex Demo
+  // Generate Script for MemoraAI Demo
   const handleGenerateScript = async () => {
     if (!conceptTitle || !videoType || !targetAudience) {
       toast.error('Please fill in all required fields');
@@ -423,8 +423,8 @@ const RealApexDemos = () => {
         language: language,
         avatar_style: avatarStyle,
         concept_name: conceptTitle,
-        class_level: 'RealApex Demo',
-        subject: 'RealApex Demo'
+        class_level: 'MemoraAI Demo',
+        subject: 'MemoraAI Demo'
       });
 
       if (response.data.success) {
@@ -657,7 +657,7 @@ const RealApexDemos = () => {
               <Sparkles className="w-10 h-10 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-white">RealApex Demo Generator</h1>
+              <h1 className="text-4xl font-bold text-white">MemoraAI Demo Generator</h1>
               <p className="text-purple-200">AI-Powered YouTube Demo Videos for Real Estate SaaS</p>
             </div>
           </div>
@@ -1189,7 +1189,7 @@ const RealApexDemos = () => {
                       <Video className="w-5 h-5 text-purple-400" />
                       Generated Demo Videos
                     </CardTitle>
-                    <CardDescription className="text-slate-400">All RealApex demo videos</CardDescription>
+                    <CardDescription className="text-slate-400">All MemoraAI demo videos</CardDescription>
                   </div>
                   <Button variant="outline" size="sm" onClick={loadGeneratedVideos} className="border-slate-600 text-slate-300">
                     <RefreshCw className={`w-4 h-4 mr-2 ${isLoadingVideos ? 'animate-spin' : ''}`} />
@@ -1509,4 +1509,4 @@ const RealApexDemos = () => {
   );
 };
 
-export default RealApexDemos;
+export default MemoraAIDemos;
