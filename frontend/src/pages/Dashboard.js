@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOut, Building2, Users, BarChart3, FileText, UserCog, Home, Layers, MessageSquare, MapPin, Wallet, Shield, Tags, FolderTree, Settings, Bot, DollarSign, CreditCard, TrendingUp, Banknote, Mail, Receipt, Star, Stethoscope, Scissors, Flame, Brain, Phone } from 'lucide-react';
+import { LogOut, Building2, Users, BarChart3, FileText, UserCog, Home, Layers, MessageSquare, MapPin, Wallet, Shield, Tags, FolderTree, Settings, Bot, DollarSign, CreditCard, TrendingUp, Banknote, Mail, Receipt, Star, Stethoscope, Scissors, Flame, Brain, Phone, CalendarDays, PieChart } from 'lucide-react';
 import NotificationCenter from '../components/notifications/NotificationCenter';
 import PageInfoModal from '../components/PageInfoModal';
 import MemoraAILogo from '../components/MemoraAILogo';
@@ -595,6 +595,27 @@ const TenantAdminDashboard = () => {
             description="Manage WhatsApp leads & conversations"
             onClick={() => navigate('/whatsapp-crm')}
             gradient="from-green-600 to-teal-500"
+          />
+          <ActionCard
+            icon={CalendarDays}
+            title="Appointments"
+            description="Manage bookings & appointments"
+            onClick={() => navigate('/memoraai-appointments')}
+            gradient="from-blue-500 to-cyan-500"
+          />
+          <ActionCard
+            icon={PieChart}
+            title="Analytics & Reports"
+            description="Category-specific business insights"
+            onClick={() => navigate('/memoraai-analytics')}
+            gradient="from-violet-500 to-purple-500"
+          />
+          <ActionCard
+            icon={FileText}
+            title="Template Workflow"
+            description="WhatsApp template create, review & submit"
+            onClick={() => navigate('/memoraai-templates')}
+            gradient="from-cyan-500 to-blue-500"
           />
         </div>
       </div>

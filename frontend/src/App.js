@@ -203,6 +203,9 @@ import SettingsPage from "./pages/SettingsPage";
 import CategorySetup from "./pages/CategorySetup";
 import HotSalesMode from "./pages/HotSalesMode";
 import WABASetup from "./pages/WABASetup";
+import AppointmentsManager from "./pages/AppointmentsManager";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import TemplateWorkflow from "./pages/TemplateWorkflow";
 
 // SEO Articles
 import ArticlesListing from "./pages/ArticlesListing";
@@ -1077,6 +1080,30 @@ function App() {
                 element={
                   <PrivateRoute>
                     <WABASetup />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/memoraai-appointments"
+                element={
+                  <PrivateRoute>
+                    <AppointmentsManager />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/memoraai-analytics"
+                element={
+                  <PrivateRoute>
+                    <AnalyticsDashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/memoraai-templates"
+                element={
+                  <PrivateRoute>
+                    <TemplateWorkflow />
                   </PrivateRoute>
                 }
               />
