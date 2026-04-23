@@ -8,6 +8,7 @@ import NotificationCenter from '../components/notifications/NotificationCenter';
 import PageInfoModal from '../components/PageInfoModal';
 import MemoraAILogo from '../components/MemoraAILogo';
 import CategoryDashboardWidgets from '../components/CategoryDashboardWidgets';
+import MobileOwnerDashboard from './MobileOwnerDashboard';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -25,7 +26,7 @@ const Dashboard = () => {
       case 'super_admin':
         return <SuperAdminDashboard />;
       case 'tenant_admin':
-        return <TenantAdminDashboard />;
+        return <MobileOwnerDashboard />;
       case 'staff':
         return <StaffDashboard />;
       case 'customer':
@@ -34,6 +35,11 @@ const Dashboard = () => {
         return <DefaultDashboard />;
     }
   };
+
+  // For tenant_admin, use the mobile owner dashboard directly (it has its own layout)
+  if (user?.role === 'tenant_admin') {
+    return <MobileOwnerDashboard />;
+  }
 
   return (
     <div className="min-h-screen relative">
