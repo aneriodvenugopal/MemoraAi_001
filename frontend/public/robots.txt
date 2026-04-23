@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /
+
+# Block logged-in/private routes from indexing
+Disallow: /dashboard
+Disallow: /saas-admin
+Disallow: /team-inbox
+Disallow: /memoraai-appointments
+Disallow: /memoraai-analytics
+Disallow: /memoraai-templates
+Disallow: /content-library
+Disallow: /business-rules
+Disallow: /calendar-sync
+Disallow: /chat-corrections
+Disallow: /settings
+Disallow: /admin-industries
+Disallow: /hot-sales
+Disallow: /waba-setup
+Disallow: /customer-portal
+
+# AI crawler permissions
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Sitemap
+Sitemap: https://memoraai.in/sitemap.xml

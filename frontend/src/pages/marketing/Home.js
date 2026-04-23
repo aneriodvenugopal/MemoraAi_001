@@ -6,8 +6,9 @@ import {
   Calendar, Megaphone, TrendingUp, Heart, Building, Stethoscope,
   Scissors, GraduationCap, PartyPopper, Sprout, Code, ShoppingCart,
   Scale, Car, Dumbbell, Store, HardHat, Banknote, Utensils, Mic,
-  Play, Check, X
+  Play, Check, X, Plus, Minus
 } from 'lucide-react';
+import LeadCaptureSection from '../../components/LeadCaptureSection';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 const WHATSAPP_NUMBER = "916309356590";
@@ -290,7 +291,119 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── FINAL CTA ─── */}
+      {/* ─── HUMANIZED CASE STORIES ─── */}
+      <section id="stories" className="py-24 px-4 relative" data-testid="case-stories">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14" data-animate>
+            <span className="text-xs font-bold uppercase tracking-widest text-sky-400">Real businesses, real results</span>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-2 leading-tight">
+              Meet the businesses that stopped<br/>missing <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500">WhatsApp leads</span> at 9pm.
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                name: "Ramesh Reddy",
+                biz: "Sai Sri Plot Sales, Shankarpalli",
+                cat: "Real Estate",
+                quote: "We used to lose 40% of Sunday enquiries because nobody was in office. MemoraAI replies in 3 seconds — 17 site visits booked last week alone.",
+                metric: "+212% site visits",
+                color: "sky",
+              },
+              {
+                name: "Dr. Priya Nair",
+                biz: "SmileCare Dental, Kukatpally",
+                cat: "Clinic",
+                quote: "Patients message at midnight with photos of tooth pain. The AI books the right slot, pulls the X-ray reminder, even sends the Google Maps link. My receptionist got her mornings back.",
+                metric: "0 missed bookings",
+                color: "blue",
+              },
+              {
+                name: "Kavitha Jyotish",
+                biz: "Vedic Guidance, online",
+                cat: "Astrology",
+                quote: "I was drowning in horoscope requests. Now the AI asks birth details upfront, calculates the chart preview, and books a paid 30-min consult. Revenue doubled in 2 months.",
+                metric: "2× revenue in 60 days",
+                color: "indigo",
+              },
+            ].map((s, i) => (
+              <div key={i} className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-sm hover:border-sky-400/40 transition-colors" data-testid={`story-${i}`}>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`w-11 h-11 rounded-full bg-gradient-to-br from-${s.color}-400 to-${s.color}-600 flex items-center justify-center text-white font-bold`}>
+                    {s.name[0]}
+                  </div>
+                  <div>
+                    <p className="font-bold text-white text-sm">{s.name}</p>
+                    <p className="text-[11px] text-gray-400">{s.biz}</p>
+                  </div>
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed mb-4">"{s.quote}"</p>
+                <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                  <span className="text-[10px] bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full uppercase font-bold tracking-wide">{s.cat}</span>
+                  <span className="text-xs font-bold text-green-400">{s.metric}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── LEAD CAPTURE (main conversion section) ─── */}
+      <section id="demo" className="py-24 px-4 relative" data-testid="lead-section">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-[140px]" />
+        </div>
+        <div className="max-w-5xl mx-auto relative z-10 grid md:grid-cols-2 gap-10 items-center">
+          <div data-animate>
+            <span className="text-xs font-bold uppercase tracking-widest text-sky-400">Get Started</span>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-2 leading-tight text-white">
+              Book your<br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-400">free live demo</span>
+            </h2>
+            <p className="text-gray-400 text-base leading-relaxed mt-4">
+              In 10 minutes, we'll show MemoraAI handling your exact customer questions — in English, Hindi, or Telugu. No slides. No theory. Your business, your scenarios.
+            </p>
+            <ul className="mt-6 space-y-3 text-sm">
+              {[
+                "Live WhatsApp demo with your industry's sample chats",
+                "Pricing based on your team & message volume",
+                "WABA setup walkthrough — go live same day",
+                "Free onboarding & content upload support",
+              ].map((t, i) => (
+                <li key={i} className="flex items-start gap-2 text-gray-300">
+                  <Check className="w-4 h-4 text-sky-400 mt-0.5 flex-shrink-0" /> {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <LeadCaptureSection variant="compact" source="homepage" />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FAQ (SEO + trust) ─── */}
+      <section id="faq" className="py-24 px-4" data-testid="faq-section">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-10" data-animate>
+            <span className="text-xs font-bold uppercase tracking-widest text-sky-400">FAQ</span>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-2">Questions, answered.</h2>
+          </div>
+          <FAQList items={[
+            { q: "How quickly can MemoraAI go live for my business?", a: "30 minutes. After you connect your Meta WhatsApp Business API number and upload your brochures/price list, the AI starts replying. Most customers get their first live booking within 48 hours." },
+            { q: "Do I need to change my WhatsApp number?", a: "No. MemoraAI runs on Meta's official WhatsApp Business API on top of your existing brand number. Your customers see exactly the same number they've always known." },
+            { q: "Which industries are supported?", a: "16+ pre-built playbooks including Real Estate, Clinics, Astrology, Salons, Coaching centres, Function halls, Gyms, Auto dealers, Restaurants, Pesticides/Fertilisers, Agriculture, Retail, Construction, Legal/CA, and Financial advisors. Custom playbooks also available." },
+            { q: "What languages does the AI speak?", a: "English, Hindi, and Telugu out of the box. Kannada, Tamil, Marathi, and more on request. The AI auto-detects the customer's language and replies in the same one." },
+            { q: "What about my existing customer chats — are they lost?", a: "No. We import your WhatsApp history (last 6 months) into the RAG memory, so the AI already knows who asked about which plot, who came for which treatment, and follows up exactly where you left off." },
+            { q: "Is my data safe?", a: "Yes. Every tenant has fully isolated data. WABA messages are stored with encryption at rest. We're ISO-compliant and never share data across businesses. Full data export available anytime." },
+            { q: "What does it cost?", a: "Plans start at ₹999/month for small businesses with 1 user + 500 chats/month. Medium plan ₹2,499/month for 5 users + 3,000 chats. Enterprise pricing for multi-branch setups. Book a free demo to see pricing matched to your volume." },
+            { q: "Can I try before I pay?", a: "Yes. All plans come with a free 7-day trial. No credit card required — we activate it after the live demo and onboarding call." },
+          ]} />
+        </div>
+      </section>
+
+
       <section className="py-24 px-4 relative" data-testid="final-cta">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-0 left-1/3 w-96 h-96 bg-violet-600/15 rounded-full blur-[120px]" />
@@ -423,3 +536,27 @@ export function WhatsAppMockup({ businessName, messages = [], compact = false })
 }
 
 export default Home;
+
+/* ─── FAQ Accordion ─── */
+export function FAQList({ items = [] }) {
+  const [open, setOpen] = React.useState(0);
+  return (
+    <div className="space-y-2" data-testid="faq-list">
+      {items.map((it, i) => {
+        const isOpen = open === i;
+        return (
+          <div key={i} className={`border rounded-2xl overflow-hidden transition-all ${isOpen ? 'border-sky-400/50 bg-sky-500/5' : 'border-white/10 bg-white/5'}`} data-testid={`faq-item-${i}`}>
+            <button onClick={() => setOpen(isOpen ? -1 : i)}
+              className="w-full flex items-center justify-between px-5 py-4 text-left" data-testid={`faq-toggle-${i}`}>
+              <span className="font-semibold text-white text-sm sm:text-base pr-4">{it.q}</span>
+              {isOpen ? <Minus className="w-5 h-5 text-sky-400 flex-shrink-0" /> : <Plus className="w-5 h-5 text-gray-400 flex-shrink-0" />}
+            </button>
+            {isOpen && (
+              <div className="px-5 pb-4 text-sm text-gray-300 leading-relaxed" data-testid={`faq-answer-${i}`}>{it.a}</div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
