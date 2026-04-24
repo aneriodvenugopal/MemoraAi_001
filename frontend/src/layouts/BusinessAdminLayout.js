@@ -164,22 +164,24 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
         {/* Main */}
         <main className="flex-1 lg:pl-[260px] min-h-screen flex flex-col">
           {/* Page header */}
-          <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-lg border-b border-gray-200/70 px-5 lg:px-8 py-4 hidden lg:block">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold text-gray-900" data-testid="page-title">{pageTitle}</h1>
-                  <span className="text-xs bg-gradient-to-r from-violet-500 to-sky-500 text-white px-2 py-0.5 rounded-md font-semibold flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" /> AI Brain
-                  </span>
+          {pageTitle && (
+            <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-lg border-b border-gray-200/70 px-5 lg:px-8 py-4 hidden lg:block">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-2xl font-bold text-gray-900" data-testid="page-title">{pageTitle}</h1>
+                    <span className="text-xs bg-gradient-to-r from-violet-500 to-sky-500 text-white px-2 py-0.5 rounded-md font-semibold flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" /> AI Brain
+                    </span>
+                  </div>
+                  {pageSubtitle && <p className="text-sm text-gray-500 mt-0.5">{pageSubtitle}</p>}
                 </div>
-                {pageSubtitle && <p className="text-sm text-gray-500 mt-0.5">{pageSubtitle}</p>}
+                <div className="flex items-center gap-3">{headerRight}</div>
               </div>
-              <div className="flex items-center gap-3">{headerRight}</div>
-            </div>
-          </header>
+            </header>
+          )}
 
-          <div className="flex-1 px-4 lg:px-8 py-5 lg:py-6">
+          <div className={`flex-1 ${pageTitle ? 'px-4 lg:px-8 py-5 lg:py-6' : ''}`}>
             {children}
           </div>
 

@@ -217,6 +217,7 @@ import MemoraLeads from "./pages/MemoraLeads";
 import Contacts from "./pages/Contacts";
 import Broadcast from "./pages/Broadcast";
 import Automation from "./pages/Automation";
+import WithSidebar from "./layouts/WithSidebar";
 import ImpersonationBanner from "./components/ImpersonationBanner";
 import TeamInbox from "./pages/TeamInbox";
 import SaaSAdminDashboard from "./pages/SaaSAdminDashboard";
@@ -948,7 +949,7 @@ function App() {
                 path="/settings"
                 element={
                   <PrivateRoute>
-                    <SettingsPage />
+                    <WithSidebar><SettingsPage /></WithSidebar>
                   </PrivateRoute>
                 }
               />
@@ -1088,7 +1089,7 @@ function App() {
                 path="/hot-sales"
                 element={
                   <PrivateRoute>
-                    <HotSalesMode />
+                    <WithSidebar><HotSalesMode /></WithSidebar>
                   </PrivateRoute>
                 }
               />
@@ -1096,7 +1097,15 @@ function App() {
                 path="/waba-setup"
                 element={
                   <PrivateRoute>
-                    <WABASetup />
+                    <WithSidebar><WABASetup /></WithSidebar>
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/team-inbox"
+                element={
+                  <PrivateRoute>
+                    <WithSidebar><TeamInbox /></WithSidebar>
                   </PrivateRoute>
                 }
               />
@@ -1104,7 +1113,7 @@ function App() {
                 path="/memoraai-appointments"
                 element={
                   <PrivateRoute>
-                    <AppointmentsManager />
+                    <WithSidebar><AppointmentsManager /></WithSidebar>
                   </PrivateRoute>
                 }
               />
@@ -1112,7 +1121,7 @@ function App() {
                 path="/memoraai-analytics"
                 element={
                   <PrivateRoute>
-                    <AnalyticsDashboard />
+                    <WithSidebar><AnalyticsDashboard /></WithSidebar>
                   </PrivateRoute>
                 }
               />
@@ -1120,7 +1129,7 @@ function App() {
                 path="/memoraai-templates"
                 element={
                   <PrivateRoute>
-                    <TemplateWorkflow />
+                    <WithSidebar><TemplateWorkflow /></WithSidebar>
                   </PrivateRoute>
                 }
               />
@@ -1136,7 +1145,7 @@ function App() {
                 path="/content-library"
                 element={
                   <PrivateRoute>
-                    <MemoraContentLibrary />
+                    <WithSidebar><MemoraContentLibrary /></WithSidebar>
                   </PrivateRoute>
                 }
               />
@@ -1201,14 +1210,6 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Automation />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/team-inbox"
-                element={
-                  <PrivateRoute>
-                    <TeamInbox />
                   </PrivateRoute>
                 }
               />

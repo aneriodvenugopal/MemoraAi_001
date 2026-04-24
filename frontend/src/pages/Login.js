@@ -150,11 +150,12 @@ const Login = () => {
   // Redirect based on user role
   const redirectBasedOnRole = (role) => {
     if (role === 'super_admin') {
-      navigate('/dashboard');  // Super admin uses same dashboard with role-based content
+      navigate('/saas-admin');  // SaaS admin lands on the admin dashboard
     } else if (role === 'customer') {
       navigate('/customer-dashboard');
     } else {
-      navigate('/dashboard');
+      // Tenant admin + staff → premium Own Business GPT with sidebar
+      navigate('/own-business-gpt');
     }
   };
 
