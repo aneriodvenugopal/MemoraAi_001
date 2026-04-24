@@ -212,6 +212,7 @@ import MemoraContentLibrary from "./pages/ContentLibrary";
 import BusinessRules from "./pages/BusinessRules";
 import CalendarSync from "./pages/CalendarSync";
 import ChatCorrections from "./pages/ChatCorrections";
+import OwnBusinessGPT from "./pages/OwnBusinessGPT";
 import ImpersonationBanner from "./components/ImpersonationBanner";
 import TeamInbox from "./pages/TeamInbox";
 import SaaSAdminDashboard from "./pages/SaaSAdminDashboard";
@@ -1156,6 +1157,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <ChatCorrections />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/own-business-gpt"
+                element={
+                  <PrivateRoute>
+                    <OwnBusinessGPT />
                   </PrivateRoute>
                 }
               />

@@ -496,6 +496,7 @@ function MoreTab({ navigate, catName, templates }) {
       title: 'AI & Automation',
       items: [
         { icon: Bot, label: 'WhatsApp Setup', sub: 'WABA configuration', onClick: () => navigate('/waba-setup') },
+        { icon: Brain, label: 'AI Brain (Own GPT)', sub: 'Train AI with your content', onClick: () => navigate('/own-business-gpt') },
         { icon: MessageSquare, label: 'Team Inbox', sub: 'Live chats + handover', onClick: () => navigate('/team-inbox') },
         { icon: Brain, label: 'AI Memory', sub: 'RAG customer memory', onClick: () => navigate('/memoraai-appointments') },
         { icon: Brain, label: 'Chat Learning', sub: 'Teach AI from corrections', onClick: () => navigate('/chat-corrections') },
