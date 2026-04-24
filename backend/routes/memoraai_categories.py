@@ -2,9 +2,9 @@
 from fastapi import APIRouter, HTTPException, Request
 from middleware.auth import get_current_user
 from models.memoraai import (
-    CATEGORY_CONFIGS, SUPPORTED_CATEGORIES,
     BusinessCategory, BusinessService, BusinessServiceCreate, BusinessServiceUpdate,
 )
+from services import category_registry
 from utils.helpers import serialize_doc
 from datetime import datetime, timezone
 import uuid
@@ -21,17 +21,20 @@ def get_db(request: Request):
 # ─── Category Management ───────────────────────────────────────
 
 @router.get("/categories/available")
-async def list_available_categories():
-    """List all supported business categories with their default services"""
+async def list_available_categories(request: Request):
+    """List all supported business categories (from DB registry) with their default services."""
+    db = get_db(request)
+    cats = await category_registry.get_all(db, active_only=True)
     result = []
-    for slug, cfg in CATEGORY_CONFIGS.items():
+    for c in cats:
+        services = c.get("default_services") or []
         result.append({
-            "slug": slug,
-            "name": cfg["name"],
-            "icon": cfg["icon"],
-            "description": cfg["description"],
-            "default_services_count": len(cfg["default_services"]),
-            "default_services": cfg["default_services"],
+            "slug": c["slug"],
+            "name": c["name"],
+            "icon": c.get("icon", ""),
+            "description": c.get("description", ""),
+            "default_services_count": len(services),
+            "default_services": services,
         })
     return {"categories": result}
 
@@ -62,10 +65,10 @@ async def select_category(request: Request):
 
     body = await request.json()
     category_slug = body.get("category_slug")
-    if category_slug not in SUPPORTED_CATEGORIES:
+    if not await category_registry.is_supported(db, category_slug):
         raise HTTPException(status_code=400, detail=f"Unsupported category: {category_slug}")
 
-    cfg = CATEGORY_CONFIGS[category_slug]
+    cfg = await category_registry.get(db, category_slug)
 
     # Check if already selected
     existing = await db.business_categories.find_one(
@@ -91,14 +94,15 @@ async def select_category(request: Request):
 
     # Auto-populate default services
     services_created = []
-    for idx, svc in enumerate(cfg["default_services"]):
+    default_services = cfg.get("default_services") or []
+    for idx, svc in enumerate(default_services):
         service = BusinessService(
             tenant_id=tenant_id,
             category_slug=category_slug,
             name=svc["name"],
-            description=svc["description"],
-            duration_mins=svc["duration_mins"],
-            price=svc["price"],
+            description=svc.get("description", ""),
+            duration_mins=svc.get("duration_mins", 0),
+            price=svc.get("price", 0),
             sort_order=idx,
         )
         svc_doc = serialize_doc(service.model_dump())
@@ -146,11 +150,13 @@ async def set_primary_category(request: Request):
     if result.modified_count == 0:
         raise HTTPException(status_code=404, detail="Category not found for this tenant")
 
+    primary_cat = await category_registry.get(db, category_slug)
+    primary_name = primary_cat.get("name", category_slug) if primary_cat else category_slug
     await db.tenants.update_one(
         {"id": tenant_id},
         {"$set": {
             "business_category": category_slug,
-            "business_category_name": CATEGORY_CONFIGS.get(category_slug, {}).get("name", category_slug),
+            "business_category_name": primary_name,
             "updated_at": datetime.now(timezone.utc).isoformat(),
         }}
     )

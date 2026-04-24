@@ -344,3 +344,15 @@ async def start_followup_scheduler():
     """Start the auto follow-up background scheduler."""
     app.state.followup_task = asyncio.create_task(_followup_scheduler_loop())
     logger.info("Auto follow-up scheduler started (runs every 30 minutes)")
+
+
+@app.on_event("startup")
+async def seed_category_registry():
+    """Seed the MongoDB-backed business category registry from static defaults (first boot only)."""
+    try:
+        from services import category_registry
+        count = await category_registry.ensure_seeded(app.state.db)
+        if count:
+            logger.info(f"Category registry seeded: {count} categories")
+    except Exception as e:
+        logger.warning(f"Category registry seed skipped: {e}")

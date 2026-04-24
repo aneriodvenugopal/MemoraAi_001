@@ -219,6 +219,7 @@ import Broadcast from "./pages/Broadcast";
 import Automation from "./pages/Automation";
 import StaffMembers from "./pages/StaffMembers";
 import MemoraLogs from "./pages/MemoraLogs";
+import CategoriesAdmin from "./pages/CategoriesAdmin";
 import WithSidebar from "./layouts/WithSidebar";
 import ImpersonationBanner from "./components/ImpersonationBanner";
 import TeamInbox from "./pages/TeamInbox";
@@ -1228,6 +1229,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <MemoraLogs />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/saas-admin/categories"
+                element={
+                  <PrivateRoute>
+                    <CategoriesAdmin />
                   </PrivateRoute>
                 }
               />

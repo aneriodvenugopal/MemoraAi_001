@@ -660,16 +660,138 @@ async def reset_owner_password(tenant_id: str, request: Request):
 
 @router.get("/business-categories")
 async def list_business_categories(request: Request):
-    """Return MemoraAI supported business categories for the onboarding form."""
+    """Return MemoraAI supported business categories (from dynamic DB registry) for the onboarding form."""
     admin = await get_current_user(request)
     if admin.get("role") != "super_admin":
         raise HTTPException(status_code=403, detail="Super admin access required")
-    try:
-        from models.memoraai import CATEGORY_CONFIGS
-        items = [
-            {"slug": k, "name": v.get("name", k.replace("_", " ").title()), "icon": v.get("icon", "")}
-            for k, v in CATEGORY_CONFIGS.items()
-        ]
-    except Exception:
-        items = []
+    from services import category_registry
+    db = get_db(request)
+    cats = await category_registry.get_all(db, active_only=True)
+    items = [{"slug": c["slug"], "name": c["name"], "icon": c.get("icon", "")} for c in cats]
     return {"categories": items, "total": len(items)}
+
+
+# ═══════════════════════════════════════════════════════
+# CATEGORY REGISTRY — admin CRUD
+# ═══════════════════════════════════════════════════════
+class CategoryCreate(BaseModel):
+    slug: str
+    name: str
+    icon: Optional[str] = "briefcase"
+    description: Optional[str] = ""
+    default_services: Optional[list] = None
+
+
+class CategoryUpdate(BaseModel):
+    name: Optional[str] = None
+    icon: Optional[str] = None
+    description: Optional[str] = None
+    is_active: Optional[bool] = None
+
+
+class ServicePayload(BaseModel):
+    name: str
+    description: Optional[str] = ""
+    duration_mins: Optional[int] = 0
+    price: Optional[float] = 0
+
+
+class ServiceUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    duration_mins: Optional[int] = None
+    price: Optional[float] = None
+
+
+def _require_super_admin(user):
+    if user.get("role") != "super_admin":
+        raise HTTPException(status_code=403, detail="Super admin access required")
+
+
+@router.get("/categories")
+async def admin_list_categories(request: Request, include_inactive: bool = False):
+    """List all categories (active by default). Set include_inactive=1 to see soft-deleted too."""
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    from services import category_registry
+    db = get_db(request)
+    cats = await category_registry.get_all(db, active_only=not include_inactive)
+    return {"categories": cats, "total": len(cats)}
+
+
+@router.post("/categories")
+async def admin_create_category(data: CategoryCreate, request: Request):
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    from services import category_registry
+    db = get_db(request)
+    try:
+        cat = await category_registry.create(db, data.model_dump())
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return {"success": True, "category": cat}
+
+
+@router.put("/categories/{slug}")
+async def admin_update_category(slug: str, data: CategoryUpdate, request: Request):
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    from services import category_registry
+    db = get_db(request)
+    try:
+        cat = await category_registry.update(db, slug, data.model_dump(exclude_unset=True))
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    return {"success": True, "category": cat}
+
+
+@router.delete("/categories/{slug}")
+async def admin_delete_category(slug: str, request: Request):
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    from services import category_registry
+    db = get_db(request)
+    ok = await category_registry.delete(db, slug)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return {"success": True, "message": f"Category '{slug}' removed"}
+
+
+@router.post("/categories/{slug}/services")
+async def admin_add_service(slug: str, data: ServicePayload, request: Request):
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    from services import category_registry
+    db = get_db(request)
+    try:
+        svc = await category_registry.add_service(db, slug, data.model_dump())
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return {"success": True, "service": svc}
+
+
+@router.put("/categories/{slug}/services/{service_id}")
+async def admin_update_service(slug: str, service_id: str, data: ServiceUpdate, request: Request):
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    from services import category_registry
+    db = get_db(request)
+    try:
+        svc = await category_registry.update_service(db, slug, service_id, data.model_dump(exclude_unset=True))
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    if not svc:
+        raise HTTPException(status_code=404, detail="Service not found")
+    return {"success": True, "service": svc}
+
+
+@router.delete("/categories/{slug}/services/{service_id}")
+async def admin_delete_service(slug: str, service_id: str, request: Request):
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    from services import category_registry
+    db = get_db(request)
+    ok = await category_registry.delete_service(db, slug, service_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Service not found")
+    return {"success": True}

@@ -1,7 +1,6 @@
 """MemoraAI WhatsApp Template Approval Workflow API"""
 from fastapi import APIRouter, HTTPException, Request
 from middleware.auth import get_current_user
-from models.memoraai import CATEGORY_CONFIGS
 from datetime import datetime, timezone
 import uuid
 import logging

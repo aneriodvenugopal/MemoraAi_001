@@ -84,6 +84,13 @@ export default function SaaSAdminDashboard() {
             </h1>
             <p className="text-xs text-gray-500">MemoraAI Platform — manage all tenants</p>
           </div>
+          <button
+            onClick={() => navigate("/saas-admin/categories")}
+            className="flex items-center gap-1.5 bg-white border border-gray-200 hover:border-sky-300 text-sm font-semibold text-gray-700 px-3 py-2 rounded-xl whitespace-nowrap"
+            data-testid="manage-categories-btn"
+          >
+            <Building className="w-4 h-4 text-sky-600" /> Categories
+          </button>
         </div>
       </header>
 

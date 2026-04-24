@@ -45,6 +45,7 @@ const PAGES_WITH_OWN_HEADER = [
   '/customer-dashboard',
   '/admin/saas-dashboard',
   '/saas-admin',
+  '/saas-admin/categories',
   '/admin/incomelands',
   '/admin/chats',
   '/marketing-agent-dashboard',

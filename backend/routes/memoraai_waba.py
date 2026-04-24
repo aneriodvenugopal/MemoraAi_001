@@ -1,7 +1,8 @@
 """MemoraAI Self-Service WABA Setup Routes"""
 from fastapi import APIRouter, HTTPException, Request
 from middleware.auth import get_current_user
-from models.memoraai import WABAConfig, WABAConfigUpdate, CATEGORY_CONFIGS
+from models.memoraai import WABAConfig, WABAConfigUpdate
+from services import category_registry
 from utils.helpers import serialize_doc
 from datetime import datetime, timezone
 import logging
@@ -135,7 +136,10 @@ async def generate_templates(request: Request):
     tenant = await db.tenants.find_one({"id": tenant_id}, {"_id": 0})
 
     category_slug = tenant.get("business_category", "real_estate") if tenant else "real_estate"
-    cat_config = CATEGORY_CONFIGS.get(category_slug, CATEGORY_CONFIGS["real_estate"])
+    cat_config = await category_registry.get(db, category_slug)
+    if not cat_config:
+        # Fallback to real_estate if the tenant's category was never in the registry
+        cat_config = await category_registry.get(db, "real_estate") or {"name": category_slug}
     business_name = (config or {}).get("business_name") or (tenant or {}).get("company_name", "Business")
 
     services = await db.business_services.find(
