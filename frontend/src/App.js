@@ -222,6 +222,8 @@ import StaffMembers from "./pages/StaffMembers";
 import MemoraLogs from "./pages/MemoraLogs";
 import CategoriesAdmin from "./pages/CategoriesAdmin";
 import SaaSAdminImpersonationLogs from "./pages/SaaSAdminImpersonationLogs";
+import SaaSAdminAnalytics from "./pages/SaaSAdminAnalytics";
+import SaaSAdminSettings from "./pages/SaaSAdminSettings";
 import WithSidebar from "./layouts/WithSidebar";
 import ImpersonationBanner from "./components/ImpersonationBanner";
 import TeamInbox from "./pages/TeamInbox";
@@ -1248,6 +1250,22 @@ function App() {
                 element={
                   <PrivateRoute>
                     <SaaSAdminImpersonationLogs />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/saas-admin/analytics"
+                element={
+                  <PrivateRoute>
+                    <SaaSAdminAnalytics />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/saas-admin/settings"
+                element={
+                  <PrivateRoute>
+                    <SaaSAdminSettings />
                   </PrivateRoute>
                 }
               />

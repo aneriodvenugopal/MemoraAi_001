@@ -1,4 +1,5 @@
 """MemoraAI SaaS Admin Dashboard API"""
+import os
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from typing import Optional
@@ -795,3 +796,193 @@ async def admin_delete_service(slug: str, service_id: str, request: Request):
     if not ok:
         raise HTTPException(status_code=404, detail="Service not found")
     return {"success": True}
+
+
+# ═══════════════════════════════════════════════════════
+# ANALYTICS — aggregated platform-wide metrics
+# ═══════════════════════════════════════════════════════
+@router.get("/analytics")
+async def saas_analytics(request: Request):
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    db = get_db(request)
+
+    now = datetime.now(timezone.utc)
+    today = now.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+    week_ago = (now - timedelta(days=7)).isoformat()
+    month_ago = (now - timedelta(days=30)).isoformat()
+
+    # --- Tenant distribution by plan ---
+    plans = {}
+    async for t in db.tenants.find({}, {"_id": 0, "subscription_status": 1}):
+        key = t.get("subscription_status") or "trial"
+        plans[key] = plans.get(key, 0) + 1
+
+    # --- Tenant distribution by category ---
+    by_category = {}
+    async for t in db.tenants.find({}, {"_id": 0, "business_category_name": 1, "business_category": 1}):
+        key = t.get("business_category_name") or (t.get("business_category") or "Not Set")
+        by_category[key] = by_category.get(key, 0) + 1
+    category_dist = sorted(
+        [{"name": k, "count": v} for k, v in by_category.items()],
+        key=lambda x: x["count"], reverse=True
+    )[:15]
+
+    # --- Tenants by activity (top 10 by conversations this month) ---
+    pipeline = [
+        {"$match": {"created_at": {"$gte": month_ago}} if False else {}},
+        {"$group": {"_id": "$tenant_id", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 10},
+    ]
+    top_convs = []
+    async for row in db.whatsapp_conversations.aggregate(pipeline):
+        tid = row["_id"]
+        if not tid:
+            continue
+        t = await db.tenants.find_one({"id": tid}, {"_id": 0, "company_name": 1, "name": 1})
+        top_convs.append({
+            "tenant_id": tid,
+            "name": (t or {}).get("company_name") or (t or {}).get("name") or "Unknown",
+            "conversations": row["count"],
+        })
+
+    # --- Growth (tenants created per week, last 8 weeks) ---
+    growth = []
+    for w in range(8, 0, -1):
+        start = (now - timedelta(days=w * 7)).isoformat()
+        end = (now - timedelta(days=(w - 1) * 7)).isoformat()
+        c = await db.tenants.count_documents({"created_at": {"$gte": start, "$lt": end}})
+        growth.append({"label": f"W-{w - 1}" if w > 1 else "This week", "count": c})
+
+    # --- Activation funnel ---
+    total_tenants = await db.tenants.count_documents({})
+    with_waba = await db.waba_configs.count_documents({"is_active": True})
+    with_content = len(await db.memoraai_content.distinct("tenant_id"))
+    with_chats = len(await db.whatsapp_conversations.distinct("tenant_id"))
+    funnel = [
+        {"label": "Signed up", "count": total_tenants, "pct": 100},
+        {"label": "WABA connected", "count": with_waba, "pct": round((with_waba / max(1, total_tenants)) * 100)},
+        {"label": "Uploaded content", "count": with_content, "pct": round((with_content / max(1, total_tenants)) * 100)},
+        {"label": "Got first chat", "count": with_chats, "pct": round((with_chats / max(1, total_tenants)) * 100)},
+    ]
+
+    # --- Message volume (today / week / month) ---
+    msgs_today = await db.whatsapp_messages.count_documents({"timestamp": {"$gte": today}})
+    msgs_week = await db.whatsapp_messages.count_documents({"timestamp": {"$gte": week_ago}})
+    msgs_month = await db.whatsapp_messages.count_documents({"timestamp": {"$gte": month_ago}})
+
+    # --- Revenue proxy (plan price x count) ---
+    plan_price = {"trial": 0, "starter": 1500, "business": 5000, "premium": 9000}
+    mrr = sum(plans.get(p, 0) * price for p, price in plan_price.items())
+
+    return {
+        "generated_at": now.isoformat(),
+        "totals": {
+            "tenants": total_tenants,
+            "active_tenants": total_tenants - plans.get("paused", 0),
+            "waba_active": with_waba,
+            "msgs_today": msgs_today,
+            "msgs_week": msgs_week,
+            "msgs_month": msgs_month,
+            "estimated_mrr": mrr,
+        },
+        "plan_distribution": [
+            {"plan": k, "count": v, "price": plan_price.get(k, 0)} for k, v in plans.items()
+        ],
+        "category_distribution": category_dist,
+        "top_tenants": top_convs,
+        "growth": growth,
+        "activation_funnel": funnel,
+    }
+
+
+# ═══════════════════════════════════════════════════════
+# PLATFORM SETTINGS — single-doc configuration
+# ═══════════════════════════════════════════════════════
+_SETTINGS_ID = "platform-settings"
+
+
+async def _get_platform_settings(db):
+    """Return current settings doc, filling in defaults on first read."""
+    doc = await db.platform_settings.find_one({"id": _SETTINGS_ID}, {"_id": 0})
+    if not doc:
+        doc = {
+            "id": _SETTINGS_ID,
+            "platform_name": "MemoraAI",
+            "support_whatsapp": "+916309356590",
+            "support_email": "support@memoraai.in",
+            "marketing_tagline": "Own Business GPT on WhatsApp",
+            "default_trial_days": 14,
+            "plan_prices": {"trial": 0, "starter": 1500, "business": 5000, "premium": 9000},
+            "signups_open": True,
+            "impersonate_require_otp": True,
+            "ai_default_model": "gpt-4o-mini",
+            "sms_provider": "sms_login",
+            "webhook_callback_url": os.environ.get("FRONTEND_URL", "").rstrip("/") + "/api/whatsapp/webhook",
+            "webhook_verify_token": os.environ.get("META_WHATSAPP_VERIFY_TOKEN", ""),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }
+        await db.platform_settings.insert_one(doc)
+    return doc
+
+
+@router.get("/settings")
+async def get_settings(request: Request):
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    db = get_db(request)
+    doc = await _get_platform_settings(db)
+    # Hide id field from response
+    doc.pop("id", None)
+    # Expose integration statuses (masked)
+    env_status = {
+        "meta_whatsapp": bool(os.environ.get("META_WHATSAPP_ACCESS_TOKEN")),
+        "meta_whatsapp_mode": os.environ.get("META_WHATSAPP_MODE", "TEST"),
+        "gemini": bool(os.environ.get("GEMINI_API_KEY")),
+        "openai": bool(os.environ.get("OPENAI_API_KEY")),
+        "emergent_llm": bool(os.environ.get("EMERGENT_LLM_KEY")),
+        "razorpay": bool(os.environ.get("RAZORPAY_KEY_ID")),
+        "stripe": bool(os.environ.get("STRIPE_API_KEY")),
+        "payu": bool(os.environ.get("PAYU_CLIENT_ID")),
+        "msg91_sms": bool(os.environ.get("MSG91_AUTH_KEY")),
+        "sms_login": bool(os.environ.get("SMS_LOGIN_API_KEY")),
+        "resend_email": bool(os.environ.get("RESEND_API_KEY")),
+        "firebase": bool(os.environ.get("FIREBASE_CREDENTIALS")),
+        "heygen": bool(os.environ.get("HEYGEN_API_KEY")),
+        "google_auth": bool(os.environ.get("GOOGLE_CLIENT_ID")),
+    }
+    return {"settings": doc, "integrations": env_status}
+
+
+class PlatformSettingsUpdate(BaseModel):
+    platform_name: Optional[str] = None
+    support_whatsapp: Optional[str] = None
+    support_email: Optional[str] = None
+    marketing_tagline: Optional[str] = None
+    default_trial_days: Optional[int] = None
+    plan_prices: Optional[dict] = None
+    signups_open: Optional[bool] = None
+    impersonate_require_otp: Optional[bool] = None
+    ai_default_model: Optional[str] = None
+    sms_provider: Optional[str] = None
+    webhook_callback_url: Optional[str] = None
+    webhook_verify_token: Optional[str] = None
+
+
+@router.put("/settings")
+async def update_settings(data: PlatformSettingsUpdate, request: Request):
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+    db = get_db(request)
+    await _get_platform_settings(db)  # ensure exists
+
+    update = {k: v for k, v in data.model_dump(exclude_unset=True).items() if v is not None}
+    if not update:
+        return {"success": True, "message": "Nothing to update"}
+    update["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.platform_settings.update_one({"id": _SETTINGS_ID}, {"$set": update})
+    fresh = await db.platform_settings.find_one({"id": _SETTINGS_ID}, {"_id": 0})
+    fresh.pop("id", None)
+    return {"success": True, "settings": fresh}
