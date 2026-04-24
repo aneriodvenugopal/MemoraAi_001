@@ -160,12 +160,18 @@ async def extract_from_file(
     else:
         # Unknown binary — still try UTF-8 decode as last resort
         try:
-            extracted = raw.decode("utf-8", errors="ignore")[:50000]
-            # Strip if mostly unreadable (>30% control chars)
-            import string
-            printable = sum(1 for c in extracted if c in string.printable)
-            if printable < 0.7 * max(1, len(extracted)):
+            decoded = raw.decode("utf-8", errors="ignore")[:50000]
+            # Reject if binary (null bytes) or <70% readable printable chars (letters/digits/punctuation/space)
+            if "\x00" in decoded[:2000]:
                 extracted = ""
+            else:
+                import string
+                readable = set(string.ascii_letters + string.digits + string.punctuation + " \n\t")
+                printable = sum(1 for c in decoded if c in readable)
+                if printable < 0.7 * max(1, len(decoded)):
+                    extracted = ""
+                else:
+                    extracted = decoded
         except Exception:
             extracted = ""
 

@@ -22,14 +22,14 @@ export default function Automation() {
     try {
       const [rulesR, corrR] = await Promise.all([
         fetch(`${API}/memoraai/rules`, { headers }).then(r => r.ok ? r.json() : { rules: [] }),
-        fetch(`${API}/memoraai/corrections/summary`, { headers }).then(r => r.ok ? r.json() : null),
+        fetch(`${API}/memoraai/corrections/stats/summary`, { headers }).then(r => r.ok ? r.json() : null),
       ]);
       setRules(rulesR.rules || []);
       if (corrR) {
         setCorrStats({
           total: corrR.total || 0,
           active: corrR.active || 0,
-          times_applied: corrR.total_times_applied || 0,
+          times_applied: corrR.times_applied || corrR.total_times_applied || 0,
         });
       }
     } catch (e) { console.error(e); }
