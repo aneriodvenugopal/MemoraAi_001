@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Building, Users, MessageSquare, Brain, Calendar,
   Flame, CheckCircle2, XCircle, Globe, BarChart3, LogIn,
-  Search, ShieldCheck, TrendingUp, Zap, History
+  Search, ShieldCheck, TrendingUp, Zap, History, Plus, Edit3, Key
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import LoginAsBusinessModal from "../components/LoginAsBusinessModal";
+import OnboardBusinessWizard from "../components/OnboardBusinessWizard";
+import EditBusinessModal from "../components/EditBusinessModal";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -17,6 +19,11 @@ export default function SaaSAdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [loginAsTarget, setLoginAsTarget] = useState(null);
+  const [showOnboard, setShowOnboard] = useState(false);
+  const [editTarget, setEditTarget] = useState(null);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (type, msg) => { setToast({ type, msg }); setTimeout(() => setToast(null), 4000); };
 
   const token = localStorage.getItem("token");
   const headers = { Authorization: `Bearer ${token}` };
@@ -104,16 +111,25 @@ export default function SaaSAdminDashboard() {
             <h2 className="font-semibold text-gray-900 text-sm">
               Registered Businesses ({filteredTenants.length})
             </h2>
-            <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by name or category"
-                className="pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 w-full sm:w-64"
-                data-testid="tenant-search-input"
-              />
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search by name or category"
+                  className="pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 w-full sm:w-64"
+                  data-testid="tenant-search-input"
+                />
+              </div>
+              <button
+                onClick={() => setShowOnboard(true)}
+                className="flex items-center gap-1 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md shadow-sky-600/30 whitespace-nowrap"
+                data-testid="register-business-btn"
+              >
+                <Plus className="w-3.5 h-3.5" /> Register Business
+              </button>
             </div>
           </div>
 
@@ -133,7 +149,18 @@ export default function SaaSAdminDashboard() {
               </thead>
               <tbody>
                 {filteredTenants.length === 0 ? (
-                  <tr><td colSpan="7" className="px-4 py-8 text-center text-gray-400 text-sm">No businesses found.</td></tr>
+                  <tr><td colSpan="7" className="px-4 py-10 text-center">
+                    <div className="inline-flex flex-col items-center gap-2">
+                      <div className="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center">
+                        <Building className="w-7 h-7 text-sky-500" />
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900">No businesses yet</p>
+                      <p className="text-xs text-gray-500 max-w-sm">Start by registering your first business (e.g., your own agency). Takes ~60 seconds.</p>
+                      <button onClick={() => setShowOnboard(true)} className="mt-1 inline-flex items-center gap-1 bg-gradient-to-r from-sky-600 to-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg" data-testid="register-first-btn">
+                        <Plus className="w-3 h-3" /> Register Business
+                      </button>
+                    </div>
+                  </td></tr>
                 ) : filteredTenants.map(t => (
                   <tr key={t.id} className="border-t border-gray-50 hover:bg-sky-50/30" data-testid={`tenant-row-${t.id}`}>
                     <td className="px-4 py-2.5">
@@ -156,13 +183,23 @@ export default function SaaSAdminDashboard() {
                         : <XCircle className="w-4 h-4 text-gray-300 mx-auto" />}
                     </td>
                     <td className="px-4 py-2.5 text-right">
-                      <button
-                        onClick={() => setLoginAsTarget(t)}
-                        className="inline-flex items-center gap-1 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors"
-                        data-testid={`login-as-btn-${t.id}`}
-                      >
-                        <LogIn className="w-3 h-3" /> Login as
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => setEditTarget(t)}
+                          className="inline-flex items-center gap-1 bg-white border border-gray-200 hover:border-sky-300 text-gray-700 hover:text-sky-700 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors"
+                          data-testid={`edit-btn-${t.id}`}
+                          title="Edit business profile & WABA credentials"
+                        >
+                          <Edit3 className="w-3 h-3" /> Edit
+                        </button>
+                        <button
+                          onClick={() => setLoginAsTarget(t)}
+                          className="inline-flex items-center gap-1 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors"
+                          data-testid={`login-as-btn-${t.id}`}
+                        >
+                          <LogIn className="w-3 h-3" /> Login as
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -190,13 +227,22 @@ export default function SaaSAdminDashboard() {
                     {t.waba_active && <CheckCircle2 className="w-3 h-3 text-green-500" />}
                   </div>
                 </div>
-                <button
-                  onClick={() => setLoginAsTarget(t)}
-                  className="flex items-center gap-1 bg-sky-500 hover:bg-sky-600 text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-lg flex-shrink-0"
-                  data-testid={`login-as-btn-mobile-${t.id}`}
-                >
-                  <LogIn className="w-3 h-3" /> Login
-                </button>
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <button
+                    onClick={() => setEditTarget(t)}
+                    className="p-1.5 bg-white border border-gray-200 text-gray-500 hover:text-sky-700 rounded-lg"
+                    data-testid={`edit-btn-mobile-${t.id}`}
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => setLoginAsTarget(t)}
+                    className="flex items-center gap-1 bg-sky-500 hover:bg-sky-600 text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-lg"
+                    data-testid={`login-as-btn-mobile-${t.id}`}
+                  >
+                    <LogIn className="w-3 h-3" /> Login
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -233,6 +279,27 @@ export default function SaaSAdminDashboard() {
           onClose={() => setLoginAsTarget(null)}
           onSuccess={handleLoginAsSuccess}
         />
+      )}
+
+      {showOnboard && (
+        <OnboardBusinessWizard
+          onClose={() => setShowOnboard(false)}
+          onSuccess={() => { fetchData(); showToast('success', 'Business onboarded successfully'); }}
+        />
+      )}
+
+      {editTarget && (
+        <EditBusinessModal
+          tenant={editTarget}
+          onClose={() => setEditTarget(null)}
+          onSaved={() => { setEditTarget(null); fetchData(); showToast('success', 'Business updated'); }}
+        />
+      )}
+
+      {toast && (
+        <div className={`fixed top-20 left-1/2 -translate-x-1/2 z-[70] px-4 py-2.5 rounded-xl shadow-xl text-sm font-medium ${toast.type === 'success' ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'}`} data-testid={`toast-${toast.type}`}>
+          {toast.msg}
+        </div>
       )}
     </div>
   );
