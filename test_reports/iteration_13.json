@@ -1,0 +1,61 @@
+{
+  "summary": "Iteration 13 backend validation for MemoraAI new Staff Members page, Activity Logs feed, simplified CRM forms, and knowledge upload (PDF/DOCX). 13/14 backend tests pass after applying an in-place fix to the Staff POST route (was crashing with a 500 because it referenced a non-existent AuthService.hash_password).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "POST /api/memoraai/staff",
+        "issue": "Crashed with 500 AttributeError: type object 'AuthService' has no attribute 'hash_password'. Meant Add Staff was completely broken end-to-end. FIXED IN-PLACE by replacing with direct bcrypt.hashpw (same pattern used in routes/auth.py).",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "GET /api/memoraai/corrections/summary",
+        "issue": "Frontend Automation.js fetches '/api/memoraai/corrections/summary' but the actual backend route is '/api/memoraai/corrections/stats/summary'. The short path is swallowed by '/memoraai/corrections/{correction_id}' and returns 404 'Correction not found'. Consequence: the new 3-card stat row on /memoraai-automation (Active Rules / AI Corrections / Times AI Applied Learning) will show 0s for the two correction-based tiles.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "POST /api/memoraai/knowledge/extract",
+        "issue": "Unsupported-binary rejection is too lenient. The 0.7 printable-ratio check uses string.printable which includes control chars (\\t\\n\\r\\v\\f and all ASCII), so a file made of every byte 0..255 passes through and gets saved as a KB 'note' with the raw byte dump. A truly unsupported binary should return 422 with the friendly message. Suggested fix: use string.printable without whitespace/control (e.g. string.ascii_letters+string.digits+string.punctuation+' ') or check for null byte (\\x00) presence and reject."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "/memoraai-automation stat cards",
+        "issue": "Two of the three stat cards will read 0 because the frontend hits /memoraai/corrections/summary (404) instead of /memoraai/corrections/stats/summary.",
+        "affected_selectors": ["Automation.js line 25 — fetch(`${API}/memoraai/corrections/summary`)"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_memoraai_iter13.py",
+    "/app/test_reports/pytest/iteration13_results.xml"
+  ],
+  "action_items": [
+    "Fix Automation.js fetch URL: change `/memoraai/corrections/summary` to `/memoraai/corrections/stats/summary` (OR add an alias route in memoraai_corrections.py that reuses the same handler).",
+    "Tighten the unsupported-binary rejection in routes/memoraai_knowledge.py so raw .bin files without readable text return 422 instead of being stored as garbage 'notes' (check for null bytes or exclude whitespace/control chars from the printable ratio).",
+    "(Self-verify) Re-test tenant login in the browser and confirm /own-business-gpt shows only the BusinessAdminLayout header (my browser automation could not complete the login step, so the 'no-duplicate-header' claim has not been independently verified by me in the browser — backend smoke says login works, duplicate-header removal is a pure React routing concern).",
+    "(Optional) Handle .doc legacy format — current code routes .doc to _extract_docx_text which uses python-docx that only supports .docx. A .doc file will silently return empty then 422."
+  ],
+  "critical_code_review_comments": [
+    "memoraai_staff.py imported AuthService but the class has no hash_password method — this is a dead import that caused a runtime 500 on the primary CRUD endpoint. Tests would have caught this before merge.",
+    "memoraai_corrections.py purposely puts '/stats/summary' under the {correction_id} path to avoid collision, but the frontend was not updated to match. Consider adding a second route decorator @router.get('/summary') that aliases the same handler so the front-end URL shape stays stable.",
+    "memoraai_knowledge.py: the last-resort UTF-8 decode path stores decoded binary garbage as legitimate knowledge content — bad for RAG quality. Add a stricter text-heuristic or reject unknown extensions outright.",
+    "memoraai_staff.py: add_staff uses 'user.get(\"user_id\")' as created_by but the JWT payload uses 'id' in many other routes — worth normalizing so created_by is never null."
+  ],
+  "updated_files": [
+    "/app/backend/routes/memoraai_staff.py",
+    "/app/backend/tests/test_memoraai_iter13.py"
+  ],
+  "success_rate": {"backend": "93% (13/14)", "frontend": "not fully validated (login automation blocked)"},
+  "test_credentials": "Tenant admin phone=8888888888 password=admin123 (verified via /api/auth/login returning access_token with role=tenant_admin)",
+  "seed_data_creation": "Created and cleaned up one TEST_Staff_Iter13 user via API. Created TEST_Lead_Iter13 lead and TEST_Contact_Iter13 contact (not deleted — benign test data prefixed with TEST_).",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend test file is /app/backend/tests/test_memoraai_iter13.py — covers tenant login, staff CRUD, logs feed + kind filter, knowledge PDF/DOCX/binary extraction, simplified CRM lead+contact create, rules GET, corrections summary (uses correct /stats/summary path). 13/14 pass; the one failing (unsupported_binary) is a real backend UX bug, not a test error. Frontend UI (Staff Members page, Activity Logs feed, Automation stat cards) were not visually verified because the browser automation could not complete phone+password login (form submit didn't trigger navigation). The /api endpoints behind those pages are all green except the corrections/summary URL mismatch — main agent can self-verify the pages load by logging in manually.",
+  "rca of the issue": "1) Staff POST 500 — developer imported services.auth_service.AuthService expecting a hash_password staticmethod; that service only has password-reset helpers. Other routes (auth.py) use bcrypt directly. Replacing the call with `bcrypt.hashpw(pw.encode(), bcrypt.gensalt()).decode()` restored the endpoint. 2) Automation stat 404 — backend deliberately puts summary under /stats/summary to avoid clashing with /{correction_id}, but Automation.js was never updated from an earlier shorter URL. 3) Binary-upload save — string.printable's inclusion of whitespace/control chars lets a bytes(range(256)) payload exceed the 70% printable threshold."
+}

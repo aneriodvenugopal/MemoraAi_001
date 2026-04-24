@@ -49,6 +49,25 @@ const PAGES_WITH_OWN_HEADER = [
   '/marketing-agent-dashboard',
   '/project-manager-dashboard',
   '/projects/', // Project detail and layout editor pages have their own headers
+  // All tenant pages inside BusinessAdminLayout / WithSidebar have their own sidebar+header
+  '/own-business-gpt',
+  '/memoraai-leads',
+  '/memoraai-contacts',
+  '/memoraai-broadcast',
+  '/memoraai-automation',
+  '/memoraai-appointments',
+  '/memoraai-analytics',
+  '/memoraai-logs',
+  '/staff-members',
+  '/team-inbox',
+  '/waba-setup',
+  '/business-rules',
+  '/calendar-sync',
+  '/chat-corrections',
+  '/hot-sales-mode',
+  '/content-library',
+  '/templates',
+  '/settings',
 ];
 
 const AuthenticatedLayout = ({ children }) => {

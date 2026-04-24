@@ -217,6 +217,8 @@ import MemoraLeads from "./pages/MemoraLeads";
 import Contacts from "./pages/Contacts";
 import Broadcast from "./pages/Broadcast";
 import Automation from "./pages/Automation";
+import StaffMembers from "./pages/StaffMembers";
+import MemoraLogs from "./pages/MemoraLogs";
 import WithSidebar from "./layouts/WithSidebar";
 import ImpersonationBanner from "./components/ImpersonationBanner";
 import TeamInbox from "./pages/TeamInbox";
@@ -1210,6 +1212,22 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Automation />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/staff-members"
+                element={
+                  <PrivateRoute>
+                    <StaffMembers />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/memoraai-logs"
+                element={
+                  <PrivateRoute>
+                    <MemoraLogs />
                   </PrivateRoute>
                 }
               />

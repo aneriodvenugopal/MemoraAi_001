@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Brain, MessageSquare, Users, UserPlus, Megaphone, Workflow,
   Calendar, BarChart3, UserCog, Settings, Plug, Headphones,
-  ChevronRight, CheckCircle2, Menu, X, Server, Sparkles
+  ChevronRight, CheckCircle2, Menu, X, Server, Sparkles, ScrollText
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -34,9 +34,10 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
     { key: 'automation',     label: 'Automation',     icon: Workflow,     path: '/memoraai-automation', tag: 'New' },
     { key: 'bookings',       label: 'Bookings',       icon: Calendar,     path: '/memoraai-appointments' },
     { key: 'analytics',      label: 'Analytics',      icon: BarChart3,    path: '/memoraai-analytics' },
-    { key: 'team',           label: 'Team Members',   icon: UserCog,      path: '/settings/role-assignments' },
+    { key: 'team',           label: 'Staff Members',  icon: UserCog,      path: '/staff-members' },
     { key: 'settings',       label: 'Settings',       icon: Settings,     path: '/settings' },
     { key: 'integrations',   label: 'Integrations',   icon: Plug,         path: '/waba-setup' },
+    { key: 'logs',           label: 'Logs',           icon: ScrollText,   path: '/memoraai-logs' },
   ];
 
   const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
@@ -46,11 +47,11 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
       {/* Top brand */}
       <div className="px-5 pt-6 pb-5 border-b border-white/5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-500/30">
             <Brain className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-bold text-white text-lg leading-tight">Memora<span className="text-violet-400">AI</span></p>
+            <p className="font-bold text-white text-lg leading-tight">Memora<span className="text-sky-400">AI</span></p>
             <p className="text-[10px] text-gray-400 leading-tight tracking-wide">WhatsApp Automation</p>
           </div>
         </div>
@@ -59,7 +60,7 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
       {/* Business profile */}
       <div className="px-5 py-4 border-b border-white/5">
         <div className="bg-white/5 rounded-2xl p-3 flex items-center gap-3" data-testid="sidebar-business-profile">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-400 to-sky-500 flex items-center justify-center text-white font-bold shadow-md">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white font-bold shadow-md">
             {(user?.name || 'B')[0].toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
@@ -82,7 +83,7 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
               onClick={() => { navigate(item.path); setMobileOpen(false); }}
               className={`group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 active
-                  ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/30'
+                  ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-lg shadow-sky-600/30'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
               data-testid={`sidebar-${item.key}`}
@@ -90,7 +91,7 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
               <item.icon className={`w-[18px] h-[18px] ${active ? 'text-white' : 'text-gray-400 group-hover:text-white'}`} />
               <span className="flex-1 text-left">{item.label}</span>
               {item.badge > 0 && (
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-violet-500/30 text-violet-200'}`}>
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-sky-500/30 text-sky-200'}`}>
                   {item.badge}
                 </span>
               )}
@@ -107,7 +108,7 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
       <div className="p-3 border-t border-white/5">
         <button
           onClick={() => window.open('https://wa.me/916309356590?text=' + encodeURIComponent('Hi, I need help with MemoraAI.'), '_blank')}
-          className="w-full bg-gradient-to-br from-violet-600 to-indigo-700 hover:from-violet-500 hover:to-indigo-600 rounded-2xl p-4 text-left transition-all shadow-lg shadow-violet-600/30"
+          className="w-full bg-gradient-to-br from-sky-600 to-blue-700 hover:from-sky-500 hover:to-blue-600 rounded-2xl p-4 text-left transition-all shadow-lg shadow-sky-600/30"
           data-testid="sidebar-support-card"
         >
           <div className="flex items-center gap-3">
@@ -116,9 +117,9 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
             </div>
             <div className="flex-1">
               <p className="font-bold text-white text-sm">Need Help?</p>
-              <p className="text-[11px] text-violet-200">Chat with Support</p>
+              <p className="text-[11px] text-sky-200">Chat with Support</p>
             </div>
-            <ChevronRight className="w-4 h-4 text-violet-200" />
+            <ChevronRight className="w-4 h-4 text-sky-200" />
           </div>
         </button>
         <button onClick={logout} className="w-full mt-2 text-[11px] text-gray-500 hover:text-gray-300" data-testid="sidebar-logout">
@@ -136,7 +137,7 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
           <Menu className="w-5 h-5 text-gray-700" />
         </button>
         <div className="flex items-center gap-2">
-          <Brain className="w-5 h-5 text-violet-600" />
+          <Brain className="w-5 h-5 text-sky-600" />
           <span className="font-bold text-gray-900">MemoraAI</span>
         </div>
       </div>
@@ -170,7 +171,7 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
                 <div>
                   <div className="flex items-center gap-2">
                     <h1 className="text-2xl font-bold text-gray-900" data-testid="page-title">{pageTitle}</h1>
-                    <span className="text-xs bg-gradient-to-r from-violet-500 to-sky-500 text-white px-2 py-0.5 rounded-md font-semibold flex items-center gap-1">
+                    <span className="text-xs bg-gradient-to-r from-sky-500 to-blue-500 text-white px-2 py-0.5 rounded-md font-semibold flex items-center gap-1">
                       <Sparkles className="w-3 h-3" /> AI Brain
                     </span>
                   </div>
@@ -189,9 +190,9 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
           <footer className="border-t border-gray-200 bg-white px-5 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-gray-500" data-testid="footer">
             <span>© 2026 MemoraAI</span>
             <div className="flex gap-4">
-              <a href="/privacy-policy" className="hover:text-violet-600">Privacy</a>
-              <a href="/terms-conditions" className="hover:text-violet-600">Terms</a>
-              <a href="https://wa.me/916309356590" className="hover:text-violet-600">Support</a>
+              <a href="/privacy-policy" className="hover:text-sky-600">Privacy</a>
+              <a href="/terms-conditions" className="hover:text-sky-600">Terms</a>
+              <a href="https://wa.me/916309356590" className="hover:text-sky-600">Support</a>
             </div>
             <span className="flex items-center gap-1.5">
               <Server className="w-3 h-3" />

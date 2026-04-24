@@ -8,7 +8,6 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, EmailStr
 
 from middleware.auth import get_current_user
-from services.auth_service import AuthService
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/memoraai/staff", tags=["memoraai-staff"])
@@ -54,6 +53,8 @@ async def add_staff(data: StaffCreate, request: Request):
         raise HTTPException(status_code=400, detail="A user with this phone already exists")
 
     default_password = "memora@123"
+    import bcrypt
+    pw_hash = bcrypt.hashpw(default_password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
     doc = {
         "id": str(uuid.uuid4()),
         "name": data.name.strip(),
@@ -61,7 +62,7 @@ async def add_staff(data: StaffCreate, request: Request):
         "email": (data.email or "").strip(),
         "role": "tenant_staff",
         "tenant_id": tenant_id,
-        "password_hash": AuthService.hash_password(default_password),
+        "password_hash": pw_hash,
         "permissions": data.permissions or ["content", "leads", "contacts", "inbox"],
         "is_active": True,
         "created_at": datetime.now(timezone.utc).isoformat(),

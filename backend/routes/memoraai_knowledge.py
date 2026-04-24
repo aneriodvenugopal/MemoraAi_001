@@ -50,6 +50,28 @@ def _extract_pdf_text(file_bytes: bytes) -> str:
         return ""
 
 
+# ────────────── Word (.docx) text extraction ──────────────
+def _extract_docx_text(file_bytes: bytes) -> str:
+    try:
+        from docx import Document
+        doc = Document(io.BytesIO(file_bytes))
+        parts = []
+        for para in doc.paragraphs:
+            t = (para.text or "").strip()
+            if t:
+                parts.append(t)
+        # Include table text too
+        for table in doc.tables:
+            for row in table.rows:
+                cells = [c.text.strip() for c in row.cells if c.text.strip()]
+                if cells:
+                    parts.append(" | ".join(cells))
+        return "\n".join(parts)[:50000]
+    except Exception as e:
+        logger.warning(f"docx extract failed: {e}")
+        return ""
+
+
 # ────────────── Image OCR via Gemini vision ──────────────
 async def _extract_image_text(file_bytes: bytes, mime_type: str, filename: str) -> str:
     """Use Gemini vision (via Emergent LLM key) to extract all text + context from an image."""
@@ -121,20 +143,37 @@ async def extract_from_file(
         if not extracted.strip():
             # Likely scanned PDF — try OCR on first page image via Gemini directly on bytes
             extracted = await _extract_image_text(raw, "application/pdf", fname)
+    elif fname.lower().endswith((".docx", ".doc")) or mime in (
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/msword",
+    ):
+        kind = "document"
+        extracted = _extract_docx_text(raw)
     elif mime.startswith("image/"):
         kind = "image"
         extracted = await _extract_image_text(raw, mime, fname)
-    else:
-        # Plain text, CSV, Excel as text fallback
+    elif fname.lower().endswith((".txt", ".csv", ".md")) or mime.startswith("text/"):
         try:
             extracted = raw.decode("utf-8", errors="ignore")[:50000]
         except Exception:
             extracted = ""
+    else:
+        # Unknown binary — still try UTF-8 decode as last resort
+        try:
+            extracted = raw.decode("utf-8", errors="ignore")[:50000]
+            # Strip if mostly unreadable (>30% control chars)
+            import string
+            printable = sum(1 for c in extracted if c in string.printable)
+            if printable < 0.7 * max(1, len(extracted)):
+                extracted = ""
+        except Exception:
+            extracted = ""
 
     if not extracted.strip():
+        hint = "Try uploading a PDF, Word document, text file, or image."
         raise HTTPException(
             status_code=422,
-            detail="Could not extract any readable text from this file. Try another format or paste as text."
+            detail=f"Could not read any text from '{fname}'. {hint}"
         )
 
     # Best-effort file save (so we can link back to the original)

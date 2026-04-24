@@ -75,7 +75,7 @@ export default function Contacts() {
     <BusinessAdminLayout pageTitle="Contacts" pageSubtitle="Every customer — from manual entries, WhatsApp chats, and imports."
       headerRight={
         <button onClick={() => setShowForm(true)}
-          className="flex items-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-md shadow-violet-600/30"
+          className="flex items-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-md shadow-sky-600/30"
           data-testid="new-contact-btn">
           <Plus className="w-4 h-4" /> New Contact
         </button>
@@ -91,24 +91,24 @@ export default function Contacts() {
             <input
               value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search by name, phone, description..."
-              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
+              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
               data-testid="contacts-search" />
           </div>
-          <button onClick={() => navigate('/team-inbox')} className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-violet-600 bg-violet-50 hover:bg-violet-100 px-3 py-2 rounded-xl">
+          <button onClick={() => navigate('/team-inbox')} className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-sky-600 bg-sky-50 hover:bg-sky-100 px-3 py-2 rounded-xl">
             <MessageSquare className="w-4 h-4" /> Inbox
           </button>
         </div>
 
         {loading ? (
-          <div className="p-8 text-center"><Loader2 className="w-6 h-6 text-violet-500 animate-spin mx-auto" /></div>
+          <div className="p-8 text-center"><Loader2 className="w-6 h-6 text-sky-500 animate-spin mx-auto" /></div>
         ) : filtered.length === 0 ? (
           <div className="p-10 text-center" data-testid="contacts-empty">
-            <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-3">
-              <Users className="w-7 h-7 text-violet-500" />
+            <div className="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center mx-auto mb-3">
+              <Users className="w-7 h-7 text-sky-500" />
             </div>
             <h3 className="font-semibold text-gray-900">No contacts yet</h3>
             <p className="text-xs text-gray-500 max-w-sm mx-auto mt-1 mb-3">Add your first contact manually, or contacts will appear automatically from WhatsApp conversations.</p>
-            <button onClick={() => setShowForm(true)} className="inline-flex items-center gap-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold px-4 py-2 rounded-lg">
+            <button onClick={() => setShowForm(true)} className="inline-flex items-center gap-1 bg-gradient-to-r from-sky-600 to-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-lg">
               <Plus className="w-3 h-3" /> Add Contact
             </button>
           </div>
@@ -116,7 +116,7 @@ export default function Contacts() {
           <ul className="divide-y divide-gray-50" data-testid="contacts-list">
             {filtered.map((c, i) => (
               <li key={c.id || i} className="px-5 py-3 flex items-start gap-3 hover:bg-gray-50/50 group" data-testid={`contact-${c.id || i}`}>
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 text-white font-bold flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 text-white font-bold flex items-center justify-center flex-shrink-0">
                   {(c.name || '?')[0].toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -174,7 +174,7 @@ function ContactFormModal({ onClose, onSaved, headers }) {
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose} data-testid="contact-form-modal">
       <form onSubmit={submit} onClick={e => e.stopPropagation()} className="bg-white w-full max-w-xl rounded-2xl max-h-[92vh] overflow-y-auto shadow-2xl">
         <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between">
-          <h2 className="font-bold text-gray-900 flex items-center gap-2"><Users className="w-5 h-5 text-violet-600" /> Add New Contact</h2>
+          <h2 className="font-bold text-gray-900 flex items-center gap-2"><Users className="w-5 h-5 text-sky-600" /> Add New Contact</h2>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-700" data-testid="close-contact-form"><X className="w-5 h-5" /></button>
         </div>
 
@@ -184,23 +184,21 @@ function ContactFormModal({ onClose, onSaved, headers }) {
             <Field label="Phone / WhatsApp *"><input required value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="10-digit mobile" className="input-base" data-testid="contact-phone" /></Field>
           </div>
 
-          {/* Big description — the hero field */}
-          <Field label="Everything about this contact">
+          {/* Description */}
+          <Field label="Notes (optional)">
             <textarea
               value={form.description}
               onChange={e => setForm({ ...form, description: e.target.value })}
-              rows="8"
-              placeholder="Write everything — their preferences, past purchases, important dates (anniversary, birthday), family members, favourite service, language, communication preference. The more you write, the smarter your AI replies to them."
-              className="input-base font-mono"
-              style={{ minHeight: '200px' }}
+              rows="4"
+              placeholder="Any preferences, important dates, past purchases..."
+              className="input-base"
               data-testid="contact-description"
             />
-            <p className="text-[10px] text-gray-400 mt-1">{form.description.length} characters</p>
           </Field>
 
           {/* Optional more */}
           <details className="group">
-            <summary className="text-xs font-semibold text-violet-600 cursor-pointer hover:text-violet-700 list-none flex items-center gap-1">
+            <summary className="text-xs font-semibold text-sky-600 cursor-pointer hover:text-sky-700 list-none flex items-center gap-1">
               <span className="group-open:rotate-90 transition-transform inline-block">▸</span>
               More fields (optional)
             </summary>
@@ -218,11 +216,11 @@ function ContactFormModal({ onClose, onSaved, headers }) {
         <div className="sticky bottom-0 bg-white border-t border-gray-100 px-5 py-3 flex gap-2">
           <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Cancel</button>
           <button type="submit" disabled={saving || !form.name.trim() || !form.phone.trim()}
-            className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white py-2.5 rounded-lg text-sm font-semibold disabled:opacity-50" data-testid="save-contact-btn">
+            className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white py-2.5 rounded-lg text-sm font-semibold disabled:opacity-50" data-testid="save-contact-btn">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Save Contact
           </button>
         </div>
-        <style>{`.input-base { width: 100%; padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; background: white; } .input-base:focus { outline: none; border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1); }`}</style>
+        <style>{`.input-base { width: 100%; padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; background: white; } .input-base:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15); }`}</style>
       </form>
     </div>
   );

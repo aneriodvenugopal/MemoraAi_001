@@ -8,7 +8,7 @@ import BusinessAdminLayout from '../layouts/BusinessAdminLayout';
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const STATUS_BADGES = {
-  new:        { bg: 'bg-violet-100',   text: 'text-violet-700',  label: 'New' },
+  new:        { bg: 'bg-sky-100',   text: 'text-sky-700',  label: 'New' },
   contacted:  { bg: 'bg-blue-100',     text: 'text-blue-700',    label: 'Contacted' },
   qualified:  { bg: 'bg-emerald-100',  text: 'text-emerald-700', label: 'Qualified' },
   closed:     { bg: 'bg-gray-100',     text: 'text-gray-600',    label: 'Closed' },
@@ -106,7 +106,7 @@ export default function MemoraLeads() {
     <BusinessAdminLayout pageTitle="Leads" pageSubtitle="Interested customers from every source — website, WhatsApp, walk-ins, ads."
       headerRight={
         <button onClick={() => setShowForm(true)}
-          className="flex items-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-md shadow-violet-600/30"
+          className="flex items-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-md shadow-sky-600/30"
           data-testid="new-lead-btn">
           <Plus className="w-4 h-4" /> New Lead
         </button>
@@ -118,7 +118,7 @@ export default function MemoraLeads() {
       )}
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" data-testid="leads-stats">
-        <StatCard label="Total Leads" value={stats.total} color="violet" icon={UserPlus} />
+        <StatCard label="Total Leads" value={stats.total} color="sky" icon={UserPlus} />
         <StatCard label="New" value={stats.new} color="blue" icon={Clock} />
         <StatCard label="Contacted" value={stats.contacted} color="sky" icon={Phone} />
         <StatCard label="Qualified" value={stats.qualified} color="emerald" icon={TrendingUp} />
@@ -131,14 +131,14 @@ export default function MemoraLeads() {
             <input
               value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search by name, phone, description..."
-              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
+              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
               data-testid="leads-search"
             />
           </div>
           <div className="flex gap-2 overflow-x-auto">
             {['', 'new', 'contacted', 'qualified', 'closed'].map(s => (
               <button key={s || 'all'} onClick={() => setStatusFilter(s)}
-                className={`whitespace-nowrap text-xs font-medium px-3 py-2 rounded-lg transition-colors ${statusFilter === s ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                className={`whitespace-nowrap text-xs font-medium px-3 py-2 rounded-lg transition-colors ${statusFilter === s ? 'bg-sky-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
                 {s ? STATUS_BADGES[s]?.label : 'All'}
               </button>
             ))}
@@ -146,15 +146,15 @@ export default function MemoraLeads() {
         </div>
 
         {loading ? (
-          <div className="p-8 text-center"><Loader2 className="w-6 h-6 text-violet-500 animate-spin mx-auto" /></div>
+          <div className="p-8 text-center"><Loader2 className="w-6 h-6 text-sky-500 animate-spin mx-auto" /></div>
         ) : filtered.length === 0 ? (
           <div className="p-10 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-3">
-              <UserPlus className="w-7 h-7 text-violet-500" />
+            <div className="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center mx-auto mb-3">
+              <UserPlus className="w-7 h-7 text-sky-500" />
             </div>
             <h3 className="font-semibold text-gray-900">No leads yet</h3>
             <p className="text-xs text-gray-500 max-w-sm mx-auto mt-1 mb-3">Add your first lead manually, or leads from your website demo form will appear here instantly.</p>
-            <button onClick={() => setShowForm(true)} className="inline-flex items-center gap-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold px-4 py-2 rounded-lg">
+            <button onClick={() => setShowForm(true)} className="inline-flex items-center gap-1 bg-gradient-to-r from-sky-600 to-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-lg">
               <Plus className="w-3 h-3" /> Add Lead
             </button>
           </div>
@@ -165,7 +165,7 @@ export default function MemoraLeads() {
               const sourceLabel = SOURCES.find(s => s.key === l.source)?.label || l.source || 'Unknown';
               return (
                 <div key={l.id} className="px-5 py-3 flex items-start gap-3 hover:bg-gray-50/50 group" data-testid={`lead-row-${l.id}`}>
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-400 to-indigo-500 text-white font-bold flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 text-white font-bold flex items-center justify-center flex-shrink-0">
                     {(l.name || '?')[0].toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -226,7 +226,7 @@ function LeadFormModal({ onClose, onSaved, headers }) {
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose} data-testid="lead-form-modal">
       <form onSubmit={submit} onClick={e => e.stopPropagation()} className="bg-white w-full max-w-xl rounded-2xl max-h-[92vh] overflow-y-auto shadow-2xl">
         <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between">
-          <h2 className="font-bold text-gray-900 flex items-center gap-2"><UserPlus className="w-5 h-5 text-violet-600" /> Add New Lead</h2>
+          <h2 className="font-bold text-gray-900 flex items-center gap-2"><UserPlus className="w-5 h-5 text-sky-600" /> Add New Lead</h2>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-700" data-testid="close-lead-form"><X className="w-5 h-5" /></button>
         </div>
 
@@ -244,22 +244,20 @@ function LeadFormModal({ onClose, onSaved, headers }) {
           </Field>
 
           {/* Big description — the main field */}
-          <Field label="Everything about this lead">
+          <Field label="Notes about this lead">
             <textarea
               value={form.description}
               onChange={e => setForm({ ...form, description: e.target.value })}
-              rows="8"
-              placeholder="Write everything — what they need, budget, timeline, language, how they heard about you, any concerns, decision makers, follow-up notes. The more you write, the smarter your AI follow-ups."
-              className="input-base font-mono"
-              style={{ minHeight: '200px' }}
+              rows="4"
+              placeholder="What do they need? Budget, timeline, language, concerns..."
+              className="input-base"
               data-testid="lead-description"
             />
-            <p className="text-[10px] text-gray-400 mt-1">{form.description.length} characters</p>
           </Field>
 
           {/* Collapsible more fields */}
           <details className="group">
-            <summary className="text-xs font-semibold text-violet-600 cursor-pointer hover:text-violet-700 list-none flex items-center gap-1">
+            <summary className="text-xs font-semibold text-sky-600 cursor-pointer hover:text-sky-700 list-none flex items-center gap-1">
               <span className="group-open:rotate-90 transition-transform inline-block">▸</span>
               More fields (optional)
             </summary>
@@ -273,11 +271,11 @@ function LeadFormModal({ onClose, onSaved, headers }) {
         <div className="sticky bottom-0 bg-white border-t border-gray-100 px-5 py-3 flex gap-2">
           <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Cancel</button>
           <button type="submit" disabled={saving || !form.name.trim() || !form.phone.trim()}
-            className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white py-2.5 rounded-lg text-sm font-semibold disabled:opacity-50" data-testid="save-lead-btn">
+            className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white py-2.5 rounded-lg text-sm font-semibold disabled:opacity-50" data-testid="save-lead-btn">
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Save Lead
           </button>
         </div>
-        <style>{`.input-base { width: 100%; padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; background: white; } .input-base:focus { outline: none; border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1); }`}</style>
+        <style>{`.input-base { width: 100%; padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; background: white; } .input-base:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15); }`}</style>
       </form>
     </div>
   );
@@ -294,7 +292,7 @@ function Field({ label, children }) {
 
 function StatCard({ label, value, color, icon: Icon }) {
   const cls = {
-    violet: 'bg-violet-50 text-violet-600',
+    sky: 'bg-sky-50 text-sky-600',
     blue: 'bg-blue-50 text-blue-600',
     sky: 'bg-sky-50 text-sky-600',
     emerald: 'bg-emerald-50 text-emerald-600',

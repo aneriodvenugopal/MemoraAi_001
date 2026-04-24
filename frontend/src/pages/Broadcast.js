@@ -33,22 +33,22 @@ export default function Broadcast() {
       pageSubtitle="Send approved WhatsApp templates to segments of your customers — in one tap."
       headerRight={
         <button onClick={() => navigate('/memoraai-templates')}
-          className="flex items-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-md shadow-violet-600/30 hover:from-violet-700 hover:to-indigo-700">
+          className="flex items-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-md shadow-sky-600/30 hover:from-sky-700 hover:to-blue-700">
           <Plus className="w-4 h-4" /> New Template
         </button>
       }
     >
       {/* Coming soon / Campaign section */}
-      <section className="bg-gradient-to-br from-violet-50 via-indigo-50 to-white border border-violet-200/50 rounded-3xl p-6 mb-6 relative overflow-hidden" data-testid="broadcast-hero">
-        <div className="absolute -top-8 -right-8 w-40 h-40 bg-violet-300/20 rounded-full blur-3xl" />
+      <section className="bg-gradient-to-br from-sky-50 via-blue-50 to-white border border-sky-200/50 rounded-3xl p-6 mb-6 relative overflow-hidden" data-testid="broadcast-hero">
+        <div className="absolute -top-8 -right-8 w-40 h-40 bg-sky-300/20 rounded-full blur-3xl" />
         <div className="flex items-start gap-4 relative">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/30 flex-shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-500/30 flex-shrink-0">
             <Megaphone className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-bold text-gray-900">Broadcast Campaigns</h2>
-              <span className="text-[10px] bg-gradient-to-r from-violet-500 to-sky-500 text-white font-bold px-2 py-0.5 rounded-full uppercase">Coming Soon</span>
+              <span className="text-[10px] bg-gradient-to-r from-sky-500 to-sky-500 text-white font-bold px-2 py-0.5 rounded-full uppercase">Coming Soon</span>
             </div>
             <p className="text-sm text-gray-600 mt-1 max-w-2xl">
               Send approved WhatsApp templates to 10 or 10,000 customers at once — segmented by industry, interest, or last visit.
@@ -65,20 +65,20 @@ export default function Broadcast() {
             <h3 className="font-bold text-gray-900">Approved Templates</h3>
             <p className="text-xs text-gray-500">Pre-approved WhatsApp templates ready to send</p>
           </div>
-          <span className="text-[10px] bg-violet-100 text-violet-700 font-semibold px-2 py-0.5 rounded-full">{templates.length} items</span>
+          <span className="text-[10px] bg-sky-100 text-sky-700 font-semibold px-2 py-0.5 rounded-full">{templates.length} items</span>
         </div>
 
         {loading ? (
-          <div className="p-8 text-center"><Loader2 className="w-6 h-6 text-violet-500 animate-spin mx-auto" /></div>
+          <div className="p-8 text-center"><Loader2 className="w-6 h-6 text-sky-500 animate-spin mx-auto" /></div>
         ) : templates.length === 0 ? (
           <div className="p-10 text-center" data-testid="broadcast-empty">
-            <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-3">
-              <FileText className="w-7 h-7 text-violet-500" />
+            <div className="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center mx-auto mb-3">
+              <FileText className="w-7 h-7 text-sky-500" />
             </div>
             <h3 className="font-semibold text-gray-900">No templates yet</h3>
             <p className="text-xs text-gray-500 max-w-sm mx-auto mt-1 mb-4">Create your first WhatsApp template — appointment reminder, offer blast, or follow-up.</p>
             <button onClick={() => navigate('/memoraai-templates')}
-              className="inline-flex items-center gap-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold px-4 py-2 rounded-lg">
+              className="inline-flex items-center gap-1 bg-gradient-to-r from-sky-600 to-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-lg">
               Create Template <ArrowRight className="w-3 h-3" />
             </button>
           </div>
@@ -86,8 +86,8 @@ export default function Broadcast() {
           <div className="divide-y divide-gray-50">
             {templates.map(t => (
               <div key={t.id} className="px-5 py-3 flex items-center gap-3 hover:bg-gray-50/50" data-testid={`template-${t.id}`}>
-                <div className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
-                  <FileText className="w-5 h-5 text-violet-600" />
+                <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center flex-shrink-0">
+                  <FileText className="w-5 h-5 text-sky-600" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 text-sm truncate">{t.name || t.title || 'Untitled'}</p>

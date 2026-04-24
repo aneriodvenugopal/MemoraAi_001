@@ -13,8 +13,8 @@ import { useAuth } from '../contexts/AuthContext';
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const TYPE_META = {
-  note:       { icon: StickyNote,      color: 'violet',  label: 'Notes' },
-  text:       { icon: FileText,        color: 'violet',  label: 'Text' },
+  note:       { icon: StickyNote,      color: 'sky',  label: 'Notes' },
+  text:       { icon: FileText,        color: 'sky',  label: 'Text' },
   document:   { icon: FileText,        color: 'blue',    label: 'Document' },
   brochure:   { icon: FileText,        color: 'blue',    label: 'PDF' },
   pdf:        { icon: FileText,        color: 'red',     label: 'PDF' },
@@ -24,21 +24,20 @@ const TYPE_META = {
   link:       { icon: Link2,           color: 'sky',     label: 'Link' },
   faq:        { icon: HelpCircle,      color: 'orange',  label: 'FAQ' },
   price_list: { icon: FileSpreadsheet, color: 'emerald', label: 'Price List' },
-  template:   { icon: FileText,        color: 'indigo',  label: 'Template' },
-  service:    { icon: Briefcase,       color: 'indigo',  label: 'Service' },
+  template:   { icon: FileText,        color: 'blue',  label: 'Template' },
+  service:    { icon: Briefcase,       color: 'blue',  label: 'Service' },
   address:    { icon: MapPin,          color: 'red',     label: 'Address' },
 };
 
 const COLOR_CLASSES = {
-  violet: 'bg-violet-50 text-violet-600',
-  blue: 'bg-blue-50 text-blue-600',
   sky: 'bg-sky-50 text-sky-600',
+  blue: 'bg-blue-50 text-blue-600',
   green: 'bg-green-50 text-green-600',
   red: 'bg-red-50 text-red-600',
   orange: 'bg-orange-50 text-orange-600',
   emerald: 'bg-emerald-50 text-emerald-600',
-  indigo: 'bg-indigo-50 text-indigo-600',
   rose: 'bg-rose-50 text-rose-600',
+  purple: 'bg-purple-50 text-purple-600',
 };
 
 const PLUS_MENU = [
@@ -50,8 +49,8 @@ const PLUS_MENU = [
   { key: 'link',    label: 'Add Website Link',        icon: Link2,           color: 'blue' },
   { key: 'faq',     label: 'Add FAQ',                 icon: HelpCircle,      color: 'orange' },
   { key: 'price',   label: 'Add Price List',          icon: FileSpreadsheet, color: 'emerald', accept: '.xlsx,.xls,.csv' },
-  { key: 'note',    label: 'Add Notes',               icon: StickyNote,      color: 'violet' },
-  { key: 'service', label: 'Add Services',            icon: Briefcase,       color: 'indigo' },
+  { key: 'note',    label: 'Add Notes',               icon: StickyNote,      color: 'sky' },
+  { key: 'service', label: 'Add Services',            icon: Briefcase,       color: 'blue' },
   { key: 'address', label: 'Add Address',             icon: MapPin,          color: 'red' },
 ];
 
@@ -253,22 +252,13 @@ export default function OwnBusinessGPT() {
       pageSubtitle="Add your business content in any format. AI learns and replies like your expert."
       headerRight={
         <>
-          <button className="flex items-center gap-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:border-violet-300 px-3 py-2 rounded-xl transition-colors" data-testid="how-it-works-btn">
-            <PlayCircle className="w-4 h-4 text-violet-600" /> How it works
+          <button className="flex items-center gap-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:border-sky-300 px-3 py-2 rounded-xl transition-colors" data-testid="how-it-works-btn">
+            <PlayCircle className="w-4 h-4 text-sky-600" /> How it works
           </button>
-          <button className="relative p-2 text-gray-500 hover:text-violet-600 transition-colors" data-testid="notifications-btn">
+          <button className="relative p-2 text-gray-500 hover:text-sky-600 transition-colors" data-testid="notifications-btn">
             <Bell className="w-5 h-5" />
             <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full" />
           </button>
-          <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 px-2.5 py-1.5 rounded-xl">
-            <div className="w-7 h-7 rounded-full bg-violet-600 text-white flex items-center justify-center font-semibold text-xs">
-              {(user?.name || 'O')[0].toUpperCase()}
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-xs font-semibold text-gray-900 leading-tight">{user?.name || 'Owner'}</p>
-              <p className="text-[10px] text-gray-500 leading-tight">Owner</p>
-            </div>
-          </div>
         </>
       }
     >
@@ -295,7 +285,7 @@ export default function OwnBusinessGPT() {
           {/* Trainer Box */}
           <section className="bg-white rounded-3xl border border-gray-200/70 p-5 lg:p-6 shadow-sm" data-testid="trainer-box">
             <div className="flex items-start gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-md shadow-violet-500/30">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center shadow-md shadow-sky-500/30">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
@@ -305,7 +295,7 @@ export default function OwnBusinessGPT() {
             </div>
 
             {/* Input box */}
-            <div className="relative border-2 border-gray-200 hover:border-violet-300 focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100 transition-all rounded-2xl p-3">
+            <div className="relative border-2 border-gray-200 hover:border-sky-300 focus-within:border-sky-500 focus-within:ring-4 focus-within:ring-sky-100 transition-all rounded-2xl p-3">
               <textarea
                 value={text} onChange={e => setText(e.target.value)}
                 placeholder="Type your content here... (e.g., 'Our clinic is open 10am–8pm. Dr. Priya handles skin issues. Fees: ₹500.')"
@@ -317,7 +307,7 @@ export default function OwnBusinessGPT() {
                 <div className="relative">
                   <button
                     onClick={() => setPlusOpen(v => !v)}
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${plusOpen ? 'bg-violet-600 text-white rotate-45' : 'bg-gray-100 hover:bg-violet-50 text-gray-600 hover:text-violet-600'}`}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${plusOpen ? 'bg-sky-600 text-white rotate-45' : 'bg-gray-100 hover:bg-sky-50 text-gray-600 hover:text-sky-600'}`}
                     data-testid="plus-menu-btn"
                   >
                     <Plus className="w-5 h-5" />
@@ -348,13 +338,13 @@ export default function OwnBusinessGPT() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-violet-50 text-gray-500 hover:text-violet-600 flex items-center justify-center transition-all" data-testid="mic-btn" title="Record voice">
+                  <button className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-sky-50 text-gray-500 hover:text-sky-600 flex items-center justify-center transition-all" data-testid="mic-btn" title="Record voice">
                     <Mic className="w-4 h-4" />
                   </button>
                   <button
                     onClick={trainText}
                     disabled={!text.trim() || saving}
-                    className="flex items-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg shadow-violet-600/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    className="flex items-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg shadow-sky-600/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                     data-testid="train-btn"
                   >
                     {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
@@ -366,15 +356,15 @@ export default function OwnBusinessGPT() {
 
             {/* Upload progress */}
             {uploading && (
-              <div className="mt-3 bg-violet-50 border border-violet-200 rounded-xl p-3 flex items-center gap-3" data-testid="upload-progress">
-                <Loader2 className="w-4 h-4 text-violet-600 animate-spin flex-shrink-0" />
+              <div className="mt-3 bg-sky-50 border border-sky-200 rounded-xl p-3 flex items-center gap-3" data-testid="upload-progress">
+                <Loader2 className="w-4 h-4 text-sky-600 animate-spin flex-shrink-0" />
                 <div className="flex-1">
-                  <p className="text-xs font-medium text-violet-900">Uploading & teaching AI...</p>
-                  <div className="w-full bg-violet-100 rounded-full h-1.5 mt-1 overflow-hidden">
-                    <div className="bg-gradient-to-r from-violet-500 to-indigo-500 h-1.5 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
+                  <p className="text-xs font-medium text-sky-900">Uploading & teaching AI...</p>
+                  <div className="w-full bg-sky-100 rounded-full h-1.5 mt-1 overflow-hidden">
+                    <div className="bg-gradient-to-r from-sky-500 to-blue-500 h-1.5 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
                   </div>
                 </div>
-                <span className="text-xs font-semibold text-violet-700">{uploadProgress}%</span>
+                <span className="text-xs font-semibold text-sky-700">{uploadProgress}%</span>
               </div>
             )}
           </section>
@@ -385,7 +375,7 @@ export default function OwnBusinessGPT() {
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h2 className="font-bold text-gray-900 text-lg">Your Knowledge Base</h2>
-                  <span className="text-[10px] bg-violet-100 text-violet-700 font-semibold px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] bg-sky-100 text-sky-700 font-semibold px-2 py-0.5 rounded-full">
                     {summary?.total ?? 0} Items
                   </span>
                 </div>
@@ -397,11 +387,11 @@ export default function OwnBusinessGPT() {
                   <input
                     type="text" value={search} onChange={e => setSearch(e.target.value)}
                     placeholder="Search content..."
-                    className="pl-8 pr-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-violet-400 w-full sm:w-56"
+                    className="pl-8 pr-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-400 w-full sm:w-56"
                     data-testid="kb-search"
                   />
                 </div>
-                <button className="p-2 border border-gray-200 rounded-xl text-gray-500 hover:border-violet-300 hover:text-violet-600 transition-colors" data-testid="kb-filter">
+                <button className="p-2 border border-gray-200 rounded-xl text-gray-500 hover:border-sky-300 hover:text-sky-600 transition-colors" data-testid="kb-filter">
                   <SlidersHorizontal className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -419,8 +409,8 @@ export default function OwnBusinessGPT() {
               </div>
             ) : filtered.length === 0 ? (
               <div className="p-10 text-center" data-testid="kb-empty">
-                <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-3">
-                  <Sparkles className="w-7 h-7 text-violet-500" />
+                <div className="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center mx-auto mb-3">
+                  <Sparkles className="w-7 h-7 text-sky-500" />
                 </div>
                 <h3 className="font-semibold text-gray-900">Train your AI — your team of one</h3>
                 <p className="text-xs text-gray-500 max-w-sm mx-auto mt-1">Type a paragraph about your services, upload a brochure, or add an FAQ above. The AI will start using it in WhatsApp replies instantly.</p>
@@ -460,7 +450,7 @@ export default function OwnBusinessGPT() {
 
             {filtered.length > 0 && (
               <div className="px-5 lg:px-6 py-3 border-t border-gray-50 text-center">
-                <button onClick={() => navigate('/content-library')} className="text-xs font-semibold text-violet-600 hover:text-violet-700 inline-flex items-center gap-1" data-testid="view-all-content">
+                <button onClick={() => navigate('/content-library')} className="text-xs font-semibold text-sky-600 hover:text-sky-700 inline-flex items-center gap-1" data-testid="view-all-content">
                   View All Content <ChevronRight className="w-3 h-3" />
                 </button>
               </div>
@@ -469,7 +459,7 @@ export default function OwnBusinessGPT() {
 
           {/* Stats row */}
           <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4" data-testid="stats-row">
-            <StatCard label="Total Content" value={summary?.total ?? 0} suffix="Items" sub={`+${summary?.this_week ?? 0} this week`} color="violet" icon={FileText} />
+            <StatCard label="Total Content" value={summary?.total ?? 0} suffix="Items" sub={`+${summary?.this_week ?? 0} this week`} color="sky" icon={FileText} />
             <StatCard label="AI Accuracy" value="92" suffix="%" sub="Improving daily" color="sky" icon={TrendingUp} />
             <StatCard label="Questions Answered" value="1,248" sub="This month" color="emerald" icon={CheckCircle2} />
             <StatCard label="Happy Customers" value="98" suffix="%" sub="Satisfaction" color="orange" icon={Users} />
@@ -540,7 +530,7 @@ export default function OwnBusinessGPT() {
           <div className="bg-white rounded-3xl border border-gray-200/70 p-5 shadow-sm" data-testid="ai-behavior-card">
             <div className="flex items-center justify-between mb-3">
               <p className="font-bold text-gray-900 text-sm">AI Behavior Settings</p>
-              <button onClick={() => navigate('/business-rules')} className="text-xs font-semibold text-violet-600 hover:text-violet-700" data-testid="edit-behavior">Edit</button>
+              <button onClick={() => navigate('/business-rules')} className="text-xs font-semibold text-sky-600 hover:text-sky-700" data-testid="edit-behavior">Edit</button>
             </div>
             <dl className="space-y-2.5 text-xs">
               <Row label="Tone" value="Friendly & Professional" />
@@ -574,7 +564,7 @@ function Row({ label, value }) {
   );
 }
 
-function StatCard({ label, value, suffix, sub, color = 'violet', icon: Icon }) {
+function StatCard({ label, value, suffix, sub, color = 'sky', icon: Icon }) {
   const cls = COLOR_CLASSES[color];
   return (
     <div className="bg-white rounded-2xl border border-gray-200/70 p-4 shadow-sm" data-testid={`stat-${label.toLowerCase().replace(/\s+/g, '-')}`}>
@@ -599,11 +589,11 @@ function FAQModal({ onClose, onSave, saving }) {
     <ModalShell title="Add FAQ" icon={HelpCircle} color="orange" onClose={onClose}>
       <label className="block mb-3">
         <span className="text-[11px] font-semibold text-gray-600 mb-1 block">Question</span>
-        <input value={q} onChange={e => setQ(e.target.value)} required placeholder="E.g., What are your consultation fees?" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-400" data-testid="faq-question" />
+        <input value={q} onChange={e => setQ(e.target.value)} required placeholder="E.g., What are your consultation fees?" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" data-testid="faq-question" />
       </label>
       <label className="block mb-4">
         <span className="text-[11px] font-semibold text-gray-600 mb-1 block">Answer</span>
-        <textarea value={a} onChange={e => setA(e.target.value)} required rows={4} placeholder="E.g., General consultation is ₹500. Follow-up within 7 days is free." className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-400" data-testid="faq-answer" />
+        <textarea value={a} onChange={e => setA(e.target.value)} required rows={4} placeholder="E.g., General consultation is ₹500. Follow-up within 7 days is free." className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-400" data-testid="faq-answer" />
       </label>
       <ModalActions onClose={onClose} onSave={() => onSave(q, a)} saving={saving} disabled={!q.trim() || !a.trim()} />
     </ModalShell>
@@ -630,7 +620,7 @@ function LinkModal({ onClose, onSave, saving, title = 'Add Website Link' }) {
 function NoteModal({ onClose, onSave, saving, title = 'Add Notes', placeholder = 'Write long-form notes about your business — SOPs, policies, anything your staff would tell a customer…' }) {
   const [t, setT] = useState(''); const [text, setText] = useState('');
   return (
-    <ModalShell title={title} icon={StickyNote} color="violet" onClose={onClose}>
+    <ModalShell title={title} icon={StickyNote} color="sky" onClose={onClose}>
       <label className="block mb-3">
         <span className="text-[11px] font-semibold text-gray-600 mb-1 block">Title</span>
         <input value={t} onChange={e => setT(e.target.value)} required placeholder="E.g., Return policy" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" data-testid="note-title" />
@@ -660,7 +650,7 @@ function VoiceModal({ onClose }) {
   );
 }
 
-function ModalShell({ title, icon: Icon, color = 'violet', children, onClose }) {
+function ModalShell({ title, icon: Icon, color = 'sky', children, onClose }) {
   const cls = COLOR_CLASSES[color];
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose} data-testid="kb-modal">
@@ -683,7 +673,7 @@ function ModalActions({ onClose, onSave, saving, disabled }) {
     <div className="flex gap-2 pt-1">
       <button onClick={onClose} type="button" className="flex-1 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100" data-testid="modal-cancel">Cancel</button>
       <button onClick={onSave} type="button" disabled={saving || disabled}
-        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white py-2.5 rounded-lg text-sm font-semibold disabled:opacity-50"
+        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white py-2.5 rounded-lg text-sm font-semibold disabled:opacity-50"
         data-testid="modal-save">
         {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
         Save & Train
