@@ -213,6 +213,10 @@ import BusinessRules from "./pages/BusinessRules";
 import CalendarSync from "./pages/CalendarSync";
 import ChatCorrections from "./pages/ChatCorrections";
 import OwnBusinessGPT from "./pages/OwnBusinessGPT";
+import MemoraLeads from "./pages/MemoraLeads";
+import Contacts from "./pages/Contacts";
+import Broadcast from "./pages/Broadcast";
+import Automation from "./pages/Automation";
 import ImpersonationBanner from "./components/ImpersonationBanner";
 import TeamInbox from "./pages/TeamInbox";
 import SaaSAdminDashboard from "./pages/SaaSAdminDashboard";
@@ -1165,6 +1169,38 @@ function App() {
                 element={
                   <PrivateRoute>
                     <OwnBusinessGPT />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/memoraai-leads"
+                element={
+                  <PrivateRoute>
+                    <MemoraLeads />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/memoraai-contacts"
+                element={
+                  <PrivateRoute>
+                    <Contacts />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/memoraai-broadcast"
+                element={
+                  <PrivateRoute>
+                    <Broadcast />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/memoraai-automation"
+                element={
+                  <PrivateRoute>
+                    <Automation />
                   </PrivateRoute>
                 }
               />
