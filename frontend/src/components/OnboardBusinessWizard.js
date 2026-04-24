@@ -4,6 +4,7 @@ import {
   Loader2, Copy, Key, ArrowRight, ArrowLeft, MapPin, Upload,
   MessageSquare, KeyRound, FileText, Sparkles
 } from "lucide-react";
+import SearchableSelect from "./SearchableSelect";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -164,10 +165,19 @@ export default function OnboardBusinessWizard({ onClose, onSuccess }) {
                 <input value={form.business_name} onChange={e => set("business_name", e.target.value)} placeholder="E.g., Eloniot Software Solutions" className="input-wiz" data-testid="f-business-name" />
               </Field>
               <Field label="Business Category *" icon={Sparkles}>
-                <select value={form.category} onChange={e => set("category", e.target.value)} className="input-wiz" data-testid="f-category">
-                  <option value="">Select category...</option>
-                  {categories.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-                </select>
+                <SearchableSelect
+                  value={form.category}
+                  onChange={(v) => set("category", v)}
+                  options={categories.map(c => ({
+                    value: c.slug,
+                    label: c.name,
+                    sublabel: c.description ? c.description.slice(0, 75) + (c.description.length > 75 ? "…" : "") : "",
+                  }))}
+                  placeholder="Select or search category..."
+                  searchPlaceholder="Type to filter 19 industries..."
+                  emptyText="No matching industry. Add it first from SaaS Admin → Categories."
+                  testid="f-category"
+                />
               </Field>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Field label="City" icon={MapPin}>

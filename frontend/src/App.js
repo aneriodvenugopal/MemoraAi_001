@@ -53,6 +53,7 @@ import PWANotifications from "./pages/pwa/PWANotifications";
 
 // Marketing Pages
 import Home from "./pages/marketing/Home";
+import IndustriesFull from "./pages/marketing/IndustriesFull";
 import Pricing from "./pages/marketing/Pricing";
 import About from "./pages/marketing/About";
 import Features from "./pages/marketing/Features";
@@ -290,6 +291,7 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/features" element={<Features />} />
                 <Route path="/industry/:slug" element={<IndustryPage />} />
+                <Route path="/industries" element={<IndustriesFull />} />
                 <Route path="/testimonials/:id" element={<TestimonialDetail />} />
                 <Route path="/contact" element={<Contact />} />
                 

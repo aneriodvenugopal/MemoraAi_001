@@ -166,7 +166,7 @@ const Home = () => {
             <p className="text-gray-500 max-w-xl mx-auto">Select your industry to see how MemoraAI transforms your customer communication.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {industries.map((ind, i) => {
+            {industries.slice(0, 12).map((ind, i) => {
               const Icon = ICON_MAP[ind.icon] || Star;
               return (
                 <button key={ind.slug} onClick={() => navigate(`/industry/${ind.slug}`)}
@@ -194,6 +194,17 @@ const Home = () => {
               );
             })}
           </div>
+          {industries.length > 12 && (
+            <div className="mt-8 flex justify-center sm:justify-end" data-testid="more-industries-cta">
+              <Link
+                to="/industries"
+                className="group inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600/20 to-blue-600/20 border border-violet-500/30 text-white text-sm font-semibold hover:from-violet-600/30 hover:to-blue-600/30 hover:border-violet-400/50 transition-all backdrop-blur-sm"
+              >
+                Explore all {industries.length} industries
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

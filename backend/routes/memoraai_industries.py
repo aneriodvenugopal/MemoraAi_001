@@ -274,6 +274,54 @@ SEED_INDUSTRIES = [
         ],
         "business_name": "TechCraft Solutions", "seo_title": "WhatsApp Automation for Software Agencies", "seo_desc": "AI WhatsApp for tech companies. Client management, quotes, project updates."
     },
+    {
+        "slug": "luxury-boutique", "title": "Luxury Boutiques / Tailoring", "icon": "scissors",
+        "hero_title": "Every Measurement, Every Preference — Remembered.",
+        "hero_sub": "MemoraAI remembers client measurements, favourite fabrics, and past orders so repeat sales feel personal.",
+        "services": ["Custom Tailoring", "Bridal Lehenga", "Designer Saree", "Measurement Visit", "Alterations", "Fabric Selection"],
+        "benefits": ["Measurement history", "Bridal consultation bookings", "Fabric catalog sharing", "Fitting reminders", "VIP customer tagging", "Event-date based suggestions", "Photo order confirmation", "Delivery schedule tracking"],
+        "demo_chat": [
+            {"from": "customer", "text": "I need a saree blouse stitched for my cousin's wedding on 25th."},
+            {"from": "bot", "text": "Welcome back Meena garu! I have your measurements from your last Diwali order (March 2025). Same measurements or fresh ones? Also — would you like the same sweetheart neckline design or something different for the wedding?"},
+            {"from": "customer", "text": "Same size, but princess cut this time. Need it by 22nd."},
+            {"from": "bot", "text": "Perfect. Princess cut blouse, stitching by 22nd ✓\n\nFabric: Will you bring the saree, or choose from our matching fabric catalog?\n\nTailoring charge: Rs.1,200 (regular) / Rs.1,800 (express)\nExpress fits your 22nd deadline. Advance Rs.500 holds your slot."},
+            {"from": "customer", "text": "Express. I'll drop the saree today evening."},
+            {"from": "bot", "text": "Booked! Express stitching - Rs.1,800. Slot confirmed for Raheem master (your regular tailor).\n\nPlease bring: saree + blouse piece + any reference pic for princess cut you like.\n\nI'll send a fitting reminder on 20th so we can do a trial before final delivery on 22nd. See you this evening!"}
+        ],
+        "business_name": "Silk Trail Boutique", "seo_title": "WhatsApp Automation for Boutiques", "seo_desc": "AI WhatsApp for designer boutiques. Measurements memory, bridal bookings, fitting reminders."
+    },
+    {
+        "slug": "subscription-service", "title": "Subscription Services (Milk / Water / Gym)", "icon": "repeat",
+        "hero_title": "Never Chase Renewals Again.",
+        "hero_sub": "MemoraAI handles daily/monthly subscriptions — milk, water, gym — with auto-reminders, holiday pauses, and renewal collection.",
+        "services": ["Monthly Milk", "Water Can Delivery", "Gym Membership", "Yoga Membership", "Trial Week Pass", "Pause & Resume"],
+        "benefits": ["Automated renewal reminders", "Holiday pause handling", "Daily delivery attendance", "Auto UPI collection link", "Trial-to-paid conversion", "Bulk delivery routing", "Invoice & receipt sharing", "Referral rewards"],
+        "demo_chat": [
+            {"from": "customer", "text": "Please pause milk from 20th to 27th — going out of town."},
+            {"from": "bot", "text": "Sure sir! Pausing 1L Full Cream Milk delivery (your current plan) from 20th Nov to 27th Nov. That's 8 days.\n\nYour plan will auto-resume on 28th Nov morning. Adjustment of Rs.480 will be credited to your next bill. Anything else?"},
+            {"from": "customer", "text": "Also when is my membership renewal?"},
+            {"from": "bot", "text": "Your monthly milk subscription ends on 30th Nov (6 days left). Current plan: 1L daily x Rs.60 = Rs.1,800/month.\n\nOffers:\n1. Renew monthly — Rs.1,800\n2. Quarterly — Rs.5,000 (save Rs.400)\n3. Half-yearly — Rs.9,500 (save Rs.1,300)\n\nWhich one? I can send a UPI link right away."},
+            {"from": "customer", "text": "Quarterly."},
+            {"from": "bot", "text": "Quarterly renewal confirmed — Rs.5,000. Sharing UPI link now. Once paid, your subscription is active till 28th Feb with the 8-day holiday pause already factored in. Thanks for choosing us again!"}
+        ],
+        "business_name": "FreshDaily Dairy", "seo_title": "WhatsApp Automation for Subscription Businesses", "seo_desc": "AI WhatsApp for milk, water and gym subscriptions. Auto reminders, pauses, and renewals."
+    },
+    {
+        "slug": "auto-dealer", "title": "Automobile Dealers / Showrooms", "icon": "car",
+        "hero_title": "From Enquiry to Delivery — On WhatsApp.",
+        "hero_sub": "MemoraAI handles test drive bookings, finance quotes, service reminders, and exchange valuations for new and used vehicle showrooms.",
+        "services": ["New Car Enquiry", "Test Drive Booking", "Vehicle Servicing", "Insurance Renewal", "EMI / Finance", "Exchange Valuation", "Accessories"],
+        "benefits": ["Model-wise enquiry memory", "Instant on-road price", "Test drive slot booking", "Service schedule reminders", "Insurance expiry alerts", "Exchange car valuation", "Accessories upsell", "Delivery day coordination"],
+        "demo_chat": [
+            {"from": "customer", "text": "Hi, I enquired about Creta last month."},
+            {"from": "bot", "text": "Welcome back Sir! You checked Creta SX Turbo AT in Atlas White last month — on-road Rs.20.1L. Good news: festive offer now gives Rs.45,000 discount + free accessories kit worth Rs.28,000.\n\nAlso, based on your feedback about boot space, you might like the Alcazar 6-seater. Shall I share comparison?"},
+            {"from": "customer", "text": "Yes compare. Also I want test drive this Saturday."},
+            {"from": "bot", "text": "Sharing Creta vs Alcazar PDF now.\n\nSaturday test drive slots:\n- 10 AM — Creta SX Turbo AT\n- 11:30 AM — Alcazar Signature\n- 4 PM — Both back-to-back (recommended)\n\n4 PM also gets you 15% more fuel for the drive route. Which one?"},
+            {"from": "customer", "text": "4 PM both. And check exchange value for my old Verna."},
+            {"from": "bot", "text": "4 PM Saturday booked — both cars.\n\nFor 2019 Verna SX MT (as per your previous RC photo) — auction estimate Rs.6.2L–6.8L. Final quote requires physical inspection which we'll do Saturday itself. Bring: RC, insurance, both keys, service book.\n\nSee you 4 PM — driver Kiran will pick you up from Ameerpet metro if needed."}
+        ],
+        "business_name": "Prime Motors", "seo_title": "WhatsApp Automation for Car Showrooms", "seo_desc": "AI WhatsApp for automobile dealers. Test drives, finance, servicing, exchanges automated."
+    },
 ]
 
 
@@ -284,10 +332,10 @@ async def list_industries_public(request: Request):
 
     # Always reseed to get latest expanded data
     count = await db.memoraai_industries.count_documents({})
-    if count < 16:
+    if count < 19:
         await db.memoraai_industries.delete_many({})
         for i, ind in enumerate(SEED_INDUSTRIES):
-            doc = {"id": str(uuid.uuid4()), **ind, "is_active": True, "sort_order": i, "created_at": datetime.now(timezone.utc).isoformat()}
+            doc = {"id": str(uuid.uuid4()), **ind, "is_active": True, "is_system": True, "sort_order": i, "created_at": datetime.now(timezone.utc).isoformat()}
             await db.memoraai_industries.insert_one(doc)
 
     industries = await db.memoraai_industries.find({"is_active": True}, {"_id": 0}).sort("sort_order", 1).to_list(50)

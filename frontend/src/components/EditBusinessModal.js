@@ -3,6 +3,7 @@ import {
   Building, X, Save, Loader2, ShieldCheck, KeyRound, Phone,
   MessageSquare, MapPin, Mail, User, Copy, RotateCw, CheckCircle2, AlertCircle
 } from "lucide-react";
+import SearchableSelect from "./SearchableSelect";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -184,10 +185,14 @@ export default function EditBusinessModal({ tenant, onClose, onSaved }) {
               </FieldWiz>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <FieldWiz label="Category" icon={Building}>
-                  <select value={profile.category} onChange={e => setProfile(p => ({ ...p, category: e.target.value }))} className="input-wiz" data-testid="edit-category">
-                    <option value="">Select category</option>
-                    {categories.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-                  </select>
+                  <SearchableSelect
+                    value={profile.category}
+                    onChange={(v) => setProfile(p => ({ ...p, category: v }))}
+                    options={categories.map(c => ({ value: c.slug, label: c.name }))}
+                    placeholder="Select category"
+                    searchPlaceholder="Search..."
+                    testid="edit-category"
+                  />
                 </FieldWiz>
                 <FieldWiz label="City" icon={MapPin}>
                   <input value={profile.city} onChange={e => setProfile(p => ({ ...p, city: e.target.value }))} className="input-wiz" data-testid="edit-city" />
