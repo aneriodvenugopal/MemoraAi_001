@@ -222,6 +222,8 @@ api_router.include_router(memoraai_corrections.router) # Chat Learning / Correct
 api_router.include_router(memoraai_public_leads.router) # Public marketing lead capture
 api_router.include_router(memoraai_knowledge.router)    # Own Business GPT - Knowledge extraction
 api_router.include_router(memoraai_crm.router)          # Tenant Leads & Contacts CRM
+from routes import memoraai_staff
+api_router.include_router(memoraai_staff.router)        # Tenant Staff Members
 
 # Phase 1 — Accounting & Money Tracking
 from routes import payment_receive, payment_out

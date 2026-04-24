@@ -231,41 +231,43 @@ function LeadFormModal({ onClose, onSaved, headers }) {
         </div>
 
         <div className="p-5 space-y-3">
-          {/* Basic fields top row */}
+          {/* Simple 2-field top row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Full Name *"><input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="E.g., Ramesh Kumar" className="input-base" data-testid="lead-name" /></Field>
             <Field label="Phone / WhatsApp *"><input required value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="10-digit mobile" className="input-base" data-testid="lead-phone" /></Field>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field label="Email (optional)"><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="name@example.com" className="input-base" data-testid="lead-email" /></Field>
-            <Field label="Service / Interest"><input value={form.service_interest} onChange={e => setForm({ ...form, service_interest: e.target.value })} placeholder="What are they interested in?" className="input-base" data-testid="lead-service" /></Field>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field label="Source *">
-              <select value={form.source} onChange={e => setForm({ ...form, source: e.target.value })} className="input-base" data-testid="lead-source">
-                {SOURCES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
-              </select>
-            </Field>
-            <Field label="Status">
-              <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} className="input-base" data-testid="lead-status">
-                {Object.entries(STATUS_BADGES).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-              </select>
-            </Field>
-          </div>
 
-          {/* Big description */}
-          <Field label="Description / All information">
+          <Field label="Where did you meet them? (Source) *">
+            <select value={form.source} onChange={e => setForm({ ...form, source: e.target.value })} className="input-base" data-testid="lead-source">
+              {SOURCES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
+            </select>
+          </Field>
+
+          {/* Big description — the main field */}
+          <Field label="Everything about this lead">
             <textarea
               value={form.description}
               onChange={e => setForm({ ...form, description: e.target.value })}
               rows="8"
-              placeholder="Write everything you know about this lead: budget, timeline, concerns, previous conversations, specific requirements, how they heard about you, decision makers, etc. The more context — the better your AI follow-ups."
+              placeholder="Write everything — what they need, budget, timeline, language, how they heard about you, any concerns, decision makers, follow-up notes. The more you write, the smarter your AI follow-ups."
               className="input-base font-mono"
-              style={{ minHeight: '180px' }}
+              style={{ minHeight: '200px' }}
               data-testid="lead-description"
             />
-            <p className="text-[10px] text-gray-400 mt-1">{form.description.length} characters · resize to fit</p>
+            <p className="text-[10px] text-gray-400 mt-1">{form.description.length} characters</p>
           </Field>
+
+          {/* Collapsible more fields */}
+          <details className="group">
+            <summary className="text-xs font-semibold text-violet-600 cursor-pointer hover:text-violet-700 list-none flex items-center gap-1">
+              <span className="group-open:rotate-90 transition-transform inline-block">▸</span>
+              More fields (optional)
+            </summary>
+            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Field label="Email"><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="name@example.com" className="input-base" data-testid="lead-email" /></Field>
+              <Field label="Service / Interest"><input value={form.service_interest} onChange={e => setForm({ ...form, service_interest: e.target.value })} placeholder="Skin treatment, 2BHK flat, etc." className="input-base" data-testid="lead-service" /></Field>
+            </div>
+          </details>
         </div>
 
         <div className="sticky bottom-0 bg-white border-t border-gray-100 px-5 py-3 flex gap-2">

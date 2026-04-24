@@ -181,32 +181,38 @@ function ContactFormModal({ onClose, onSaved, headers }) {
         <div className="p-5 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Full Name *"><input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="E.g., Priya Sharma" className="input-base" data-testid="contact-name" /></Field>
-            <Field label="Phone *"><input required value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="10-digit mobile" className="input-base" data-testid="contact-phone" /></Field>
+            <Field label="Phone / WhatsApp *"><input required value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="10-digit mobile" className="input-base" data-testid="contact-phone" /></Field>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field label="WhatsApp (if different)"><input value={form.whatsapp} onChange={e => setForm({ ...form, whatsapp: e.target.value })} placeholder="Same as phone by default" className="input-base" data-testid="contact-whatsapp" /></Field>
-            <Field label="Email"><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="name@example.com" className="input-base" data-testid="contact-email" /></Field>
-          </div>
-          <Field label="Address (optional)">
-            <input value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} placeholder="City, pincode, landmark" className="input-base" data-testid="contact-address" />
-          </Field>
-          <Field label="Tags (comma separated)">
-            <input value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} placeholder="vip, premium, regular" className="input-base" data-testid="contact-tags" />
-          </Field>
 
-          {/* Big description */}
-          <Field label="Description / All information">
+          {/* Big description — the hero field */}
+          <Field label="Everything about this contact">
             <textarea
               value={form.description}
               onChange={e => setForm({ ...form, description: e.target.value })}
               rows="8"
-              placeholder="Write everything you know about this contact: their preferences, past purchases, important dates (anniversary, birthday), family members, favourite service, communication preference, etc. The more context — the better your AI replies."
+              placeholder="Write everything — their preferences, past purchases, important dates (anniversary, birthday), family members, favourite service, language, communication preference. The more you write, the smarter your AI replies to them."
               className="input-base font-mono"
-              style={{ minHeight: '180px' }}
+              style={{ minHeight: '200px' }}
               data-testid="contact-description"
             />
             <p className="text-[10px] text-gray-400 mt-1">{form.description.length} characters</p>
           </Field>
+
+          {/* Optional more */}
+          <details className="group">
+            <summary className="text-xs font-semibold text-violet-600 cursor-pointer hover:text-violet-700 list-none flex items-center gap-1">
+              <span className="group-open:rotate-90 transition-transform inline-block">▸</span>
+              More fields (optional)
+            </summary>
+            <div className="mt-3 space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Field label="WhatsApp (if different)"><input value={form.whatsapp} onChange={e => setForm({ ...form, whatsapp: e.target.value })} placeholder="Same as phone" className="input-base" data-testid="contact-whatsapp" /></Field>
+                <Field label="Email"><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="name@example.com" className="input-base" data-testid="contact-email" /></Field>
+              </div>
+              <Field label="Address"><input value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} placeholder="City, pincode, landmark" className="input-base" data-testid="contact-address" /></Field>
+              <Field label="Tags"><input value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} placeholder="vip, premium, regular" className="input-base" data-testid="contact-tags" /></Field>
+            </div>
+          </details>
         </div>
 
         <div className="sticky bottom-0 bg-white border-t border-gray-100 px-5 py-3 flex gap-2">
