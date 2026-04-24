@@ -4,6 +4,7 @@ import {
   ArrowLeft, Plus, Edit3, Trash2, Save, X, Loader2, Search, Briefcase,
   ChevronDown, ChevronRight, Clock, IndianRupee, AlertCircle, CheckCircle2
 } from "lucide-react";
+import SaaSAdminLayout from "../layouts/SaaSAdminLayout";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -54,26 +55,16 @@ export default function CategoriesAdmin() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50" data-testid="categories-admin">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto flex items-center gap-3 px-4 py-3">
-          <button onClick={() => navigate("/saas-admin")} className="p-1.5 rounded-lg hover:bg-gray-100" data-testid="back-btn">
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
-          </button>
-          <div className="flex-1">
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-sky-600" /> Business Categories
-            </h1>
-            <p className="text-xs text-gray-500">Add industries & default services the AI proposes to every new client.</p>
-          </div>
-          <button onClick={() => setShowNewCat(true)} className="flex items-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white text-xs sm:text-sm font-semibold px-3 py-2 rounded-lg shadow-md shadow-sky-600/30" data-testid="add-category-btn">
-            <Plus className="w-4 h-4" /> New Category
-          </button>
-        </div>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-4 py-5 space-y-4">
+    <SaaSAdminLayout
+      pageTitle="Business Categories"
+      pageSubtitle="Add industries & default services the AI proposes to every new client."
+      headerRight={
+        <button onClick={() => setShowNewCat(true)} className="flex items-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white text-xs sm:text-sm font-semibold px-3 py-2 rounded-lg shadow-md shadow-sky-600/30" data-testid="add-category-btn">
+          <Plus className="w-4 h-4" /> New Category
+        </button>
+      }
+    >
+      <div data-testid="categories-admin" className="space-y-4">
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -112,7 +103,6 @@ export default function CategoriesAdmin() {
             ))}
           </div>
         )}
-      </main>
 
       {showNewCat && (
         <CategoryFormModal
@@ -134,7 +124,8 @@ export default function CategoriesAdmin() {
       {toast && (
         <div className={`fixed top-20 left-1/2 -translate-x-1/2 z-[70] px-4 py-2.5 rounded-xl shadow-xl text-sm font-medium ${toast.type === "success" ? "bg-emerald-600 text-white" : "bg-rose-600 text-white"}`} data-testid={`toast-${toast.type}`}>{toast.msg}</div>
       )}
-    </div>
+      </div>
+    </SaaSAdminLayout>
   );
 }
 

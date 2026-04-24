@@ -6,6 +6,7 @@ import {
   Search, ShieldCheck, TrendingUp, Zap, History, Plus, Edit3, Key
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import SaaSAdminLayout from "../layouts/SaaSAdminLayout";
 import LoginAsBusinessModal from "../components/LoginAsBusinessModal";
 import OnboardBusinessWizard from "../components/OnboardBusinessWizard";
 import EditBusinessModal from "../components/EditBusinessModal";
@@ -69,32 +70,11 @@ export default function SaaSAdminDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50" data-testid="saas-admin-dashboard">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto flex items-center gap-3 px-4 py-3">
-          <button onClick={() => navigate("/dashboard")}
-            className="p-1.5 rounded-lg hover:bg-gray-100" data-testid="back-btn">
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
-          </button>
-          <div className="flex-1">
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-sky-600" />
-              SaaS Admin
-            </h1>
-            <p className="text-xs text-gray-500">MemoraAI Platform — manage all tenants</p>
-          </div>
-          <button
-            onClick={() => navigate("/saas-admin/categories")}
-            className="flex items-center gap-1.5 bg-white border border-gray-200 hover:border-sky-300 text-sm font-semibold text-gray-700 px-3 py-2 rounded-xl whitespace-nowrap"
-            data-testid="manage-categories-btn"
-          >
-            <Building className="w-4 h-4 text-sky-600" /> Categories
-          </button>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 py-5 space-y-5">
+    <SaaSAdminLayout
+      pageTitle="Overview"
+      pageSubtitle="MemoraAI Platform — manage all tenants, categories, and platform health"
+    >
+      <div data-testid="saas-admin-dashboard" className="space-y-5">
         {/* KPI Row */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" data-testid="saas-kpis">
           <KPI icon={Building} label="Tenants" value={ov.total_tenants} />
@@ -277,7 +257,6 @@ export default function SaaSAdminDashboard() {
             ))}
           </div>
         </section>
-      </main>
 
       {loginAsTarget && (
         <LoginAsBusinessModal
@@ -308,7 +287,8 @@ export default function SaaSAdminDashboard() {
           {toast.msg}
         </div>
       )}
-    </div>
+      </div>
+    </SaaSAdminLayout>
   );
 }
 
