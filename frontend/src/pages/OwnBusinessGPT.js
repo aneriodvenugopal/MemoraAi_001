@@ -46,6 +46,7 @@ const PLUS_MENU = [
   { key: 'image',   label: 'Upload Image',            icon: ImageIcon,       color: 'green',   accept: 'image/*' },
   { key: 'voice',   label: 'Record Voice',            icon: Mic,             color: 'sky' },
   { key: 'video',   label: 'Upload Video',            icon: Video,           color: 'rose',    accept: 'video/*' },
+  { key: 'youtube', label: 'Add YouTube Link',        icon: Video,           color: 'rose' },
   { key: 'link',    label: 'Add Website Link',        icon: Link2,           color: 'blue' },
   { key: 'faq',     label: 'Add FAQ',                 icon: HelpCircle,      color: 'orange' },
   { key: 'price',   label: 'Add Price List',          icon: FileSpreadsheet, color: 'emerald', accept: '.xlsx,.xls,.csv' },
@@ -226,9 +227,18 @@ export default function OwnBusinessGPT() {
   };
 
   const deleteItem = async (id) => {
-    if (!window.confirm('Delete this knowledge item?')) return;
-    await fetch(`${API}/memoraai/content/${id}`, { method: 'DELETE', headers: authOnly });
-    loadAll();
+    if (!window.confirm('Delete this knowledge item? The AI will stop using it immediately.')) return;
+    try {
+      const r = await fetch(`${API}/memoraai/content/${id}`, { method: 'DELETE', headers: authOnly });
+      if (r.ok) {
+        showToast('success', 'Deleted');
+        setKb(prev => prev.filter(it => it.id !== id));
+        loadAll();
+      } else {
+        const err = await r.json().catch(() => ({}));
+        showToast('error', err.detail || 'Delete failed');
+      }
+    } catch (e) { showToast('error', 'Delete failed'); }
   };
 
   const filtered = kb.filter(it =>
@@ -279,7 +289,7 @@ export default function OwnBusinessGPT() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6" data-testid="own-business-gpt-grid">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_380px] gap-6" data-testid="own-business-gpt-grid">
         {/* ═══════ CENTER COLUMN ═══════ */}
         <div className="space-y-6 min-w-0">
           {/* Trainer Box */}
@@ -315,7 +325,7 @@ export default function OwnBusinessGPT() {
                   {plusOpen && (
                     <>
                       <div className="fixed inset-0 z-30" onClick={() => setPlusOpen(false)} />
-                      <div className="absolute bottom-full mb-2 left-0 bg-white rounded-2xl border border-gray-200 shadow-2xl py-2 w-[260px] z-40 max-h-[420px] overflow-y-auto" data-testid="plus-menu">
+                      <div className="absolute top-full mt-2 left-0 bg-white rounded-2xl border border-gray-200 shadow-2xl py-2 w-[280px] z-40 max-h-[80vh] overflow-y-auto" data-testid="plus-menu">
                         {PLUS_MENU.map(item => {
                           const cls = COLOR_CLASSES[item.color];
                           return (
@@ -545,6 +555,7 @@ export default function OwnBusinessGPT() {
       {/* ═══════ MODALS ═══════ */}
       {activeModal === 'faq' && <FAQModal onClose={() => setActiveModal(null)} onSave={saveFAQ} saving={saving} />}
       {activeModal === 'link' && <LinkModal onClose={() => setActiveModal(null)} onSave={saveLink} saving={saving} />}
+      {activeModal === 'youtube' && <LinkModal title="Add YouTube Link" onClose={() => setActiveModal(null)} onSave={(url, t) => saveGeneric({ title: t || 'YouTube Video', content_type: 'video', url, description: '', tags: ['kb', 'youtube', 'video'] })} saving={saving} />}
       {activeModal === 'note' && <NoteModal onClose={() => setActiveModal(null)} onSave={(data) => saveGeneric({ title: data.title, content_type: 'note', description: data.text, tags: ['kb','note'] })} saving={saving} />}
       {activeModal === 'service' && <NoteModal title="Add Service" placeholder="E.g., Dental cleaning — ₹800, takes 30 mins, available Mon-Sat 10am–7pm" onClose={() => setActiveModal(null)} onSave={(data) => saveGeneric({ title: data.title, content_type: 'note', description: data.text, tags: ['kb','service'] })} saving={saving} />}
       {activeModal === 'address' && <NoteModal title="Add Address" placeholder="E.g., 3rd floor, Park Hyatt Towers, Banjara Hills, Hyderabad, 500034. Google Maps link: https://..." onClose={() => setActiveModal(null)} onSave={(data) => saveGeneric({ title: data.title || 'Business Address', content_type: 'note', description: data.text, tags: ['kb','address'] })} saving={saving} />}
@@ -599,19 +610,19 @@ function FAQModal({ onClose, onSave, saving }) {
   );
 }
 
-function LinkModal({ onClose, onSave, saving }) {
-  const [url, setUrl] = useState(''); const [title, setTitle] = useState('');
+function LinkModal({ onClose, onSave, saving, title = 'Add Website Link' }) {
+  const [url, setUrl] = useState(''); const [t, setT] = useState('');
   return (
-    <ModalShell title="Add Website Link" icon={Link2} color="blue" onClose={onClose}>
+    <ModalShell title={title} icon={Link2} color="blue" onClose={onClose}>
       <label className="block mb-3">
         <span className="text-[11px] font-semibold text-gray-600 mb-1 block">URL</span>
-        <input type="url" value={url} onChange={e => setUrl(e.target.value)} required placeholder="https://your-website.com" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" data-testid="link-url" />
+        <input type="url" value={url} onChange={e => setUrl(e.target.value)} required placeholder={title.includes('YouTube') ? 'https://youtube.com/watch?v=...' : 'https://your-website.com'} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" data-testid="link-url" />
       </label>
       <label className="block mb-4">
         <span className="text-[11px] font-semibold text-gray-600 mb-1 block">Title (optional)</span>
-        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="E.g., Our services page" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" data-testid="link-title" />
+        <input value={t} onChange={e => setT(e.target.value)} placeholder="E.g., Our services page" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" data-testid="link-title" />
       </label>
-      <ModalActions onClose={onClose} onSave={() => onSave(url, title)} saving={saving} disabled={!url.trim()} />
+      <ModalActions onClose={onClose} onSave={() => onSave(url, t)} saving={saving} disabled={!url.trim()} />
     </ModalShell>
   );
 }

@@ -978,7 +978,7 @@ function App() {
                 path="/settings/role-assignments"
                 element={
                   <PrivateRoute>
-                    <RoleAssignments />
+                    <WithSidebar><RoleAssignments /></WithSidebar>
                   </PrivateRoute>
                 }
               />
