@@ -56,12 +56,17 @@ const Home = () => {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
               <Brain className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-bold">Memora<span className="text-violet-400">AI</span></span>
+            <div className="leading-none">
+              <span className="text-lg font-bold">Memora<span className="text-violet-400">AI</span></span>
+              <span className="hidden sm:block text-[9px] text-gray-500 font-medium">A product by Eloniot Software Solutions</span>
+            </div>
           </Link>
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
-            <a href="#industries" className="hover:text-white transition-colors">Industries</a>
+            <Link to="/industries" className="hover:text-white transition-colors">Industries</Link>
             <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+            <Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link>
+            <Link to="/about" className="hover:text-white transition-colors">About</Link>
+            <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
             <Link to="/login" className="hover:text-white transition-colors">Login</Link>
           </div>
           <div className="flex items-center gap-2">
@@ -443,27 +448,41 @@ const Home = () => {
       <footer className="border-t border-white/5 py-12 px-4" data-testid="footer">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-sm text-gray-500">
           <div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-3">
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center"><Brain className="w-4 h-4 text-white" /></div>
               <span className="font-bold text-white">MemoraAI</span>
             </div>
-            <p className="text-xs text-gray-600 leading-relaxed">WhatsApp That Remembers Every Customer. Built by Eloniot Software Solutions.</p>
+            <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">WhatsApp That Remembers Every Customer.</p>
+            <p className="text-[11px] text-gray-500 leading-relaxed">
+              A product by <a href="https://eloniot.com" target="_blank" rel="noreferrer" className="text-violet-400 hover:text-violet-300 font-semibold">Eloniot Software Solutions</a><br />
+              <span className="text-gray-600">Hyderabad, India</span>
+            </p>
           </div>
           <div>
             <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider">Product</h4>
-            <ul className="space-y-2"><li><a href="#features" className="hover:text-white transition-colors">Features</a></li><li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li><li><a href="#industries" className="hover:text-white transition-colors">Industries</a></li><li><Link to="/register" className="hover:text-white transition-colors">Free Demo</Link></li></ul>
+            <ul className="space-y-2"><li><a href="#features" className="hover:text-white transition-colors">Features</a></li><li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li><li><Link to="/industries" className="hover:text-white transition-colors">Industries</Link></li><li><Link to="/register" className="hover:text-white transition-colors">Free Demo</Link></li></ul>
           </div>
           <div>
-            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider">Industries</h4>
-            <ul className="space-y-2">{industries.slice(0, 5).map(i => <li key={i.slug}><Link to={`/industry/${i.slug}`} className="hover:text-white transition-colors">{i.title}</Link></li>)}</ul>
+            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider">Company</h4>
+            <ul className="space-y-2">
+              <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+              <li><Link to="/login" className="hover:text-white transition-colors">Login</Link></li>
+              <li><a href="mailto:info@memoraai.in" className="hover:text-white transition-colors">info@memoraai.in</a></li>
+            </ul>
           </div>
           <div>
             <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider">Legal</h4>
-            <ul className="space-y-2"><li><Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link></li><li><Link to="/terms-conditions" className="hover:text-white transition-colors">Terms</Link></li><li><Link to="/login" className="hover:text-white transition-colors">Login</Link></li></ul>
+            <ul className="space-y-2">
+              <li><Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
+              <li><Link to="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link></li>
+            </ul>
           </div>
         </div>
-        <div className="max-w-6xl mx-auto mt-8 pt-6 border-t border-white/5 text-center text-xs text-gray-600">
-          2025-2026 MemoraAI by Eloniot Software Solutions. All rights reserved.
+        <div className="max-w-6xl mx-auto mt-8 pt-6 border-t border-white/5 text-center text-xs text-gray-600 space-y-1">
+          <p>© 2025-2026 <span className="text-gray-400 font-semibold">MemoraAI</span></p>
+          <p>Owned & Operated by <a href="https://eloniot.com" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-violet-300 font-semibold">Eloniot Software Solutions</a> · Hyderabad, India · GSTIN available on request</p>
         </div>
       </footer>
 

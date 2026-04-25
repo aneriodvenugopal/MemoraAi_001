@@ -17,22 +17,30 @@ const TermsConditions = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
             <p className="text-gray-700 leading-relaxed">
-              By accessing and using MemoraAI services, you accept and agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our services.
+              These Terms & Conditions ("Terms") govern your access to and use of MemoraAI (the "Service"), a WhatsApp
+              Business automation platform owned and operated by <strong>Eloniot Software Solutions</strong>, Hyderabad,
+              Telangana, India. By accessing or using the Service you agree to be bound by these Terms. If you do not
+              agree, you may not use the Service.
+            </p>
+            <p className="text-gray-700 leading-relaxed mt-3">
+              <strong>Service Provider:</strong> Eloniot Software Solutions, Hyderabad, India ·
+              Email: <a href="mailto:info@memoraai.in" className="text-blue-600 hover:underline">info@memoraai.in</a> ·
+              GSTIN: available on request.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Service Description</h2>
             <p className="text-gray-700 leading-relaxed">
-              MemoraAI provides a comprehensive real estate management platform including:
+              MemoraAI is a multi-tenant SaaS that helps Indian businesses automate WhatsApp customer conversations,
+              including:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-700 space-y-2">
-              <li>Lead and CRM management</li>
-              <li>Property and project management</li>
-              <li>Payment and booking automation</li>
-              <li>Communication tools (SMS, Email, WhatsApp)</li>
-              <li>Analytics and reporting</li>
-              <li>FREE 24×7 Expert Advisory services</li>
+              <li>AI-powered chat replies trained on your business knowledge base</li>
+              <li>Lead capture, contact memory, and CRM</li>
+              <li>Appointment / booking automation and reminders</li>
+              <li>Broadcast campaigns via Meta WhatsApp Cloud API</li>
+              <li>Analytics, reporting, and team-inbox collaboration</li>
             </ul>
           </section>
 

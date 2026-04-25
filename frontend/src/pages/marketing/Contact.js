@@ -1,245 +1,157 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Mail, Phone, MapPin } from 'lucide-react';
-import { toast } from 'sonner';
+import {
+  ArrowLeft, Brain, MessageSquare, Mail, Phone, MapPin, Send,
+  Loader2, CheckCircle2, Globe, Building2
+} from 'lucide-react';
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
-    message: ''
-  });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    // TODO: Implement contact form backend API
-    toast.success('Thank you! We will contact you soon.');
-    setFormData({ name: '', email: '', phone: '', company: '', message: '' });
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setSending(true); setError('');
+    try {
+      const r = await fetch(`${API}/memoraai/landing/lead`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, source: 'contact_page' }),
+      });
+      if (!r.ok) {
+        const d = await r.json().catch(() => ({}));
+        throw new Error(d.detail || 'Failed to submit');
+      }
+      setSent(true);
+    } catch (err) { setError(err.message || String(err)); }
+    setSending(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-900">
-      {/* Header */}
-      <header className="container mx-auto px-6 py-6">
-        <div className="flex items-center justify-between">
-          <Link 
-            to="/" 
-            className="flex items-center text-white hover:text-cyan-300 transition-colors"
-          >
-            <ArrowLeft className="mr-2" />
-            Back to Home
+    <div className="min-h-screen bg-[#0a0e27] text-white">
+      <nav className="sticky top-0 z-30 bg-[#0a0e27]/80 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
+              <Brain className="w-5 h-5 text-white" />
+            </div>
+            <div className="leading-none">
+              <span className="text-lg font-bold">Memora<span className="text-violet-400">AI</span></span>
+              <span className="hidden sm:block text-[9px] text-gray-500 font-medium">A product by Eloniot Software Solutions</span>
+            </div>
           </Link>
-          
-          <div className="flex gap-4">
-            <Link 
-              to="/login" 
-              className="px-6 py-2 text-white hover:text-cyan-300 transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link 
-              to="/register" 
-              className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-all"
-            >
-              Get Started
-            </Link>
-          </div>
+          <Link to="/" className="text-xs text-gray-400 hover:text-white flex items-center gap-1">
+            <ArrowLeft className="w-3.5 h-3.5" /> Back home
+          </Link>
         </div>
-      </header>
+      </nav>
 
-      {/* Contact Section */}
-      <section className="container mx-auto px-6 py-16">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-white mb-6">
-            Get in Touch
-          </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <div className="text-center mb-12" data-testid="contact-hero">
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">Talk to the team</h1>
+          <p className="text-base text-gray-400 mt-3 max-w-2xl mx-auto">
+            Sales, support, partnership, or product feedback — we read every message and reply within 4 working hours.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-            <h2 className="text-2xl font-bold text-white mb-6">Send us a Message</h2>
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-white mb-2">Name *</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  autoComplete="name"
-                  autoFocus
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
-                  placeholder="Your name"
-                  aria-label="Full name"
-                />
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          {/* Contact form */}
+          <div className="lg:col-span-3 bg-white/[0.03] border border-white/5 rounded-3xl p-6 sm:p-8" data-testid="contact-form-card">
+            {sent ? (
+              <div className="text-center py-8" data-testid="contact-success">
+                <div className="w-14 h-14 rounded-full bg-emerald-500/15 flex items-center justify-center mx-auto mb-3">
+                  <CheckCircle2 className="w-7 h-7 text-emerald-400" />
+                </div>
+                <h3 className="font-bold text-lg">Message received</h3>
+                <p className="text-sm text-gray-400 mt-1">We'll get back to you on WhatsApp / email within 4 hours.</p>
               </div>
-
-              <div>
-                <label className="block text-white mb-2">Email *</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  autoComplete="email"
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
-                  placeholder="your@email.com"
-                  aria-label="Email address"
-                />
-              </div>
-
-              <div>
-                <label className="block text-white mb-2">Phone</label>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  pattern="[0-9]{10}"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  autoComplete="tel"
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
-                  placeholder="+91 XXXXXXXXXX"
-                  aria-label="Phone number"
-                />
-              </div>
-
-              <div>
-                <label className="block text-white mb-2">Company</label>
-                <input
-                  type="text"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  autoComplete="organization"
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
-                  placeholder="Your company name"
-                  aria-label="Company name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-white mb-2">Message *</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={5}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
-                  placeholder="Tell us about your requirements..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full px-6 py-4 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-all"
-              >
-                Send Message
-              </button>
-            </form>
+            ) : (
+              <form onSubmit={submit} className="space-y-4">
+                <h2 className="text-xl font-bold mb-2">Send a message</h2>
+                {error && <div className="bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs px-3 py-2 rounded-lg" data-testid="contact-error">{error}</div>}
+                <Field label="Your Name *">
+                  <input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="cinp" data-testid="c-name" />
+                </Field>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Field label="Email *">
+                    <input required type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="cinp" data-testid="c-email" />
+                  </Field>
+                  <Field label="Phone / WhatsApp">
+                    <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="cinp" data-testid="c-phone" />
+                  </Field>
+                </div>
+                <Field label="Tell us about your business">
+                  <textarea required rows={5} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="What industry, how many leads/month, biggest WhatsApp problem..." className="cinp" data-testid="c-message" />
+                </Field>
+                <button type="submit" disabled={sending} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 text-white font-semibold py-3 rounded-xl disabled:opacity-50" data-testid="contact-submit">
+                  {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  {sending ? 'Sending...' : 'Send Message'}
+                </button>
+              </form>
+            )}
           </div>
 
-          {/* Contact Information */}
-          <div className="space-y-8">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-              <h2 className="text-2xl font-bold text-white mb-6">Contact Information</h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <Mail className="w-6 h-6 text-cyan-400 mr-4 mt-1" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">Email</h3>
-                    <a href="mailto:info@memoraai.in" className="text-gray-300 hover:text-cyan-400">
-                      info@memoraai.in
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <Phone className="w-6 h-6 text-cyan-400 mr-4 mt-1" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">Phone</h3>
-                    <a href="tel:+919948303060" className="text-gray-300 hover:text-cyan-400">
-                      +91 99483 03060
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <MapPin className="w-6 h-6 text-cyan-400 mr-4 mt-1" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">Office</h3>
-                    <p className="text-gray-300">
-                      India
-                    </p>
-                  </div>
-                </div>
+          {/* Contact info */}
+          <div className="lg:col-span-2 space-y-3" data-testid="contact-info">
+            <div className="bg-gradient-to-br from-[#25D366]/15 to-[#1ebc56]/10 border border-[#25D366]/20 rounded-3xl p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <MessageSquare className="w-5 h-5 text-[#25D366]" />
+                <h3 className="font-bold">WhatsApp Us — Fastest</h3>
               </div>
+              <p className="text-xs text-gray-400 mb-3">We reply within minutes during business hours (Mon–Sat, 10 AM – 8 PM IST).</p>
+              <a href="https://wa.me/916309356590?text=Hi%20MemoraAI%20team" target="_blank" rel="noreferrer"
+                className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white text-sm font-semibold px-4 py-2 rounded-full">
+                <MessageSquare className="w-4 h-4" /> +91 6309 356 590
+              </a>
             </div>
 
-            {/* Quick Links */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-              <h2 className="text-2xl font-bold text-white mb-6">Quick Links</h2>
-              
-              <div className="space-y-3">
-                <Link to="/pricing" className="block text-gray-300 hover:text-cyan-400 transition-colors">
-                  → View Pricing Plans
-                </Link>
-                <Link to="/features" className="block text-gray-300 hover:text-cyan-400 transition-colors">
-                  → Explore Features
-                </Link>
-                <Link to="/about" className="block text-gray-300 hover:text-cyan-400 transition-colors">
-                  → Learn About Us
-                </Link>
-                <Link to="/register" className="block text-gray-300 hover:text-cyan-400 transition-colors">
-                  → Start Free Trial
-                </Link>
-              </div>
-            </div>
+            <ContactRow icon={Mail} label="Email" value="info@memoraai.in" link="mailto:info@memoraai.in" testid="c-email-link" />
+            <ContactRow icon={Phone} label="Phone" value="+91 6309 356 590" link="tel:+916309356590" />
+            <ContactRow icon={MapPin} label="Office" value="Hyderabad, Telangana, India" />
+            <ContactRow icon={Globe} label="Parent Company" value="Eloniot Software Solutions" link="https://eloniot.com" />
 
-            {/* Support Hours */}
-            <div className="bg-gradient-to-r from-cyan-900/50 to-blue-900/50 backdrop-blur-md rounded-2xl p-8 border border-cyan-400/30">
-              <h2 className="text-2xl font-bold text-white mb-4">Support Hours</h2>
-              <p className="text-gray-200">
-                <strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM IST<br />
-                <strong>Saturday:</strong> 10:00 AM - 4:00 PM IST<br />
-                <strong>Sunday:</strong> Closed
-              </p>
-              <p className="text-cyan-300 mt-4">
-                Enterprise customers get 24/7 support
-              </p>
+            <div className="bg-white/[0.03] border border-white/5 rounded-3xl p-5 text-[11px] text-gray-400 leading-relaxed">
+              <div className="flex items-center gap-2 mb-2">
+                <Building2 className="w-4 h-4 text-violet-400" />
+                <span className="font-semibold text-white">Legal Entity</span>
+              </div>
+              MemoraAI is owned and operated by <span className="text-violet-300 font-semibold">Eloniot Software Solutions</span>,
+              Hyderabad, India. GSTIN available on request. All payments are processed via PCI-DSS compliant gateways
+              (Razorpay / Stripe / PayU). For invoices, contact <a href="mailto:info@memoraai.in" className="text-violet-300 hover:text-violet-200">info@memoraai.in</a>.
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900/50 py-8 border-t border-white/10 mt-16">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-gray-400">
-            © 2025 MemoraAI. All rights reserved. | 10+ Years in Real Estate Excellence
-          </p>
-        </div>
-      </footer>
+      <style>{`.cinp{width:100%;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;font-size:13px;color:#fff}.cinp:focus{outline:none;border-color:rgba(139,92,246,.5);background:rgba(255,255,255,.05)}.cinp::placeholder{color:#6b7280}`}</style>
     </div>
   );
 };
+
+function Field({ label, children }) {
+  return (
+    <label className="block">
+      <span className="text-[11px] font-semibold text-gray-400 mb-1 block">{label}</span>
+      {children}
+    </label>
+  );
+}
+
+function ContactRow({ icon: Icon, label, value, link, testid }) {
+  const Wrap = link ? 'a' : 'div';
+  const props = link ? { href: link, target: link.startsWith('http') ? '_blank' : undefined, rel: 'noreferrer' } : {};
+  return (
+    <Wrap {...props} data-testid={testid} className="flex items-start gap-3 bg-white/[0.03] border border-white/5 rounded-2xl px-4 py-3 group hover:border-violet-500/30 transition-colors">
+      <Icon className="w-4 h-4 text-violet-400 mt-1 flex-shrink-0" />
+      <div className="min-w-0">
+        <p className="text-[10px] uppercase tracking-widest text-gray-500 font-semibold">{label}</p>
+        <p className={`text-sm font-medium ${link ? 'text-violet-300 group-hover:text-violet-200' : 'text-gray-200'}`}>{value}</p>
+      </div>
+    </Wrap>
+  );
+}
 
 export default Contact;

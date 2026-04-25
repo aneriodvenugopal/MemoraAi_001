@@ -18,9 +18,20 @@ const PrivacyPolicy = () => {
         
         <div className="bg-white rounded-xl shadow-md p-8 space-y-6">
 
-          {/* ==================== REALAPEX SECTION ==================== */}
+          {/* ==================== MEMORAAI / ELONIOT SECTION ==================== */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">MemoraAI Platform</h2>
+            <p className="text-gray-700 leading-relaxed">
+              MemoraAI is a WhatsApp Business automation platform owned and operated by{' '}
+              <strong>Eloniot Software Solutions</strong>, a software product company based in Hyderabad, Telangana, India.
+              This Privacy Policy explains how we collect, use, store, and protect your data when you use MemoraAI
+              (the "Service"). By using the Service, you agree to the practices described below.
+            </p>
+            <p className="text-gray-700 leading-relaxed mt-3">
+              <strong>Data controller:</strong> Eloniot Software Solutions, Hyderabad, India ·
+              Email: <a href="mailto:info@memoraai.in" className="text-blue-600 hover:underline">info@memoraai.in</a> ·
+              GSTIN: available on request.
+            </p>
           </section>
 
           <section>
