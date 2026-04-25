@@ -227,11 +227,8 @@ const Login = () => {
       {/* Premium hero panel — desktop only */}
       <aside className="hidden lg:flex flex-col justify-between w-1/2 xl:w-[55%] p-12 relative z-10 bg-gradient-to-br from-gray-900 via-gray-900 to-sky-950 text-white">
         <div>
-          <div className="flex items-center gap-2 mb-12">
-            <MemoraAILogo size="md" showBrand={false} />
-            <span className="text-2xl font-bold tracking-tight">
-              Memora<span className="text-sky-400">AI</span>
-            </span>
+          <div className="flex items-center mb-12">
+            <MemoraAILogo size="lg" />
           </div>
           <h1 className="text-4xl xl:text-5xl font-bold leading-tight mb-5">
             Your AI sales<br />agent that <span className="text-sky-400">never sleeps</span>.
@@ -274,7 +271,7 @@ const Login = () => {
         <Card className="w-full max-w-md shadow-xl border-0 bg-white/95 backdrop-blur">
           <CardHeader className="text-center pb-2">
             <div className="flex justify-center mb-4 lg:hidden">
-              <MemoraAILogo size="xl" showCaption={true} showBrand={true} />
+              <MemoraAILogo size="lg" />
             </div>
             <div className="hidden lg:block pt-4">
               <span className="text-[10px] uppercase tracking-widest text-sky-600 font-bold">MemoraAI</span>

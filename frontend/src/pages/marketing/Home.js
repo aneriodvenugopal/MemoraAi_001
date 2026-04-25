@@ -8,6 +8,7 @@ import {
   Scale, Car, Dumbbell, Store, HardHat, Banknote, Utensils, Mic,
   Play, Check, X, Plus, Minus
 } from 'lucide-react';
+import MemoraLogo from '../../components/MemoraLogo';
 import LeadCaptureSection from '../../components/LeadCaptureSection';
 
 const API = process.env.REACT_APP_BACKEND_URL;
@@ -52,15 +53,7 @@ const Home = () => {
       {/* ─── NAVBAR ─── */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0e27]/80 backdrop-blur-xl border-b border-white/5" data-testid="navbar">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
-              <Brain className="w-5 h-5 text-white" />
-            </div>
-            <div className="leading-none">
-              <span className="text-lg font-bold">Memora<span className="text-violet-400">AI</span></span>
-              <span className="hidden sm:block text-[9px] text-gray-500 font-medium">A product by Eloniot Software Solutions</span>
-            </div>
-          </Link>
+          <MemoraLogo variant="compact" tone="dark" size="sm" to="/" />
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
             <Link to="/industries" className="hover:text-white transition-colors">Industries</Link>
             <a href="#features" className="hover:text-white transition-colors">Features</a>
@@ -448,10 +441,7 @@ const Home = () => {
       <footer className="border-t border-white/5 py-12 px-4" data-testid="footer">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-sm text-gray-500">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center"><Brain className="w-4 h-4 text-white" /></div>
-              <span className="font-bold text-white">MemoraAI</span>
-            </div>
+            <div className="mb-3"><MemoraLogo variant="compact" tone="dark" size="sm" /></div>
             <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">WhatsApp That Remembers Every Customer.</p>
             <p className="text-[11px] text-gray-500 leading-relaxed">
               A product by <a href="https://eloniot.com" target="_blank" rel="noreferrer" className="text-violet-400 hover:text-violet-300 font-semibold">Eloniot Software Solutions</a><br />

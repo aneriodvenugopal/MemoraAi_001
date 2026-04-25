@@ -4,6 +4,7 @@ import {
   ArrowLeft, Brain, MessageSquare, Mail, Phone, MapPin, Send,
   Loader2, CheckCircle2, Globe, Building2
 } from 'lucide-react';
+import MemoraLogo from '../../components/MemoraLogo';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -34,15 +35,7 @@ const Contact = () => {
     <div className="min-h-screen bg-[#0a0e27] text-white">
       <nav className="sticky top-0 z-30 bg-[#0a0e27]/80 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
-              <Brain className="w-5 h-5 text-white" />
-            </div>
-            <div className="leading-none">
-              <span className="text-lg font-bold">Memora<span className="text-violet-400">AI</span></span>
-              <span className="hidden sm:block text-[9px] text-gray-500 font-medium">A product by Eloniot Software Solutions</span>
-            </div>
-          </Link>
+          <MemoraLogo variant="compact" tone="dark" size="sm" to="/" />
           <Link to="/" className="text-xs text-gray-400 hover:text-white flex items-center gap-1">
             <ArrowLeft className="w-3.5 h-3.5" /> Back home
           </Link>

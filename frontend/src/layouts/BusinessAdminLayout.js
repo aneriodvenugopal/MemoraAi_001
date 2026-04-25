@@ -47,12 +47,12 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
       {/* Top brand */}
       <div className="px-5 pt-6 pb-5 border-b border-white/5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-500/30">
-            <Brain className="w-5 h-5 text-white" />
+          <div className="w-12 h-10 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+            <img src="/memoraai-logo.png" alt="MemoraAI" className="h-7 w-auto object-contain" />
           </div>
           <div>
-            <p className="font-bold text-white text-lg leading-tight">Memora<span className="text-sky-400">AI</span></p>
-            <p className="text-[10px] text-gray-400 leading-tight tracking-wide">WhatsApp Automation</p>
+            <p className="font-bold text-white text-base leading-tight">Memora<span className="text-sky-400">AI</span></p>
+            <p className="text-[10px] uppercase tracking-widest text-sky-300/70 font-semibold">Business GPT</p>
           </div>
         </div>
       </div>

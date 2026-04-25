@@ -96,8 +96,8 @@ export default function SaaSAdminLayout({ children, pageTitle, pageSubtitle, hea
         {/* Brand */}
         <div className="p-5 flex items-center justify-between border-b border-white/5">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-500/30">
-              <ShieldCheck className="w-5 h-5 text-white" />
+            <div className="w-12 h-10 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+              <img src="/memoraai-logo.png" alt="MemoraAI" className="h-7 w-auto object-contain" />
             </div>
             {!collapsed && (
               <div>
