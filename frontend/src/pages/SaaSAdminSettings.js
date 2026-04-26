@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Settings, Save, Loader2, ShieldCheck, MessageSquare, KeyRound, Brain, Globe,
-  CheckCircle2, XCircle, AlertCircle, IndianRupee, Copy
+  CheckCircle2, XCircle, AlertCircle, IndianRupee, Copy, Image as ImageIcon, Upload, RefreshCw
 } from "lucide-react";
 import SaaSAdminLayout from "../layouts/SaaSAdminLayout";
 
@@ -73,6 +73,9 @@ export default function SaaSAdminSettings() {
             {flash.msg}
           </div>
         )}
+
+        {/* Branding — Logo */}
+        <LogoUploader token={token} onFlash={showFlash} />
 
         {/* Branding */}
         <Card title="Platform Branding" icon={Globe}>
@@ -251,5 +254,142 @@ function CopyBtn({ text }) {
       <Copy className="w-3.5 h-3.5" />
       {copied && <span className="absolute -mt-6 text-[9px] text-emerald-600">Copied</span>}
     </button>
+  );
+}
+
+function LogoUploader({ token, onFlash }) {
+  const fileRef = useRef(null);
+  const [preview, setPreview] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [removeDark, setRemoveDark] = useState(true);
+  const [cacheBust, setCacheBust] = useState(Date.now());
+
+  const onPick = (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      onFlash("error", "Please choose an image file");
+      return;
+    }
+    if (f.size > 10 * 1024 * 1024) {
+      onFlash("error", "Image too large (max 10 MB)");
+      return;
+    }
+    const url = URL.createObjectURL(f);
+    setPreview({ file: f, url, name: f.name, sizeKB: Math.round(f.size / 1024) });
+  };
+
+  const upload = async () => {
+    if (!preview?.file) return;
+    setBusy(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", preview.file);
+      fd.append("remove_dark_bg", removeDark ? "true" : "false");
+      const r = await fetch(`${API}/memoraai/saas-admin/upload-logo`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || "Upload failed");
+      onFlash("success", `Logo updated (${d.logo_size_kb} KB) — refresh other tabs to see changes`);
+      setCacheBust(Date.now());
+      setPreview(null);
+      if (fileRef.current) fileRef.current.value = "";
+    } catch (e) {
+      onFlash("error", e.message || String(e));
+    }
+    setBusy(false);
+  };
+
+  return (
+    <section className="bg-white rounded-2xl border border-gray-200/70 p-5 shadow-sm" data-testid="logo-uploader-card">
+      <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
+        <ImageIcon className="w-4 h-4 text-sky-600" />
+        <h3 className="text-sm font-semibold text-gray-900">Brand Logo</h3>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-4">
+        {/* Current logo preview */}
+        <div>
+          <p className="text-[11px] font-semibold text-gray-600 mb-1.5">Current logo</p>
+          <div className="rounded-xl border border-gray-200 bg-slate-900 p-4 flex items-center justify-center min-h-[120px]" data-testid="current-logo-preview">
+            <img
+              src={`/memoraai-logo.png?v=${cacheBust}`}
+              alt="Current MemoraAI logo"
+              className="max-h-20 w-auto object-contain"
+            />
+          </div>
+          <p className="text-[10px] text-gray-400 mt-1">Path: <code className="bg-gray-100 px-1 rounded">/memoraai-logo.png</code></p>
+        </div>
+
+        {/* Upload zone */}
+        <div>
+          <p className="text-[11px] font-semibold text-gray-600 mb-1.5">Upload new logo</p>
+          <label
+            className="block rounded-xl border-2 border-dashed border-sky-300 bg-sky-50/50 hover:bg-sky-50 transition-colors cursor-pointer p-4 text-center"
+            data-testid="logo-dropzone"
+          >
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="hidden"
+              onChange={onPick}
+              data-testid="logo-file-input"
+            />
+            {preview ? (
+              <div className="space-y-2">
+                <div className="rounded-lg bg-slate-900 p-3 flex items-center justify-center">
+                  <img src={preview.url} alt="preview" className="max-h-20 object-contain" data-testid="logo-preview-img" />
+                </div>
+                <p className="text-[11px] text-gray-700 truncate">{preview.name} <span className="text-gray-400">· {preview.sizeKB} KB</span></p>
+                <p className="text-[10px] text-sky-600">Click to choose a different file</p>
+              </div>
+            ) : (
+              <div className="py-3">
+                <Upload className="w-6 h-6 text-sky-500 mx-auto mb-1.5" />
+                <p className="text-xs font-medium text-gray-700">Click to browse</p>
+                <p className="text-[10px] text-gray-500 mt-0.5">PNG, JPG, or WebP · max 10 MB</p>
+              </div>
+            )}
+          </label>
+
+          <label className="flex items-start gap-2 mt-3 cursor-pointer" data-testid="remove-dark-bg-toggle">
+            <input type="checkbox" checked={removeDark} onChange={e => setRemoveDark(e.target.checked)} className="mt-0.5" />
+            <div>
+              <p className="text-[11px] font-semibold text-gray-700">Auto-remove dark background</p>
+              <p className="text-[10px] text-gray-500">Recommended if your logo is on a black/navy backdrop. Makes background transparent and crops tightly.</p>
+            </div>
+          </label>
+
+          <div className="flex items-center gap-2 mt-3">
+            <button
+              onClick={upload}
+              disabled={!preview || busy}
+              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              data-testid="upload-logo-btn"
+            >
+              {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+              {busy ? "Uploading…" : "Replace Logo"}
+            </button>
+            <button
+              onClick={() => setCacheBust(Date.now())}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 px-2 py-1.5 rounded-lg"
+              title="Reload preview"
+              data-testid="logo-refresh-btn"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p className="text-[10px] text-gray-500 mt-3">
+        Replaces the public logo and the square app icon. Cached browsers may take a moment to show the new version — append <code className="bg-gray-100 px-1 rounded">?v=…</code> to bust cache or force-refresh.
+      </p>
+    </section>
   );
 }

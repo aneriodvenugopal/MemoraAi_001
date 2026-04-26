@@ -1,6 +1,8 @@
 """MemoraAI SaaS Admin Dashboard API"""
 import os
-from fastapi import APIRouter, HTTPException, Request
+import io
+from pathlib import Path
+from fastapi import APIRouter, HTTPException, Request, UploadFile, File, Form
 from pydantic import BaseModel
 from typing import Optional
 from middleware.auth import get_current_user
@@ -986,3 +988,133 @@ async def update_settings(data: PlatformSettingsUpdate, request: Request):
     fresh = await db.platform_settings.find_one({"id": _SETTINGS_ID}, {"_id": 0})
     fresh.pop("id", None)
     return {"success": True, "settings": fresh}
+
+
+# ═══════════════════════════════════════════════════════
+# LOGO UPLOAD — replaces /memoraai-logo.png and /memoraai-icon.png
+# ═══════════════════════════════════════════════════════
+
+_PUBLIC_DIR = Path("/app/frontend/public")
+_LOGO_PATH = _PUBLIC_DIR / "memoraai-logo.png"
+_ICON_PATH = _PUBLIC_DIR / "memoraai-icon.png"
+
+
+def _process_logo_image(raw_bytes: bytes, remove_dark_bg: bool = True) -> tuple[bytes, bytes]:
+    """
+    Process uploaded logo:
+      - if remove_dark_bg: detect bright (logo) pixels and make near-black background transparent
+      - tightly crop to logo bounds
+      - return (full_logo_png_bytes, square_icon_png_bytes)
+    """
+    from PIL import Image
+    import numpy as np
+
+    im = Image.open(io.BytesIO(raw_bytes)).convert("RGBA")
+    arr = np.array(im).astype(np.int32)
+
+    if remove_dark_bg:
+        bright = arr[:, :, :3].max(axis=2)
+        # Locate the actual logo glyph area (bright pixels) for cropping
+        bright_mask = bright > 200
+        if not bright_mask.any():
+            # fallback: trust the image as-is, just crop on alpha
+            cropped = im
+        else:
+            ys, xs = np.where(bright_mask)
+            x1, y1 = max(0, int(xs.min()) - 10), max(0, int(ys.min()) - 10)
+            x2, y2 = int(xs.max()) + 10, int(ys.max()) + 10
+            cropped_im = im.crop((x1, y1, x2 + 1, y2 + 1))
+
+            # Apply alpha gradient: dark background -> transparent, bright glyph -> opaque
+            arr2 = np.array(cropped_im).astype(np.int32)
+            bright2 = arr2[:, :, :3].max(axis=2)
+            alpha = np.clip((bright2 - 130) * 255.0 / (180 - 130), 0, 255).astype(np.uint8)
+            arr2[:, :, 3] = alpha
+            cropped = Image.fromarray(arr2.astype(np.uint8), "RGBA")
+
+            # Trim by alpha
+            ar = np.array(cropped)
+            amask = ar[:, :, 3] > 30
+            if amask.any():
+                ys, xs = np.where(amask)
+                cropped = cropped.crop((int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1))
+    else:
+        # Keep existing alpha; trim by alpha if present
+        ar = np.array(im)
+        amask = ar[:, :, 3] > 10
+        if amask.any():
+            ys, xs = np.where(amask)
+            cropped = im.crop((int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1))
+        else:
+            cropped = im
+
+    # Add small margin
+    margin = 20
+    w, h = cropped.size
+    canvas = Image.new("RGBA", (w + 2 * margin, h + 2 * margin), (0, 0, 0, 0))
+    canvas.paste(cropped, (margin, margin), cropped)
+
+    logo_buf = io.BytesIO()
+    canvas.save(logo_buf, "PNG", optimize=True)
+
+    # Build square icon: assume left ~32% is the icon mark; if not, fall back to centered crop
+    cw, ch = cropped.size
+    mark = cropped.crop((0, 0, max(1, int(cw * 0.32)), ch))
+    ma = np.array(mark)
+    amask = ma[:, :, 3] > 30
+    if amask.any():
+        ys, xs = np.where(amask)
+        mark = mark.crop((int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1))
+    mw, mh = mark.size
+    side = max(mw, mh) + 30
+    icon_canvas = Image.new("RGBA", (side, side), (0, 0, 0, 0))
+    icon_canvas.paste(mark, ((side - mw) // 2, (side - mh) // 2), mark)
+    icon_canvas = icon_canvas.resize((512, 512), Image.LANCZOS)
+    icon_buf = io.BytesIO()
+    icon_canvas.save(icon_buf, "PNG", optimize=True)
+
+    return logo_buf.getvalue(), icon_buf.getvalue()
+
+
+@router.post("/upload-logo")
+async def upload_logo(
+    request: Request,
+    file: UploadFile = File(...),
+    remove_dark_bg: bool = Form(True),
+):
+    """
+    Upload a new MemoraAI logo. Replaces:
+      - /app/frontend/public/memoraai-logo.png  (full wordmark)
+      - /app/frontend/public/memoraai-icon.png  (512x512 square mark)
+
+    If `remove_dark_bg` is true, near-black pixels are converted to transparent
+    and the image is auto-cropped tightly around the bright glyph.
+    """
+    admin = await get_current_user(request)
+    _require_super_admin(admin)
+
+    if not file.content_type or not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Please upload an image file (PNG/JPG)")
+
+    raw = await file.read()
+    if len(raw) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Logo file too large (max 10MB)")
+
+    try:
+        logo_bytes, icon_bytes = _process_logo_image(raw, remove_dark_bg=bool(remove_dark_bg))
+    except Exception as e:
+        logger.exception("Logo processing failed")
+        raise HTTPException(status_code=400, detail=f"Could not process image: {e}")
+
+    _PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
+    _LOGO_PATH.write_bytes(logo_bytes)
+    _ICON_PATH.write_bytes(icon_bytes)
+
+    return {
+        "success": True,
+        "logo_url": "/memoraai-logo.png",
+        "icon_url": "/memoraai-icon.png",
+        "logo_size_kb": round(len(logo_bytes) / 1024, 1),
+        "icon_size_kb": round(len(icon_bytes) / 1024, 1),
+        "uploaded_at": datetime.now(timezone.utc).isoformat(),
+    }
