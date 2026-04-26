@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   ArrowLeft, MessageSquare, Shield, Phone, Link2, CheckCircle,
-  AlertCircle, RefreshCw, FileText, Settings
+  AlertCircle, RefreshCw, FileText, Settings, Copy, Webhook, ExternalLink, Eye, EyeOff
 } from "lucide-react";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -18,6 +18,9 @@ export default function WABASetup() {
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [webhookInfo, setWebhookInfo] = useState(null);
+  const [showVerifyToken, setShowVerifyToken] = useState(false);
+  const [copiedField, setCopiedField] = useState(null);
   const [form, setForm] = useState({
     phone_number: "", phone_number_id: "", waba_id: "", access_token: "",
     business_name: "", business_description: "", business_address: "",
@@ -51,6 +54,27 @@ export default function WABASetup() {
   }, [token]);
 
   useEffect(() => { fetchConfig(); }, [fetchConfig]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get(`${API}/memoraai/waba/webhook-info`, { headers });
+        setWebhookInfo(res.data);
+      } catch (e) {
+        console.error("Failed to fetch webhook info", e);
+      }
+    })();
+  }, []); // run once on mount
+
+  const copyToClipboard = async (text, field) => {
+    try {
+      await navigator.clipboard.writeText(text || "");
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 1500);
+    } catch (e) {
+      console.error("Copy failed", e);
+    }
+  };
 
   const saveConfig = async () => {
     setLoading(true);
@@ -113,6 +137,123 @@ export default function WABASetup() {
             </Badge>
             {config.is_active && <Badge className="bg-blue-100 text-blue-700">Active</Badge>}
           </div>
+        )}
+
+        {/* Webhook Configuration — copy these into Meta Developer Console */}
+        {webhookInfo && (
+          <Card className="mb-4 border-emerald-200 bg-gradient-to-br from-emerald-50/40 to-sky-50/30" data-testid="webhook-config-card">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Webhook className="w-5 h-5 text-emerald-600" />
+                Webhook Configuration
+                <Badge className="bg-emerald-100 text-emerald-700 ml-1">Step 1 — Configure in Meta</Badge>
+              </CardTitle>
+              <p className="text-xs text-gray-600 mt-1">
+                Copy these values and paste them in <span className="font-medium">Meta Developer Console → WhatsApp → Configuration → Webhook</span>.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {/* Callback URL */}
+                <div data-testid="webhook-callback-url-row">
+                  <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1.5">
+                    <Link2 className="w-3.5 h-3.5 text-gray-500" /> Callback URL
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      value={webhookInfo.callback_url || ""}
+                      readOnly
+                      className="font-mono text-xs bg-white"
+                      data-testid="webhook-callback-url"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(webhookInfo.callback_url, "callback")}
+                      className="gap-1 flex-shrink-0"
+                      data-testid="copy-callback-url"
+                    >
+                      {copiedField === "callback" ? <CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copiedField === "callback" ? "Copied" : "Copy"}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Verify Token */}
+                <div data-testid="webhook-verify-token-row">
+                  <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1.5">
+                    <Shield className="w-3.5 h-3.5 text-gray-500" /> Verify Token
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type={showVerifyToken ? "text" : "password"}
+                      value={webhookInfo.verify_token || ""}
+                      readOnly
+                      className="font-mono text-xs bg-white"
+                      data-testid="webhook-verify-token"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowVerifyToken(s => !s)}
+                      className="gap-1 flex-shrink-0"
+                      data-testid="toggle-verify-token"
+                    >
+                      {showVerifyToken ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(webhookInfo.verify_token, "verify")}
+                      className="gap-1 flex-shrink-0"
+                      data-testid="copy-verify-token"
+                    >
+                      {copiedField === "verify" ? <CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copiedField === "verify" ? "Copied" : "Copy"}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Subscribe Fields */}
+                {webhookInfo.subscribed_fields?.length > 0 && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">Subscribe to fields</label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {webhookInfo.subscribed_fields.map(f => (
+                        <Badge key={f} variant="outline" className="bg-white text-[11px] font-mono" data-testid={`webhook-field-${f}`}>
+                          {f}
+                        </Badge>
+                      ))}
+                    </div>
+                    <p className="text-[11px] text-gray-500 mt-1">At minimum, subscribe to <code className="bg-gray-100 px-1 rounded font-mono">messages</code>.</p>
+                  </div>
+                )}
+
+                {/* Instructions */}
+                <div className="bg-white border border-emerald-200 rounded-lg p-3 mt-2">
+                  <p className="text-xs font-semibold text-emerald-800 mb-1.5 flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5" /> How to configure in Meta
+                  </p>
+                  <ol className="text-xs text-gray-700 space-y-1 list-decimal list-inside">
+                    {(webhookInfo.instructions || []).map((step, i) => (
+                      <li key={i}>{step}</li>
+                    ))}
+                  </ol>
+                  {webhookInfo.meta_console_url && (
+                    <a
+                      href={webhookInfo.meta_console_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-sky-600 hover:text-sky-700 mt-2"
+                      data-testid="open-meta-console"
+                    >
+                      Open Meta Developer Console <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {/* Business Details */}

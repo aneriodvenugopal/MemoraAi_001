@@ -40,6 +40,54 @@ async def get_waba_config(request: Request):
     return {"config": config}
 
 
+@router.get("/webhook-info")
+async def get_webhook_info(request: Request):
+    """
+    Return the webhook Callback URL and Verify Token for the tenant to paste
+    into Meta Developer Console → WhatsApp → Configuration.
+    Tenant-scoped read; same values across tenants (single platform webhook).
+    """
+    user = await get_current_user(request)
+    if not user.get("tenant_id") and user.get("role") not in ("super_admin", "tenant_admin"):
+        raise HTTPException(status_code=403, detail="Login required")
+
+    db = get_db(request)
+    # Pull from platform_settings if super-admin overrode them, else fall back to env / public URL
+    settings = await db.platform_settings.find_one({"id": "platform-settings"}, {"_id": 0}) or {}
+
+    public_base = (
+        os.environ.get("PUBLIC_SITE_URL")
+        or os.environ.get("FRONTEND_URL")
+        or os.environ.get("REACT_APP_BACKEND_URL")
+        or "https://memoraai.in"
+    ).rstrip("/")
+
+    callback_url = settings.get("webhook_callback_url") or f"{public_base}/api/whatsapp/webhook"
+    verify_token = (
+        settings.get("webhook_verify_token")
+        or os.environ.get("META_WHATSAPP_VERIFY_TOKEN")
+        or os.environ.get("WHATSAPP_VERIFY_TOKEN")
+        or ""
+    )
+
+    return {
+        "callback_url": callback_url,
+        "verify_token": verify_token,
+        "subscribed_fields": [
+            "messages",
+            "message_template_status_update",
+            "message_template_quality_update",
+        ],
+        "instructions": [
+            "Open Meta Developer Console → your WhatsApp app → Configuration.",
+            "Click Edit on the Webhook section.",
+            "Paste the Callback URL and Verify Token below, then click Verify and Save.",
+            "Subscribe to the 'messages' webhook field at minimum.",
+        ],
+        "meta_console_url": "https://developers.facebook.com/apps/",
+    }
+
+
 @router.post("/config")
 async def save_waba_config(data: WABAConfigUpdate, request: Request):
     """Save or update WABA configuration"""
