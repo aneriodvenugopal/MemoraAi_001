@@ -62,7 +62,19 @@ async def get_webhook_info(request: Request):
         or "https://memoraai.in"
     ).rstrip("/")
 
-    callback_url = settings.get("webhook_callback_url") or f"{public_base}/api/whatsapp/webhook"
+    raw_cb = (settings.get("webhook_callback_url") or "").strip()
+    if raw_cb.startswith("http://") or raw_cb.startswith("https://"):
+        callback_url = raw_cb
+    elif raw_cb:
+        # relative path saved by mistake — prepend public base and self-heal in DB
+        callback_url = f"{public_base}/{raw_cb.lstrip('/')}"
+        await db.platform_settings.update_one(
+            {"id": "platform-settings"},
+            {"$set": {"webhook_callback_url": callback_url}},
+            upsert=True,
+        )
+    else:
+        callback_url = f"{public_base}/api/whatsapp/webhook"
     verify_token = (
         settings.get("webhook_verify_token")
         or os.environ.get("META_WHATSAPP_VERIFY_TOKEN")

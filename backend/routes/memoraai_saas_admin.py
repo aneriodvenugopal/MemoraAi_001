@@ -909,6 +909,11 @@ async def _get_platform_settings(db):
     """Return current settings doc, filling in defaults on first read."""
     doc = await db.platform_settings.find_one({"id": _SETTINGS_ID}, {"_id": 0})
     if not doc:
+        public_base = (
+            os.environ.get("PUBLIC_SITE_URL")
+            or os.environ.get("FRONTEND_URL")
+            or "https://memoraai.in"
+        ).rstrip("/")
         doc = {
             "id": _SETTINGS_ID,
             "platform_name": "MemoraAI",
@@ -921,7 +926,7 @@ async def _get_platform_settings(db):
             "impersonate_require_otp": True,
             "ai_default_model": "gpt-4o-mini",
             "sms_provider": "sms_login",
-            "webhook_callback_url": os.environ.get("FRONTEND_URL", "").rstrip("/") + "/api/whatsapp/webhook",
+            "webhook_callback_url": f"{public_base}/api/whatsapp/webhook",
             "webhook_verify_token": os.environ.get("META_WHATSAPP_VERIFY_TOKEN", ""),
             "created_at": datetime.now(timezone.utc).isoformat(),
             "updated_at": datetime.now(timezone.utc).isoformat(),
