@@ -85,12 +85,16 @@ class MetaWhatsAppClient:
     async def _resolve_creds(self, tenant_id: Optional[str] = None) -> Dict[str, str]:
         """Resolve which (access_token, phone_number_id, waba_id) to use.
 
-        Order:
-          1. If tenant_id provided AND tenant has a saved waba_config with
-             access_token + phone_number_id → use tenant's own credentials.
-          2. Fall back to env (admin / platform-wide credentials).
+        STRICT POLICY (multi-tenant safety):
+          • If ``tenant_id`` is truthy → MUST use that tenant's saved
+            ``waba_configs`` row. If the row is missing or incomplete we
+            return ``source='missing_tenant_creds'`` (NO env fallback).
+            Send methods will hard-fail on this so we never reply from the
+            wrong brand.
+          • If ``tenant_id`` is None → this is a super-admin / platform-wide
+            send (system messages). Use env credentials.
 
-        Cached per tenant_id for 30s to avoid a Mongo roundtrip per send.
+        Cached per ``tenant_id`` for 30s; invalidated on save_waba_config.
         """
         import time as _time
         cache_key = tenant_id or "__env__"
@@ -100,30 +104,70 @@ class MetaWhatsAppClient:
             if _time.time() < expires_at:
                 return creds
 
-        if tenant_id and self._db is not None:
+        # Tenant-scoped path — STRICT
+        if tenant_id:
+            if self._db is None:
+                logger.error(
+                    f"❌ TENANT SEND BLOCKED: db handle missing for tenant_id={tenant_id}. "
+                    f"Cannot resolve credentials."
+                )
+                return {
+                    "access_token": "", "phone_number_id": "", "waba_id": "",
+                    "source": "missing_tenant_creds", "tenant_id": tenant_id,
+                    "error": "db_unavailable",
+                }
             try:
                 cfg = await self._db.waba_configs.find_one(
                     {"tenant_id": tenant_id}, {"_id": 0}
                 )
-                if cfg and cfg.get("access_token") and cfg.get("phone_number_id"):
-                    resolved = {
-                        "access_token": cfg["access_token"],
-                        "phone_number_id": cfg["phone_number_id"],
-                        "waba_id": cfg.get("waba_id", "") or "",
-                        "source": "tenant",
-                        "tenant_id": tenant_id,
-                    }
-                    self._creds_cache[cache_key] = (resolved, _time.time() + self._creds_ttl)
-                    return resolved
             except Exception as e:
-                logger.warning(f"Failed to load tenant WABA creds for {tenant_id}: {e}")
+                logger.error(
+                    f"❌ TENANT SEND BLOCKED: waba_configs lookup failed for "
+                    f"tenant_id={tenant_id}: {e}"
+                )
+                return {
+                    "access_token": "", "phone_number_id": "", "waba_id": "",
+                    "source": "missing_tenant_creds", "tenant_id": tenant_id,
+                    "error": f"lookup_failed:{e}",
+                }
+            if not cfg:
+                logger.error(
+                    f"❌ TENANT SEND BLOCKED: no waba_configs row for tenant_id={tenant_id}. "
+                    f"Tell the business to save credentials at /waba-setup."
+                )
+                return {
+                    "access_token": "", "phone_number_id": "", "waba_id": "",
+                    "source": "missing_tenant_creds", "tenant_id": tenant_id,
+                    "error": "waba_config_not_found",
+                }
+            if not cfg.get("access_token") or not cfg.get("phone_number_id"):
+                missing = [k for k in ("access_token", "phone_number_id") if not cfg.get(k)]
+                logger.error(
+                    f"❌ TENANT SEND BLOCKED: tenant_id={tenant_id} waba_config "
+                    f"is missing fields={missing}. Refuse to fall back to admin env."
+                )
+                return {
+                    "access_token": "", "phone_number_id": "", "waba_id": "",
+                    "source": "missing_tenant_creds", "tenant_id": tenant_id,
+                    "error": f"missing_fields:{','.join(missing)}",
+                }
+            resolved = {
+                "access_token": cfg["access_token"],
+                "phone_number_id": cfg["phone_number_id"],
+                "waba_id": cfg.get("waba_id", "") or "",
+                "source": "tenant",
+                "tenant_id": tenant_id,
+            }
+            self._creds_cache[cache_key] = (resolved, _time.time() + self._creds_ttl)
+            return resolved
 
+        # System / super-admin path — env credentials
         env_creds = {
             "access_token": self.access_token,
             "phone_number_id": self.phone_number_id,
             "waba_id": self.waba_id,
             "source": "env",
-            "tenant_id": tenant_id or "",
+            "tenant_id": "",
         }
         self._creds_cache[cache_key] = (env_creds, _time.time() + self._creds_ttl)
         return env_creds
@@ -231,16 +275,33 @@ class MetaWhatsAppClient:
         
         # Resolve tenant-specific credentials (or fall back to env)
         creds = await self._resolve_creds(tenant_id)
+        if creds.get("source") == "missing_tenant_creds":
+            logger.error(
+                f"🚫 OUTBOUND BLOCKED tenant={tenant_id} reason={creds.get('error')} "
+                f"to={phone}. Will NOT fall back to admin env."
+            )
+            return {
+                "success": False,
+                "error": "missing_tenant_credentials",
+                "reason": creds.get("error"),
+                "message": "This tenant has no valid WABA credentials saved. "
+                           "Reply blocked to prevent sending from wrong brand.",
+            }
         if not creds.get("access_token") or not creds.get("phone_number_id"):
             logger.error(
-                f"❌ Cannot send to {phone}: no WABA credentials for tenant_id={tenant_id} "
-                f"(source={creds.get('source')}). Configure credentials in /waba-setup."
+                f"❌ Cannot send to {phone}: env credentials also missing "
+                f"(source={creds.get('source')})."
             )
             return {
                 "success": False,
                 "error": "missing_credentials",
-                "message": "WABA access_token / phone_number_id not configured for this tenant.",
+                "message": "WABA access_token / phone_number_id not configured.",
             }
+
+        logger.info(
+            f"📤 OUTBOUND tenant={creds.get('tenant_id') or 'system'} "
+            f"pnid={creds['phone_number_id']} src={creds['source']} to={phone}"
+        )
 
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
@@ -363,6 +424,12 @@ class MetaWhatsAppClient:
         """
         phone = self._normalize_phone(phone)
         creds = await self._resolve_creds(tenant_id)
+        if creds.get("source") == "missing_tenant_creds":
+            logger.error(
+                f"🚫 TEMPLATE BLOCKED tenant={tenant_id} reason={creds.get('error')} to={phone}"
+            )
+            return {"success": False, "error": "missing_tenant_credentials",
+                    "reason": creds.get("error")}
         if not creds.get("access_token") or not creds.get("phone_number_id"):
             return {"success": False, "error": "missing_credentials"}
         
@@ -593,6 +660,11 @@ class MetaWhatsAppClient:
         """
         phone = self._normalize_phone(phone)
         creds = await self._resolve_creds(tenant_id)
+        if creds.get("source") == "missing_tenant_creds":
+            logger.error(
+                f"🚫 INTERACTIVE BLOCKED tenant={tenant_id} reason={creds.get('error')} to={phone}"
+            )
+            return {"success": False, "error": "missing_tenant_credentials"}
         if not creds.get("access_token") or not creds.get("phone_number_id"):
             return {"success": False, "error": "missing_credentials"}
         
@@ -854,6 +926,11 @@ class MetaWhatsAppClient:
         }
         
         creds = await self._resolve_creds(tenant_id)
+        if creds.get("source") == "missing_tenant_creds":
+            logger.warning(
+                f"mark_as_read skipped: missing tenant creds tenant={tenant_id} reason={creds.get('error')}"
+            )
+            return {"success": False, "error": "missing_tenant_credentials"}
         if not creds.get("access_token") or not creds.get("phone_number_id"):
             return {"success": False, "error": "missing_credentials"}
 

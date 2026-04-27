@@ -299,6 +299,21 @@ async def process_incoming_message(
 ):
     """Background task to process incoming message with session management"""
     try:
+        # Hard precondition: tenant_id MUST be set. Never proceed without it.
+        if not tenant_id:
+            logger.error(
+                f"🚫 process_incoming_message called without tenant_id (phone={phone}). "
+                f"Refusing to send any reply."
+            )
+            await db.security_logs.insert_one({
+                "event": "outbound_blocked_missing_tenant_id",
+                "phone": phone,
+                "message_id": message_id,
+                "timestamp": datetime.now(timezone.utc),
+                "severity": "high",
+            })
+            return
+
         logger.info(f"🔄 Processing message from {phone}: '{message}' (tenant={tenant_id}, lead={lead_id})")
         
         # Initialize session manager with db
@@ -361,6 +376,29 @@ async def process_incoming_message(
         # Send response with session awareness + typing delay + message splitting
         if result.get("success") and result.get("response"):
             response_text = result["response"]
+
+            # CROSS-TENANT GUARD: if this phone already has a conversation under a
+            # DIFFERENT tenant, refuse to reply (would be a cross-tenant leak).
+            other = await db.whatsapp_conversations.find_one(
+                {"phone": phone, "tenant_id": {"$ne": tenant_id}},
+                {"_id": 0, "tenant_id": 1, "id": 1}
+            )
+            if other and other.get("tenant_id"):
+                logger.error(
+                    f"🚫 CROSS-TENANT GUARD: phone={phone} has conversation under "
+                    f"tenant={other.get('tenant_id')} but inbound was for tenant={tenant_id}. "
+                    f"Blocking reply."
+                )
+                await db.security_logs.insert_one({
+                    "event": "cross_tenant_send_blocked",
+                    "phone": phone,
+                    "inbound_tenant_id": tenant_id,
+                    "conversation_tenant_id": other.get("tenant_id"),
+                    "timestamp": datetime.now(timezone.utc),
+                    "severity": "critical",
+                })
+                return
+
             logger.info(f"📤 Sending reply to {phone}: '{response_text[:100]}...'")
 
             # Import enhancer for message splitting
@@ -570,7 +608,21 @@ async def whatsapp_webhook(
         phone = sender_phone
         tenant_id = await identify_tenant(db, raw_payload)
 
-        if not tenant_id:
+        # Capture pnid for explicit logging
+        try:
+            _meta_for_log = (raw_payload.get("entry", [{}])[0]
+                             .get("changes", [{}])[0]
+                             .get("value", {}).get("metadata", {}))
+            _inbound_pnid = _meta_for_log.get("phone_number_id", "")
+        except Exception:
+            _inbound_pnid = ""
+
+        if tenant_id:
+            logger.info(
+                f"📥 INBOUND tenant={tenant_id} pnid={_inbound_pnid} from={phone} "
+                f"msg='{message_text[:80]}'"
+            )
+        else:
             # Record unmatched webhook for ops visibility, then 200 silently.
             # We do NOT auto-reply across tenants — that would leak data.
             try:

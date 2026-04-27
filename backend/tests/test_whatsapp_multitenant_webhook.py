@@ -328,3 +328,131 @@ class TestMemoraAIWABA:
         # cleanup
         mongo_db.waba_configs.delete_many({"phone_number_id": pnid_cfg})
         mongo_db.whatsapp_tenant_mapping.delete_many({"phone_number_id": pnid_cfg})
+
+
+
+# ------------------- No-fallback policy + cross-tenant guard (iteration 15) -------------------
+
+import asyncio
+
+
+class TestNoFallbackPolicy:
+    """
+    The hard rule the user demanded:
+    if tenant_id is provided BUT tenant has no/incomplete waba_credentials,
+    we MUST NOT fall back to env (admin) credentials. Send must hard-fail.
+    """
+
+    def test_resolve_creds_no_env_fallback_when_tenant_creds_missing(self, mongo_db):
+        from services.whatsapp_agentic.meta_whatsapp_client import meta_whatsapp_client
+        tid = f"tnt_nofallback_{uuid.uuid4().hex[:6]}"
+        mongo_db.waba_configs.update_one(
+            {"tenant_id": tid},
+            {"$set": {
+                "tenant_id": tid,
+                "phone_number_id": None,
+                "access_token": None,
+                "is_active": False,
+            }},
+            upsert=True,
+        )
+
+        async def _go():
+            from motor.motor_asyncio import AsyncIOMotorClient
+            mclient = AsyncIOMotorClient(MONGO_URL)
+            mdb = mclient[DB_NAME]
+            meta_whatsapp_client.set_session_manager(None, mdb)
+            meta_whatsapp_client.invalidate_creds_cache(tid)
+            creds = await meta_whatsapp_client._resolve_creds(tid)
+            mclient.close()
+            return creds
+
+        creds = asyncio.new_event_loop().run_until_complete(_go())
+        assert creds.get("source") == "missing_tenant_creds"
+        assert not creds.get("access_token")
+        mongo_db.waba_configs.delete_many({"tenant_id": tid})
+
+    def test_send_text_message_blocked_when_tenant_creds_missing(self, mongo_db):
+        from services.whatsapp_agentic.meta_whatsapp_client import meta_whatsapp_client
+        tid = f"tnt_nofallback_send_{uuid.uuid4().hex[:6]}"
+        mongo_db.waba_configs.update_one(
+            {"tenant_id": tid},
+            {"$set": {
+                "tenant_id": tid,
+                "phone_number_id": None,
+                "access_token": None,
+            }},
+            upsert=True,
+        )
+
+        async def _go():
+            from motor.motor_asyncio import AsyncIOMotorClient
+            mclient = AsyncIOMotorClient(MONGO_URL)
+            mdb = mclient[DB_NAME]
+            meta_whatsapp_client.set_session_manager(None, mdb)
+            meta_whatsapp_client.invalidate_creds_cache(tid)
+            r = await meta_whatsapp_client.send_text_message(
+                phone="919900000099",
+                message="should never deliver",
+                tenant_id=tid,
+                check_session=False,
+            )
+            mclient.close()
+            return r
+
+        result = asyncio.new_event_loop().run_until_complete(_go())
+        assert result.get("success") is False
+        assert result.get("error") == "missing_tenant_credentials"
+        mongo_db.waba_configs.delete_many({"tenant_id": tid})
+
+    def test_resolve_creds_uses_env_only_when_tenant_id_is_none(self, mongo_db):
+        from services.whatsapp_agentic.meta_whatsapp_client import meta_whatsapp_client
+
+        async def _go():
+            from motor.motor_asyncio import AsyncIOMotorClient
+            mclient = AsyncIOMotorClient(MONGO_URL)
+            mdb = mclient[DB_NAME]
+            meta_whatsapp_client.set_session_manager(None, mdb)
+            meta_whatsapp_client.invalidate_creds_cache(None)
+            c = await meta_whatsapp_client._resolve_creds(None)
+            mclient.close()
+            return c
+
+        creds = asyncio.new_event_loop().run_until_complete(_go())
+        assert creds.get("source") == "env"
+
+
+class TestCrossTenantGuard:
+    def test_blocks_reply_when_phone_belongs_to_different_tenant(self, mongo_db, seeded_tenant):
+        """If phone has conversation under tenant A but inbound resolves to
+        tenant B, the AI reply must be blocked + security event logged."""
+        other_tenant = f"tnt_OTHER_{uuid.uuid4().hex[:6]}"
+        sender = f"91{int(time.time()) % 9000000000:010d}"
+        mongo_db.whatsapp_conversations.update_one(
+            {"phone": sender, "tenant_id": other_tenant},
+            {"$set": {
+                "id": f"conv_{uuid.uuid4().hex[:8]}",
+                "phone": sender,
+                "tenant_id": other_tenant,
+                "is_active": True,
+            }},
+            upsert=True,
+        )
+        payload = _meta_payload(TEST_TENANT_PNID, TEST_TENANT_WABAID, sender, text="hi confused customer")
+        r = requests.post(f"{API}/whatsapp/webhook", json=payload, timeout=30)
+        assert r.status_code == 200
+        time.sleep(2)
+
+        sec = mongo_db.security_logs.find_one({
+            "event": "cross_tenant_send_blocked",
+            "phone": sender,
+            "inbound_tenant_id": seeded_tenant["tenant_id"],
+            "conversation_tenant_id": other_tenant,
+        })
+        assert sec is not None, "Cross-tenant guard did not log security event"
+
+        mongo_db.whatsapp_conversations.delete_many({"phone": sender})
+        mongo_db.security_logs.delete_many({
+            "event": "cross_tenant_send_blocked", "phone": sender,
+        })
+        mongo_db.leads.delete_many({"buyer_phone": sender})
