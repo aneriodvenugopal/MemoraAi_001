@@ -87,7 +87,21 @@ def _normalize_url(url: str) -> str:
 
 
 def _same_host(seed: str, url: str) -> bool:
-    return _u.urlparse(seed).netloc.lower() == _u.urlparse(url).netloc.lower()
+    """Compare hosts treating apex and www. as the same site."""
+    def _h(u: str) -> str:
+        h = _u.urlparse(u).netloc.lower()
+        if h.startswith("www."):
+            h = h[4:]
+        return h
+    return _h(seed) == _h(url)
+
+
+def _registrable(url: str) -> str:
+    """Bare host without www. prefix — used for cross-domain sitemap filtering."""
+    h = _u.urlparse(url).netloc.lower()
+    if h.startswith("www."):
+        h = h[4:]
+    return h
 
 
 # ─────────────── HTML cleaner & extractor ───────────────
@@ -246,10 +260,12 @@ async def _parse_sitemap(client: httpx.AsyncClient, url: str, depth: int = 0,
         root = ET.fromstring(txt2)
     except Exception:
         return []
+    import html as _html
     for loc in root.iter("loc"):
         u = (loc.text or "").strip()
         if not u:
             continue
+        u = _html.unescape(u)  # decode &amp; → &
         if root.tag.lower().endswith("sitemapindex") or u.endswith(".xml"):
             urls.extend(await _parse_sitemap(client, u, depth + 1, seen))
         else:
@@ -258,65 +274,145 @@ async def _parse_sitemap(client: httpx.AsyncClient, url: str, depth: int = 0,
 
 
 async def _parse_robots(client: httpx.AsyncClient, base: str) -> Tuple[List[str], List[str]]:
-    """Return (sitemaps, disallow_patterns)."""
+    """Return (sitemaps, disallow_patterns_for_OUR_UA).
+
+    Properly groups directives by User-agent and only collects Disallow rules
+    that apply to '*' (or our own UA) — skipping rules scoped to GPTBot,
+    ClaudeBot, Amazonbot, etc.
+    """
     txt = await _fetch_text(client, _u.urljoin(base, "/robots.txt"))
     sitemaps: List[str] = []
     disallow: List[str] = []
     if not txt:
         return sitemaps, disallow
-    for line in txt.splitlines():
-        line = line.strip()
-        if line.lower().startswith("sitemap:"):
-            sitemaps.append(line.split(":", 1)[1].strip())
-        elif line.lower().startswith("disallow:"):
-            v = line.split(":", 1)[1].strip()
-            if v:
-                disallow.append(v)
+
+    our_ua_lower = USER_AGENT.split("/", 1)[0].lower()
+    current_uas: List[str] = []
+    in_block = False
+    apply = False  # whether the current block applies to us
+
+    for raw in txt.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if ":" not in line:
+            continue
+        key, _, val = line.partition(":")
+        key = key.strip().lower()
+        val = val.strip()
+
+        if key == "sitemap":
+            if val:
+                sitemaps.append(val)
+            continue
+
+        if key == "user-agent":
+            # New record begins (or extension of current group when consecutive)
+            if not in_block:
+                current_uas = []
+                in_block = True
+            current_uas.append(val.lower())
+            apply = any((ua == "*" or our_ua_lower in ua) for ua in current_uas)
+            continue
+
+        # Any other directive marks the start of rule lines for the current group
+        in_block = False  # next user-agent starts a fresh group
+        if not apply:
+            continue
+        if key == "disallow" and val:
+            disallow.append(val)
+
     return sitemaps, disallow
+
+
+_SKIP_EXT = (
+    ".pdf", ".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp", ".ico",
+    ".mp4", ".mp3", ".zip", ".rar", ".doc", ".docx", ".xls", ".xlsx",
+    ".ppt", ".pptx", ".css", ".js", ".woff", ".woff2", ".ttf",
+)
 
 
 # ─────────────── BFS crawler ───────────────
 async def _crawl_bfs(client: httpx.AsyncClient, seeds: List[str], host_seed: str,
-                     max_pages: int, disallow: List[str]) -> List[Tuple[str, str, str, int]]:
-    """Returns list of (url, title, cleaned_text, word_count)."""
+                     max_pages: int, disallow: List[str],
+                     expand_links: bool = True) -> List[Tuple[str, str, str, int]]:
+    """Returns list of (url, title, cleaned_text, word_count). Concurrent fetcher.
+
+    When ``expand_links`` is False, only the supplied seed URLs are crawled
+    (used when a sitemap already provides the full URL list — avoids
+    blowing up the queue and wasting cycles).
+    """
     visited: Set[str] = set()
     queue: List[str] = list(dict.fromkeys(_normalize_url(s) for s in seeds))
     out: List[Tuple[str, str, str, int]] = []
+    sem = asyncio.Semaphore(8)
 
     def _allowed(url: str) -> bool:
         path = _u.urlparse(url).path
         for d in disallow:
             if path.startswith(d):
                 return False
+        if any(path.lower().endswith(ext) for ext in _SKIP_EXT):
+            return False
         return True
 
-    while queue and len(out) < max_pages:
-        url = queue.pop(0)
-        if url in visited:
-            continue
-        visited.add(url)
-        if not _same_host(host_seed, url) or not _allowed(url):
-            continue
-        try:
-            r = await client.get(url, headers={"User-Agent": USER_AGENT},
-                                 timeout=TIMEOUT, follow_redirects=True)
-            if r.status_code != 200 or "html" not in (r.headers.get("content-type") or "").lower():
+    async def _fetch_one(url: str):
+        async with sem:
+            try:
+                r = await client.get(
+                    url, headers={"User-Agent": USER_AGENT},
+                    timeout=httpx.Timeout(connect=5.0, read=8.0, write=5.0, pool=5.0),
+                    follow_redirects=True,
+                )
+                if r.status_code != 200:
+                    return None
+                ct = (r.headers.get("content-type") or "").lower()
+                if "html" not in ct:
+                    return None
+                if len(r.content) > MAX_BYTES_PER_PAGE:
+                    return None
+                return r
+            except Exception as e:
+                logger.debug(f"crawl fail {url}: {e}")
+                return None
+
+    iterations = 0
+    while queue and len(out) < max_pages and iterations < 200:
+        iterations += 1
+        batch: List[str] = []
+        while queue and len(batch) < 8:
+            u = queue.pop(0)
+            if u in visited:
                 continue
-            if len(r.content) > MAX_BYTES_PER_PAGE:
+            visited.add(u)
+            if not _same_host(host_seed, u) or not _allowed(u):
                 continue
-            soup = BeautifulSoup(r.text, "lxml")
-            title = (soup.title.string.strip() if soup.title and soup.title.string else url)[:280]
-            text = _clean_text(soup)
-            words = len(text.split())
-            out.append((url, title, text, words))
-            # enqueue more links
-            if len(out) < max_pages:
-                for a in soup.find_all("a", href=True):
-                    nxt = _normalize_url(_u.urljoin(url, a["href"]))
-                    if nxt and nxt not in visited and _same_host(host_seed, nxt):
-                        queue.append(nxt)
-        except Exception as e:
-            logger.debug(f"crawl fail {url}: {e}")
+            batch.append(u)
+        if not batch:
+            continue
+        results = await asyncio.gather(
+            *(_fetch_one(u) for u in batch), return_exceptions=True
+        )
+        for url, r in zip(batch, results):
+            if r is None or isinstance(r, BaseException) or len(out) >= max_pages:
+                continue
+            try:
+                soup = BeautifulSoup(r.text, "lxml")
+                title = (soup.title.string.strip() if soup.title and soup.title.string else url)[:280]
+                text = _clean_text(soup)
+                words = len(text.split())
+                if words < 8:
+                    continue
+                out.append((url, title, text, words))
+                if expand_links and len(out) < max_pages and len(visited) < max_pages * 4:
+                    for a in soup.find_all("a", href=True):
+                        nxt = _normalize_url(_u.urljoin(url, a["href"]))
+                        if nxt and nxt not in visited and _same_host(host_seed, nxt):
+                            queue.append(nxt)
+            except Exception as e:
+                logger.debug(f"parse fail {url}: {e}")
+        # Yield to other tasks (don't starve event loop)
+        await asyncio.sleep(0)
     return out
 
 
@@ -358,6 +454,9 @@ async def run_crawl(db, tenant_id: str, source_id: str, primary_url: str,
     async with httpx.AsyncClient(timeout=TIMEOUT) as client:
         # Step 1 — robots.txt
         sm_from_robots, disallow = await _parse_robots(client, seed)
+        # Drop cross-domain sitemap suggestions (e.g. robots.txt may point to
+        # an unrelated sister-site sitemap)
+        sm_from_robots = [s for s in sm_from_robots if _same_host(seed, s)]
 
         # Step 2 — sitemaps
         sitemap_candidates = list(dict.fromkeys(
@@ -378,11 +477,15 @@ async def run_crawl(db, tenant_id: str, source_id: str, primary_url: str,
                     sitemap_found = True
 
         sitemap_urls = list(dict.fromkeys(_normalize_url(u) for u in sitemap_urls))
+        # Prioritize root + extras + sitemap (first slice = max_pages * 1.2)
         seeds = [seed] + extras + sitemap_urls
-        seeds = list(dict.fromkeys(seeds))[:max_pages * 2]
+        seeds = list(dict.fromkeys(seeds))[: int(max_pages * 1.2)]
 
-        # Step 3 — BFS
-        crawled = await _crawl_bfs(client, seeds, host_seed, max_pages, disallow)
+        # Step 3 — BFS (skip link expansion when sitemap already provides URLs)
+        crawled = await _crawl_bfs(
+            client, seeds, host_seed, max_pages, disallow,
+            expand_links=not bool(sitemap_urls),
+        )
 
     # Step 4 — Persist
     page_count = 0
