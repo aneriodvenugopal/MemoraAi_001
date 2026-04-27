@@ -217,3 +217,91 @@ async def inbox_stats(request: Request):
         "human_mode": human_mode, "ai_mode": ai_mode,
         "messages_today": msgs_today, "unread": unread,
     }
+
+
+
+@router.get("/conversations/{conversation_id}/memory-panel")
+async def get_conversation_memory_panel(conversation_id: str, request: Request):
+    """
+    Customer Memory Panel for the team inbox.
+
+    Returns: customer summary, last intent, mood, language, previous asks,
+    recommended next reply (from latest AI reply log), and the AI reply
+    metadata trail used to generate the current conversation.
+    """
+    user = await get_current_user(request)
+    db = get_db(request)
+    tenant_id = user.get("tenant_id")
+
+    conv = await db.whatsapp_conversations.find_one(
+        {"id": conversation_id, "tenant_id": tenant_id},
+        {"_id": 0}
+    )
+    if not conv:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+
+    phone = conv.get("phone", "")
+
+    contact = await db.memoraai_contacts.find_one(
+        {"tenant_id": tenant_id, "phone": phone}, {"_id": 0}
+    ) or {}
+    lead = await db.memoraai_leads.find_one(
+        {"tenant_id": tenant_id, "phone": phone}, {"_id": 0}
+    ) or {}
+    memories = await db.business_memories.find(
+        {"tenant_id": tenant_id, "customer_phone": phone},
+        {"_id": 0, "memory_type": 1, "content": 1, "metadata": 1, "created_at": 1}
+    ).sort("created_at", -1).to_list(20)
+
+    latest_log = await db.ai_reply_logs.find_one(
+        {"tenant_id": tenant_id, "phone": phone},
+        {"_id": 0},
+        sort=[("logged_at", -1)],
+    ) or {}
+
+    last_user_msgs = await db.whatsapp_messages.find(
+        {"conversation_id": conversation_id, "role": "user"},
+        {"_id": 0, "content": 1, "timestamp": 1}
+    ).sort("timestamp", -1).to_list(5)
+    previous_asks = [m.get("content", "") for m in last_user_msgs]
+
+    recommended = ""
+    if latest_log.get("response"):
+        recommended = latest_log["response"]
+
+    return {
+        "conversation_id": conversation_id,
+        "phone": phone,
+        "customer": {
+            "name": contact.get("name") or lead.get("name") or "",
+            "tags": contact.get("tags") or [],
+            "stage": lead.get("status") or "new",
+            "lead_score": lead.get("score"),
+            "captured_fields": lead.get("captured_fields") or {},
+        },
+        "last_signals": {
+            "language": latest_log.get("language_detected") or "english",
+            "sentiment": latest_log.get("sentiment") or "neutral",
+            "buying_intent": latest_log.get("buying_intent", False),
+            "source_used": latest_log.get("source_used") or "general",
+            "memory_used": latest_log.get("memory_used", False),
+            "confidence": latest_log.get("confidence"),
+            "model": latest_log.get("model"),
+        },
+        "previous_asks": previous_asks,
+        "memories": memories,
+        "recommended_next_reply": recommended,
+    }
+
+
+@router.get("/ai-reply-logs/{conversation_id}")
+async def list_ai_reply_logs(conversation_id: str, request: Request, limit: int = 30):
+    """Per-reply metadata trail for debugging the AI brain."""
+    user = await get_current_user(request)
+    db = get_db(request)
+    tenant_id = user.get("tenant_id")
+    items = await db.ai_reply_logs.find(
+        {"tenant_id": tenant_id, "conversation_id": conversation_id},
+        {"_id": 0}
+    ).sort("logged_at", -1).to_list(limit)
+    return {"count": len(items), "items": items}

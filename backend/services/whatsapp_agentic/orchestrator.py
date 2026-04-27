@@ -127,10 +127,19 @@ If unclear, respond with "general_question".
                     "conversation_id": conversation_id
                 }
             
-            # --- USE SALES ENGINE (DB-first approach) ---
-            from .sales_engine import SalesEngine
-            engine = SalesEngine(self.db)
-            
+            # --- ENGINE SELECTION ---
+            # Default to the new content-first IntelligentReplyEngine.
+            # Set USE_LEGACY_SALES_ENGINE=true in env to fall back to the
+            # old real-estate-locked SalesEngine.
+            import os as _os
+            use_legacy = _os.getenv("USE_LEGACY_SALES_ENGINE", "false").lower() == "true"
+            if use_legacy:
+                from .sales_engine import SalesEngine
+                engine = SalesEngine(self.db)
+            else:
+                from .intelligent_engine import IntelligentReplyEngine
+                engine = IntelligentReplyEngine(self.db)
+
             result = await engine.process(
                 tenant_id=tenant_id,
                 lead_id=lead_id,
