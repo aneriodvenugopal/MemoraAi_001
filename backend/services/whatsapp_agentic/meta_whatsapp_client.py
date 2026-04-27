@@ -70,10 +70,55 @@ class MetaWhatsAppClient:
             session_manager.set_db(db)
         
     def _get_headers(self) -> Dict[str, str]:
-        """Get API headers with Bearer token"""
+        """Get API headers with Bearer token (env-level)"""
         return {
             "Authorization": f"Bearer {self.access_token}",
             "Content-Type": "application/json"
+        }
+
+    # ──────────────────────────────────────────────
+    # MULTI-TENANT CREDENTIAL RESOLUTION
+    # ──────────────────────────────────────────────
+    async def _resolve_creds(self, tenant_id: Optional[str] = None) -> Dict[str, str]:
+        """Resolve which (access_token, phone_number_id, waba_id) to use.
+
+        Order:
+          1. If tenant_id provided AND tenant has a saved waba_config with
+             access_token + phone_number_id → use tenant's own credentials.
+          2. Fall back to env (admin / platform-wide credentials).
+
+        This is what makes outbound WhatsApp sends work for every tenant
+        independently — each business sends from THEIR OWN registered number
+        using THEIR OWN access token.
+        """
+        if tenant_id and self._db is not None:
+            try:
+                cfg = await self._db.waba_configs.find_one(
+                    {"tenant_id": tenant_id}, {"_id": 0}
+                )
+                if cfg and cfg.get("access_token") and cfg.get("phone_number_id"):
+                    return {
+                        "access_token": cfg["access_token"],
+                        "phone_number_id": cfg["phone_number_id"],
+                        "waba_id": cfg.get("waba_id", "") or "",
+                        "source": "tenant",
+                        "tenant_id": tenant_id,
+                    }
+            except Exception as e:
+                logger.warning(f"Failed to load tenant WABA creds for {tenant_id}: {e}")
+        return {
+            "access_token": self.access_token,
+            "phone_number_id": self.phone_number_id,
+            "waba_id": self.waba_id,
+            "source": "env",
+            "tenant_id": tenant_id or "",
+        }
+
+    @staticmethod
+    def _headers_from(creds: Dict[str, str]) -> Dict[str, str]:
+        return {
+            "Authorization": f"Bearer {creds.get('access_token', '')}",
+            "Content-Type": "application/json",
         }
     
 
@@ -163,17 +208,33 @@ class MetaWhatsAppClient:
             }
         }
         
+        # Resolve tenant-specific credentials (or fall back to env)
+        creds = await self._resolve_creds(tenant_id)
+        if not creds.get("access_token") or not creds.get("phone_number_id"):
+            logger.error(
+                f"❌ Cannot send to {phone}: no WABA credentials for tenant_id={tenant_id} "
+                f"(source={creds.get('source')}). Configure credentials in /waba-setup."
+            )
+            return {
+                "success": False,
+                "error": "missing_credentials",
+                "message": "WABA access_token / phone_number_id not configured for this tenant.",
+            }
+
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
                 response = await client.post(
-                    f"{self.base_url}/{self.phone_number_id}/messages",
-                    headers=self._get_headers(),
+                    f"{self.base_url}/{creds['phone_number_id']}/messages",
+                    headers=self._headers_from(creds),
                     json=payload
                 )
                 
                 result = response.json() if response.status_code in [200, 201] else {}
                 
-                logger.info(f"📤 WhatsApp Send Response: {response.status_code} - {result}")
+                logger.info(
+                    f"📤 WhatsApp Send Response (src={creds['source']} pnid={creds['phone_number_id']}): "
+                    f"{response.status_code} - {result}"
+                )
                 
                 if response.status_code not in [200, 201]:
                     error_data = response.json() if response.text else {}
@@ -240,7 +301,8 @@ class MetaWhatsAppClient:
         result = await self.send_template_message(
             phone=phone,
             template_name=self.fallback_template,
-            language="en_US"
+            language="en_US",
+            tenant_id=tenant_id,
         )
         
         if result.get("success"):
@@ -270,7 +332,8 @@ class MetaWhatsAppClient:
         template_name: str,
         template_params: List[str] = None,
         language: str = "en_US",
-        header_params: List[Dict] = None
+        header_params: List[Dict] = None,
+        tenant_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Send a pre-approved template message
@@ -278,6 +341,9 @@ class MetaWhatsAppClient:
         Endpoint: POST /{phone_number_id}/messages
         """
         phone = self._normalize_phone(phone)
+        creds = await self._resolve_creds(tenant_id)
+        if not creds.get("access_token") or not creds.get("phone_number_id"):
+            return {"success": False, "error": "missing_credentials"}
         
         # Build components with parameters
         components = []
@@ -316,14 +382,14 @@ class MetaWhatsAppClient:
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
                 response = await client.post(
-                    f"{self.base_url}/{self.phone_number_id}/messages",
-                    headers=self._get_headers(),
+                    f"{self.base_url}/{creds['phone_number_id']}/messages",
+                    headers=self._headers_from(creds),
                     json=payload
                 )
                 
                 result = response.json() if response.status_code in [200, 201] else {}
                 
-                logger.info(f"📤 Template Send Response: {response.status_code} - {result}")
+                logger.info(f"📤 Template Send Response (src={creds['source']}): {response.status_code} - {result}")
                 
                 if response.status_code not in [200, 201]:
                     error_data = {}
@@ -495,7 +561,8 @@ class MetaWhatsAppClient:
         body_text: str,
         buttons: List[Dict[str, str]],
         header: Optional[str] = None,
-        footer: Optional[str] = None
+        footer: Optional[str] = None,
+        tenant_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Send interactive message with buttons
@@ -504,6 +571,9 @@ class MetaWhatsAppClient:
         Max 3 buttons allowed
         """
         phone = self._normalize_phone(phone)
+        creds = await self._resolve_creds(tenant_id)
+        if not creds.get("access_token") or not creds.get("phone_number_id"):
+            return {"success": False, "error": "missing_credentials"}
         
         interactive = {
             "type": "button",
@@ -540,8 +610,8 @@ class MetaWhatsAppClient:
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
                 response = await client.post(
-                    f"{self.base_url}/{self.phone_number_id}/messages",
-                    headers=self._get_headers(),
+                    f"{self.base_url}/{creds['phone_number_id']}/messages",
+                    headers=self._headers_from(creds),
                     json=payload
                 )
                 
@@ -750,7 +820,7 @@ class MetaWhatsAppClient:
             language="en"
         )
     
-    async def mark_as_read(self, message_id: str) -> Dict[str, Any]:
+    async def mark_as_read(self, message_id: str, tenant_id: Optional[str] = None) -> Dict[str, Any]:
         """
         Mark a message as read (sends green double ticks to sender).
         
@@ -762,11 +832,15 @@ class MetaWhatsAppClient:
             "message_id": message_id
         }
         
+        creds = await self._resolve_creds(tenant_id)
+        if not creds.get("access_token") or not creds.get("phone_number_id"):
+            return {"success": False, "error": "missing_credentials"}
+
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
                 response = await client.post(
-                    f"{self.base_url}/{self.phone_number_id}/messages",
-                    headers=self._get_headers(),
+                    f"{self.base_url}/{creds['phone_number_id']}/messages",
+                    headers=self._headers_from(creds),
                     json=payload
                 )
                 

@@ -128,9 +128,15 @@ def normalize_phone(phone: str) -> str:
 
 async def identify_tenant(db, payload: Dict) -> Optional[str]:
     """
-    Identify tenant STRICTLY from WABA mapping.
-    NEVER falls back to another tenant's data.
-    Returns None if tenant cannot be identified → caller must handle safely.
+    Identify tenant STRICTLY from the incoming Meta webhook payload.
+
+    Resolution order (tightest match first):
+      1. `phone_number_id` from payload → match `whatsapp_tenant_mapping`
+      2. `phone_number_id` from payload → match `waba_configs` (auto-heals mapping)
+      3. `waba_id` (entry.id) from payload → match `waba_configs`
+      4. Existing conversation lookup by sender_phone (only as last resort).
+
+    Never falls back across tenants. Returns None on miss → caller logs and 200s.
     """
     waba_id = ""
     phone_number_id = ""
@@ -146,22 +152,57 @@ async def identify_tenant(db, payload: Dict) -> Optional[str]:
 
     to_number = payload.get("to", payload.get("waba_id", waba_id))
 
-    # Step 1: Check explicit WABA → tenant mapping
+    # Step 1: tightest — explicit WABA → tenant mapping
     if to_number or phone_number_id:
         to_normalized = normalize_phone(str(to_number)) if to_number else ""
         mapping = await db.whatsapp_tenant_mapping.find_one(
             {"$or": [
-                {"whatsapp_number": to_normalized},
-                {"waba_id": str(to_number)},
-                {"phone_number_id": phone_number_id}
+                {"phone_number_id": phone_number_id} if phone_number_id else {"_id": "_never_"},
+                {"whatsapp_number": to_normalized} if to_normalized else {"_id": "_never_"},
+                {"waba_id": str(to_number)} if to_number else {"_id": "_never_"},
             ]},
             {"_id": 0}
         )
         if mapping:
-            logger.info(f"Tenant identified via WABA mapping: {mapping['tenant_id']}")
+            logger.info(
+                f"Tenant identified via mapping: {mapping['tenant_id']} (pnid={phone_number_id})"
+            )
             return mapping["tenant_id"]
 
-    # Step 2: Check if sender phone already has a conversation with a known tenant
+    # Step 2: fall back to waba_configs by phone_number_id (multi-tenant primary path)
+    if phone_number_id:
+        cfg = await db.waba_configs.find_one(
+            {"phone_number_id": phone_number_id}, {"_id": 0}
+        )
+        if cfg and cfg.get("tenant_id"):
+            tenant_id = cfg["tenant_id"]
+            # Self-heal mapping for next time
+            try:
+                await db.whatsapp_tenant_mapping.update_one(
+                    {"phone_number_id": phone_number_id},
+                    {"$set": {
+                        "tenant_id": tenant_id,
+                        "phone_number_id": phone_number_id,
+                        "waba_id": cfg.get("waba_id", "") or waba_id,
+                        "phone_number": cfg.get("phone_number", "") or display_phone,
+                        "auto_healed_at": datetime.now(timezone.utc).isoformat(),
+                    }},
+                    upsert=True,
+                )
+            except Exception as he:
+                logger.warning(f"Mapping auto-heal failed: {he}")
+            logger.info(
+                f"Tenant identified via waba_configs: {tenant_id} (pnid={phone_number_id}) — mapping auto-healed"
+            )
+            return tenant_id
+
+    # Step 3: waba_id match in waba_configs (rarer)
+    if waba_id:
+        cfg = await db.waba_configs.find_one({"waba_id": waba_id}, {"_id": 0})
+        if cfg and cfg.get("tenant_id"):
+            return cfg["tenant_id"]
+
+    # Step 4: existing conversation by sender phone — last resort
     sender_phone = ""
     if entries:
         changes = entries[0].get("changes", [])
@@ -178,7 +219,7 @@ async def identify_tenant(db, payload: Dict) -> Optional[str]:
             logger.info(f"Tenant identified from existing conversation: {existing_conv['tenant_id']}")
             return existing_conv["tenant_id"]
 
-    # Step 3: NO CROSS-TENANT FALLBACK. Log security event and return None.
+    # Step 5: NO CROSS-TENANT FALLBACK. Log security event and return None.
     await db.security_logs.insert_one({
         "event": "tenant_identification_failed",
         "waba_id": waba_id,
@@ -190,8 +231,8 @@ async def identify_tenant(db, payload: Dict) -> Optional[str]:
     })
     logger.warning(
         f"TENANT NOT IDENTIFIED: waba={waba_id} phone_id={phone_number_id} "
-        f"sender={sender_phone}. No WABA mapping configured. "
-        f"Use POST /api/whatsapp/tenant-mapping to configure."
+        f"sender={sender_phone}. No matching waba_config/mapping. "
+        f"Tell the client to save their WABA credentials at /waba-setup."
     )
     return None
 
@@ -347,6 +388,7 @@ async def process_incoming_message(
                         phone=phone,
                         body_text="Choose an option or type your message:",
                         buttons=quick_replies[:3],
+                        tenant_id=tenant_id,
                     )
                     logger.info(f"📱 Quick reply buttons sent to {phone}")
                 except Exception as btn_err:
@@ -441,17 +483,28 @@ async def whatsapp_webhook(
     - Deduplicates by message ID
     - Prevents bot loops (ignores own messages)
     - Rate limits per phone number
-    - Processes messages in background
+    - Multi-tenant: resolves tenant from payload's phone_number_id
     """
     db = get_db(request)
     
     try:
         raw_payload = await request.json()
         logger.info(f"WhatsApp Webhook POST received: {raw_payload}")
-        
+
+        # ── Audit log every inbound payload (best effort) ──
+        try:
+            await db.webhook_logs.insert_one({
+                "id": str(uuid.uuid4()),
+                "direction": "inbound",
+                "received_at": datetime.now(timezone.utc),
+                "payload": raw_payload,
+            })
+        except Exception as log_err:
+            logger.warning(f"webhook_logs insert failed (non-blocking): {log_err}")
+
         # Parse the Meta webhook payload format
         parsed = meta_whatsapp_client.parse_webhook_payload(raw_payload)
-        
+
         if parsed.get("error"):
             # Still return 200 to Meta so it doesn't retry
             return {"status": "ok"}
@@ -466,10 +519,6 @@ async def whatsapp_webhook(
         
         logger.info(f"Incoming message from {phone}: '{message_text}' (id={message_id})")
         
-        # --- SEND READ RECEIPT (green ticks) ---
-        if message_id:
-            background_tasks.add_task(meta_whatsapp_client.mark_as_read, message_id)
-        
         # --- DUPLICATE MESSAGE PROTECTION ---
         if message_id and _message_dedup.has(message_id):
             logger.info(f"Duplicate message ignored: {message_id}")
@@ -477,19 +526,25 @@ async def whatsapp_webhook(
         if message_id:
             _message_dedup.set(message_id)
         
-        # --- BOT LOOP PREVENTION ---
-        # Ignore messages sent from our own WhatsApp numbers
+        # --- BOT LOOP PREVENTION (DYNAMIC, multi-tenant) ---
+        # Block messages whose sender == any tenant's own WABA number.
         sender_phone = normalize_phone(phone)
         own_phones = set()
-        # Add all known business phone numbers
-        for env_key in ["META_WHATSAPP_OWN_PHONE", "META_WHATSAPP_OWN_PHONE_2"]:
+        for env_key in ("META_WHATSAPP_OWN_PHONE", "META_WHATSAPP_OWN_PHONE_2"):
             val = os.getenv(env_key, "")
             if val:
                 own_phones.add(normalize_phone(val))
-        # Known business numbers
-        own_phones.add(normalize_phone("6309356590"))
-        own_phones.add(normalize_phone("9390893060"))
-        
+        try:
+            async for cfg in db.waba_configs.find(
+                {"phone_number": {"$ne": None}},
+                {"_id": 0, "phone_number": 1}
+            ):
+                pn = cfg.get("phone_number")
+                if pn:
+                    own_phones.add(normalize_phone(pn))
+        except Exception as e:
+            logger.warning(f"Failed to load own phone list from waba_configs: {e}")
+
         if sender_phone in own_phones:
             logger.info(f"Bot loop prevented: ignoring message from own number {sender_phone}")
             return {"status": "ok"}
@@ -502,24 +557,38 @@ async def whatsapp_webhook(
             return {"status": "ok"}
         _rate_limit.set(rate_key)
         
-        # --- PROCESS MESSAGE INLINE ---
+        # --- IDENTIFY TENANT ---
         phone = sender_phone
         tenant_id = await identify_tenant(db, raw_payload)
-        
+
         if not tenant_id:
-            logger.warning(f"TENANT NOT IDENTIFIED for {phone}. Sending safe error. Configure WABA mapping.")
-            # Send safe error message — never expose other tenant data
+            # Record unmatched webhook for ops visibility, then 200 silently.
+            # We do NOT auto-reply across tenants — that would leak data.
             try:
-                await meta_whatsapp_client.send_text_message(
-                    phone=phone,
-                    message="Thank you for contacting us! Our team will get back to you shortly. Please call our office for immediate assistance.",
-                    tenant_id="",
-                    check_session=False,
-                )
-            except Exception:
-                pass
+                meta = (raw_payload.get("entry", [{}])[0]
+                        .get("changes", [{}])[0]
+                        .get("value", {}).get("metadata", {}))
+                await db.unmatched_webhooks.insert_one({
+                    "id": str(uuid.uuid4()),
+                    "received_at": datetime.now(timezone.utc),
+                    "phone_number_id": meta.get("phone_number_id", ""),
+                    "display_phone_number": meta.get("display_phone_number", ""),
+                    "waba_id": str(raw_payload.get("entry", [{}])[0].get("id", "")),
+                    "sender_phone": sender_phone,
+                    "preview": message_text[:200],
+                })
+            except Exception as e:
+                logger.warning(f"unmatched_webhooks insert failed: {e}")
+            logger.warning(
+                f"TENANT NOT IDENTIFIED for {phone}. "
+                f"No matching waba_config. Ask the client to save WABA creds at /waba-setup."
+            )
             return {"status": "ok"}
-        
+
+        # --- SEND READ RECEIPT (green ticks) using TENANT credentials ---
+        if message_id:
+            background_tasks.add_task(meta_whatsapp_client.mark_as_read, message_id, tenant_id)
+
         contact_name = parsed.get("contact_name", "")
         lead = await find_or_create_lead(db, tenant_id, phone, message_text, contact_name)
         lead_id = lead["id"]
@@ -554,11 +623,65 @@ async def webhook_health():
     stats = llm_router.get_stats()
     return {
         "status": "ok",
-        "version": "v10_dual_llm",
+        "version": "v11_multi_tenant",
         "deployed": True,
         "llm_engine": "gemini-2.5-flash-lite + gpt-4o-mini",
+        "multi_tenant": True,
         "llm_stats": stats
     }
+
+
+@router.get("/webhook-routing")
+async def webhook_routing_diagnostic(
+    request: Request,
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Super-admin diagnostic: shows every tenant → phone_number_id mapping
+    used to route inbound webhooks, plus recent unmatched payloads.
+    """
+    if current_user.get("role") != "super_admin":
+        raise HTTPException(status_code=403, detail="Super admin only")
+    db = get_db(request)
+
+    mappings = await db.whatsapp_tenant_mapping.find({}, {"_id": 0}).to_list(500)
+    configs = await db.waba_configs.find(
+        {}, {"_id": 0, "tenant_id": 1, "phone_number": 1, "phone_number_id": 1,
+             "waba_id": 1, "is_active": 1, "is_verified": 1}
+    ).to_list(500)
+    unmatched = await db.unmatched_webhooks.find({}, {"_id": 0}).sort(
+        "received_at", -1
+    ).to_list(20)
+
+    # Detect orphans (waba_config has pnid but no mapping)
+    mapped_ids = {m.get("phone_number_id") for m in mappings if m.get("phone_number_id")}
+    orphans = [
+        c for c in configs
+        if c.get("phone_number_id") and c["phone_number_id"] not in mapped_ids
+    ]
+
+    return {
+        "mappings": mappings,
+        "waba_configs": configs,
+        "orphan_configs": orphans,
+        "recent_unmatched_webhooks": unmatched,
+    }
+
+
+@router.get("/unmatched-webhooks")
+async def list_unmatched_webhooks(
+    request: Request,
+    current_user: dict = Depends(get_current_user),
+    limit: int = 50,
+):
+    """List recent unmatched webhook payloads — for debugging onboarding."""
+    if current_user.get("role") != "super_admin":
+        raise HTTPException(status_code=403, detail="Super admin only")
+    db = get_db(request)
+    items = await db.unmatched_webhooks.find({}, {"_id": 0}).sort(
+        "received_at", -1
+    ).to_list(limit)
+    return {"count": len(items), "items": items}
 
 
 @router.post("/reset-conversation/{phone}")
@@ -597,22 +720,50 @@ async def whatsapp_webhook_verify(request: Request):
     Meta sends: hub.mode, hub.verify_token, hub.challenge
     Must return ONLY the challenge as plain text with HTTP 200.
     Must return HTTP 403 if verification fails.
+
+    Multi-tenant: accepts ANY of:
+      • env META_WHATSAPP_VERIFY_TOKEN / WHATSAPP_VERIFY_TOKEN
+      • platform_settings.webhook_verify_token (super-admin override)
+      • any tenant's waba_configs.verify_token (so each onboarded business
+        can use their own Meta app + verify token)
     """
+    db = get_db(request)
     params = request.query_params
     
     mode = params.get("hub.mode")
     token = params.get("hub.verify_token")
     challenge = params.get("hub.challenge")
     
-    verify_token = os.getenv("META_WHATSAPP_VERIFY_TOKEN", os.getenv("WHATSAPP_VERIFY_TOKEN", ""))
-    
-    logger.info(f"Webhook verify: mode={mode}, token_match={token == verify_token}, challenge={challenge}")
-    
-    if mode == "subscribe" and token == verify_token:
+    accepted = set()
+    env_tok = os.getenv("META_WHATSAPP_VERIFY_TOKEN", "") or os.getenv("WHATSAPP_VERIFY_TOKEN", "")
+    if env_tok:
+        accepted.add(env_tok)
+    try:
+        platform = await db.platform_settings.find_one(
+            {"id": "platform-settings"}, {"_id": 0, "webhook_verify_token": 1}
+        )
+        if platform and platform.get("webhook_verify_token"):
+            accepted.add(platform["webhook_verify_token"])
+        async for cfg in db.waba_configs.find(
+            {"verify_token": {"$ne": None}},
+            {"_id": 0, "verify_token": 1}
+        ):
+            v = cfg.get("verify_token")
+            if v:
+                accepted.add(v)
+    except Exception as e:
+        logger.warning(f"verify-token lookup failed: {e}")
+
+    matched = mode == "subscribe" and token in accepted
+    logger.info(
+        f"Webhook verify: mode={mode} match={matched} accepted_tokens={len(accepted)}"
+    )
+
+    if matched:
         logger.info("Webhook verified successfully!")
         return PlainTextResponse(content=str(challenge), status_code=200)
     
-    logger.warning(f"Webhook verification FAILED: mode={mode}, token={token}")
+    logger.warning(f"Webhook verification FAILED: mode={mode} token_prefix={(token or '')[:6]}…")
     return PlainTextResponse(content="Forbidden", status_code=403)
 
 

@@ -1,0 +1,43 @@
+{
+  "summary": "Backend validation of multi-tenant WhatsApp webhook refactor. 14/14 pytest cases pass. Verified (a) multi-token GET verification (env + tenant verify_token + wrong-token 403), (b) POST routing via whatsapp_tenant_mapping, (c) POST routing via waba_configs with auto-heal of mapping (auto_healed_at field is written), (d) unknown phone_number_id is logged to unmatched_webhooks with NO cross-tenant lead/reply, (e) bot-loop prevention when sender==tenant's saved phone_number (no lead created), (f) webhook-health returns v11_multi_tenant + multi_tenant=true, (g) webhook-routing / unmatched-webhooks are super-admin-only (403 for tenant_admin), (h) /memoraai/waba/webhook-info returns absolute https callback + non-empty verify_token, (i) POST /memoraai/waba/config WITHOUT waba_id still creates a whatsapp_tenant_mapping keyed on phone_number_id. Backend logs confirm 'src=tenant pnid=...' for every outbound send during tests, proving dynamic per-tenant credential routing in MetaWhatsAppClient._resolve_creds is actually used (not env fallback).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "GET /api/memoraai/waba/webhook-info",
+        "issue": "Spec expects callback_url to start with 'https://memoraai.in'. In this preview environment it returns the preview host (https://retomerp-memora.preview.emergentagent.com/api/whatsapp/webhook). Test accepts both, but production deploy must ensure settings.webhook_callback_url or public base resolves to https://memoraai.in/api/whatsapp/webhook so onboarded clients paste the correct callback into Meta."
+      },
+      {
+        "endpoint": "POST /api/whatsapp/webhook (Meta outbound send)",
+        "issue": "Expected — with the dummy access_token saved in waba_configs the outbound call to graph.facebook.com returns 401. This is INTENDED for this test (we only verify routing, not real delivery). In production each tenant will provide a real long-lived user token via /waba-setup."
+      }
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_whatsapp_multitenant_webhook.py",
+    "/app/test_reports/pytest/iteration14_results.xml"
+  ],
+  "action_items": [
+    "(Production) Ensure settings.webhook_callback_url (or the public base fallback in routes/memoraai_waba.py:webhook-info) resolves to https://memoraai.in/api/whatsapp/webhook so clients onboarding via /waba-setup paste the right URL into Meta.",
+    "(Observability) Consider exposing /api/whatsapp/unmatched-webhooks in the super-admin UI so ops can see which tenants still need to save WABA creds.",
+    "(Hardening) identify_tenant() Step 4 (existing conversation lookup by sender_phone) can cross-attribute a message if the same customer previously talked to a different tenant via the same phone. Suggest dropping Step 4 or gating it to sender+tenant_id pair."
+  ],
+  "critical_code_review_comments": [
+    "routes/whatsapp_webhook.py: identify_tenant Step 4 (lookup by sender_phone alone) can leak across tenants if same customer exists on multiple tenants. Low risk but worth tightening — the docstring already says 'last resort', consider removing entirely now that waba_configs lookup is solid.",
+    "routes/whatsapp_webhook.py: _message_dedup TTLCache is per-process in-memory — if backend is horizontally scaled, the same Meta message can be processed twice. For multi-replica production, back dedup with Redis or Mongo TTL index on message_id.",
+    "services/whatsapp_agentic/meta_whatsapp_client.py: _resolve_creds is called once per send, doing a Mongo roundtrip every time. Add a short (30s) in-memory LRU cache keyed by tenant_id to avoid N extra queries per conversation turn.",
+    "routes/whatsapp_webhook.py line ~715: GET /webhook iterates waba_configs on every verification request. If a tenant count grows to 100+, cache accepted tokens for 60s — not critical but cheap to add.",
+    "routes/memoraai_waba.py save_waba_config creates unique index on phone_number_id every time the endpoint is called (line ~146). Move index creation to startup (app.state.db.whatsapp_tenant_mapping.create_index at lifespan) — currently it's idempotent but wasteful."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_whatsapp_multitenant_webhook.py"
+  ],
+  "success_rate": {"backend": "100% (14/14)", "frontend": "skipped per request"},
+  "test_credentials": "Super admin 9948303060 / admin123, Tenant admin 8888888888 / admin123 — both verified via /api/auth/login",
+  "seed_data_creation": "Created one ephemeral tenant (id prefix 'tnt_test_iter14_') + matching waba_configs + whatsapp_tenant_mapping entries + one unmatched_webhooks doc. All cleaned up in module-scope teardown (mongo_db fixture). No residual TEST_ data left in DB other than unmatched_webhooks log (intentional for ops visibility and harmless).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Test file /app/backend/tests/test_whatsapp_multitenant_webhook.py is the regression suite for the multi-tenant webhook refactor. It seeds a test tenant directly in Mongo (bypassing UI) and posts fake Meta payloads at /api/whatsapp/webhook. To verify credential routing without relying on real Meta delivery, grep backend.err.log for 'src=tenant pnid=<your pnid>' after running the suite. The META_WHATSAPP_VERIFY_TOKEN env fallback is still honored (test_env_token_accepted skips only if env is empty — it was present in this run). Bot loop prevention is now dynamic (pulls phone_number list from db.waba_configs on every inbound), so any tenant saving their own phone number is automatically protected.",
+  "rca of the issue": "N/A — no bugs found. All 12 scenarios in the review request pass. Refactor from singleton env-based MetaWhatsAppClient to per-call tenant-aware _resolve_creds is verified end-to-end: (1) log line 'src=tenant pnid=...' proves tenant token path is taken, (2) auto_healed_at field on whatsapp_tenant_mapping proves waba_configs fallback writes a mapping, (3) unmatched_webhooks collection receives unknown-pnid payloads, (4) 403 on webhook-routing/unmatched-webhooks for tenant_admin proves super-admin gate, (5) bot-loop check now reads db.waba_configs.phone_number so every onboarded tenant is protected without env var."
+}

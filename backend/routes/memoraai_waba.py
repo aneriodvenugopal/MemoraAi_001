@@ -126,19 +126,30 @@ async def save_waba_config(data: WABAConfigUpdate, request: Request):
         await db.waba_configs.insert_one(config_doc)
         msg = "WABA configuration created"
 
-    # Update tenant WABA mapping if phone_number_id provided
-    if data.phone_number_id and data.waba_id:
+    # Update tenant WABA mapping for inbound webhook routing.
+    # Primary key is phone_number_id (that's what Meta sends in payload metadata).
+    if data.phone_number_id:
         await db.whatsapp_tenant_mapping.update_one(
-            {"waba_id": data.waba_id},
+            {"phone_number_id": data.phone_number_id},
             {"$set": {
                 "tenant_id": tenant_id,
-                "waba_id": data.waba_id,
+                "waba_id": data.waba_id or "",
                 "phone_number_id": data.phone_number_id,
                 "phone_number": data.phone_number or "",
+                "whatsapp_number": (data.phone_number or "").lstrip("+"),
                 "updated_at": datetime.now(timezone.utc).isoformat(),
             }},
             upsert=True,
         )
+        # Ensure index for fast webhook lookups (idempotent)
+        try:
+            await db.whatsapp_tenant_mapping.create_index("phone_number_id", unique=True)
+        except Exception:
+            pass
+        try:
+            await db.waba_configs.create_index("phone_number_id")
+        except Exception:
+            pass
 
     result_config = await db.waba_configs.find_one({"tenant_id": tenant_id}, {"_id": 0})
     return {"message": msg, "config": result_config}
