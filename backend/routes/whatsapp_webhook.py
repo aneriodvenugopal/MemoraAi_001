@@ -202,7 +202,9 @@ async def identify_tenant(db, payload: Dict) -> Optional[str]:
         if cfg and cfg.get("tenant_id"):
             return cfg["tenant_id"]
 
-    # Step 4: existing conversation by sender phone — last resort
+    # Step 4: existing conversation by sender phone — STRICTLY scoped.
+    # Only safe if there is exactly ONE tenant this customer has talked to,
+    # otherwise we'd risk leaking messages across tenants.
     sender_phone = ""
     if entries:
         changes = entries[0].get("changes", [])
@@ -212,12 +214,19 @@ async def identify_tenant(db, payload: Dict) -> Optional[str]:
                 sender_phone = normalize_phone(messages[0].get("from", ""))
 
     if sender_phone:
-        existing_conv = await db.whatsapp_conversations.find_one(
-            {"phone": sender_phone}, {"_id": 0, "tenant_id": 1}
+        distinct_tenants = await db.whatsapp_conversations.distinct(
+            "tenant_id", {"phone": sender_phone}
         )
-        if existing_conv and existing_conv.get("tenant_id"):
-            logger.info(f"Tenant identified from existing conversation: {existing_conv['tenant_id']}")
-            return existing_conv["tenant_id"]
+        if len(distinct_tenants) == 1 and distinct_tenants[0]:
+            logger.info(
+                f"Tenant identified from existing conversation (single-tenant match): {distinct_tenants[0]}"
+            )
+            return distinct_tenants[0]
+        elif len(distinct_tenants) > 1:
+            logger.warning(
+                f"Sender {sender_phone} matched MULTIPLE tenants {distinct_tenants}. "
+                f"Refusing to auto-route to avoid cross-tenant leak."
+            )
 
     # Step 5: NO CROSS-TENANT FALLBACK. Log security event and return None.
     await db.security_logs.insert_one({

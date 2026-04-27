@@ -152,6 +152,14 @@ async def save_waba_config(data: WABAConfigUpdate, request: Request):
             pass
 
     result_config = await db.waba_configs.find_one({"tenant_id": tenant_id}, {"_id": 0})
+
+    # Invalidate cached creds so next outbound send picks up the new values immediately
+    try:
+        from services.whatsapp_agentic.meta_whatsapp_client import meta_whatsapp_client
+        meta_whatsapp_client.invalidate_creds_cache(tenant_id)
+    except Exception as e:
+        logger.warning(f"Could not invalidate creds cache: {e}")
+
     return {"message": msg, "config": result_config}
 
 

@@ -46,6 +46,9 @@ class MetaWhatsAppClient:
         self.timeout = 30
         self._session_manager = None
         self._db = None
+        # Per-tenant credential cache: {tenant_id: (creds_dict, expires_at_epoch)}
+        self._creds_cache: Dict[str, Any] = {}
+        self._creds_ttl = 30  # seconds
         
         # Fallback template for expired sessions
         self.fallback_template = os.getenv("WHATSAPP_FALLBACK_TEMPLATE", "follow_up_template")
@@ -87,32 +90,50 @@ class MetaWhatsAppClient:
              access_token + phone_number_id → use tenant's own credentials.
           2. Fall back to env (admin / platform-wide credentials).
 
-        This is what makes outbound WhatsApp sends work for every tenant
-        independently — each business sends from THEIR OWN registered number
-        using THEIR OWN access token.
+        Cached per tenant_id for 30s to avoid a Mongo roundtrip per send.
         """
+        import time as _time
+        cache_key = tenant_id or "__env__"
+        cached = self._creds_cache.get(cache_key)
+        if cached:
+            creds, expires_at = cached
+            if _time.time() < expires_at:
+                return creds
+
         if tenant_id and self._db is not None:
             try:
                 cfg = await self._db.waba_configs.find_one(
                     {"tenant_id": tenant_id}, {"_id": 0}
                 )
                 if cfg and cfg.get("access_token") and cfg.get("phone_number_id"):
-                    return {
+                    resolved = {
                         "access_token": cfg["access_token"],
                         "phone_number_id": cfg["phone_number_id"],
                         "waba_id": cfg.get("waba_id", "") or "",
                         "source": "tenant",
                         "tenant_id": tenant_id,
                     }
+                    self._creds_cache[cache_key] = (resolved, _time.time() + self._creds_ttl)
+                    return resolved
             except Exception as e:
                 logger.warning(f"Failed to load tenant WABA creds for {tenant_id}: {e}")
-        return {
+
+        env_creds = {
             "access_token": self.access_token,
             "phone_number_id": self.phone_number_id,
             "waba_id": self.waba_id,
             "source": "env",
             "tenant_id": tenant_id or "",
         }
+        self._creds_cache[cache_key] = (env_creds, _time.time() + self._creds_ttl)
+        return env_creds
+
+    def invalidate_creds_cache(self, tenant_id: Optional[str] = None) -> None:
+        """Clear cached credentials. Call after a tenant updates their waba_config."""
+        if tenant_id is None:
+            self._creds_cache.clear()
+        else:
+            self._creds_cache.pop(tenant_id, None)
 
     @staticmethod
     def _headers_from(creds: Dict[str, str]) -> Dict[str, str]:
