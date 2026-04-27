@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Brain, MessageSquare, Users, UserPlus, Megaphone, Workflow,
   Calendar, BarChart3, UserCog, Settings, Plug, Headphones,
-  ChevronRight, CheckCircle2, Menu, X, Server, Sparkles, ScrollText
+  ChevronRight, CheckCircle2, Menu, X, Server, Sparkles, ScrollText, Globe
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -27,6 +27,7 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
 
   const menu = [
     { key: 'ai-brain',       label: 'AI Brain (GPT)', icon: Brain,        path: '/own-business-gpt' },
+    { key: 'website-intel',  label: 'Website Intelligence', icon: Globe,  path: '/website-intelligence', tag: 'New' },
     { key: 'conversations',  label: 'Conversations',  icon: MessageSquare,path: '/team-inbox',         badge: counts.conversations },
     { key: 'leads',          label: 'Leads',          icon: UserPlus,     path: '/memoraai-leads',     badge: counts.leads },
     { key: 'contacts',       label: 'Contacts',       icon: Users,        path: '/memoraai-contacts' },

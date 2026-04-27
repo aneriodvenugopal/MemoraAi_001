@@ -214,6 +214,7 @@ import BusinessRules from "./pages/BusinessRules";
 import CalendarSync from "./pages/CalendarSync";
 import ChatCorrections from "./pages/ChatCorrections";
 import OwnBusinessGPT from "./pages/OwnBusinessGPT";
+import WebsiteIntelligence from "./pages/WebsiteIntelligence";
 import MemoraLeads from "./pages/MemoraLeads";
 import Contacts from "./pages/Contacts";
 import Broadcast from "./pages/Broadcast";
@@ -1186,6 +1187,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <OwnBusinessGPT />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/website-intelligence"
+                element={
+                  <PrivateRoute>
+                    <WebsiteIntelligence />
                   </PrivateRoute>
                 }
               />

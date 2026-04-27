@@ -295,6 +295,46 @@ class IntelligentReplyEngine:
         sources: List[str] = []
         sections: List[str] = []
 
+        # PRIORITY #1: Website indexed chunks (semantic-ish, query-aware)
+        try:
+            from services import website_crawler
+            hits = await website_crawler.search_chunks(self.db, tenant_id, query, k=4)
+            if hits:
+                sources.append("website_page")
+                lines = ["### WEBSITE CONTENT (most relevant pages):"]
+                for h in hits:
+                    title = h.get("title") or h.get("url", "")
+                    url = h.get("url") or ""
+                    snippet = (h.get("text") or "").replace("\n", " ")[:380]
+                    lines.append(f"- *{title}* ({url}): {snippet}")
+                sections.append("\n".join(lines))
+        except Exception as e:
+            logger.warning(f"website_chunks search failed: {e}")
+
+        # Structured services from website (extracted)
+        try:
+            wstruct = await self.db.website_structured_data.find_one(
+                {"tenant_id": tenant_id}, {"_id": 0}
+            )
+        except Exception:
+            wstruct = None
+        if wstruct and (wstruct.get("services") or wstruct.get("faqs") or wstruct.get("business")):
+            sources.append("website_structured")
+            lines = ["### WEBSITE STRUCTURED DATA:"]
+            for s in (wstruct.get("services") or [])[:8]:
+                price = s.get("price")
+                cur = s.get("currency") or ""
+                price_part = f" — *{cur} {price}*" if price not in (None, "", 0) else ""
+                lines.append(f"• *{s.get('name','')}*{price_part}")
+            for f in (wstruct.get("faqs") or [])[:6]:
+                lines.append(f"- Q: {f.get('question','')[:120]}\n  A: {f.get('answer','')[:240]}")
+            biz = wstruct.get("business") or {}
+            if biz:
+                bits = [f"{k}: {v}" for k, v in biz.items() if v]
+                if bits:
+                    lines.append("- Business info: " + " | ".join(bits[:4]))
+            sections.append("\n".join(lines))
+
         services = await self.db.business_services.find(
             {"tenant_id": tenant_id, "is_active": {"$ne": False}},
             {"_id": 0, "name": 1, "description": 1, "duration_mins": 1,
