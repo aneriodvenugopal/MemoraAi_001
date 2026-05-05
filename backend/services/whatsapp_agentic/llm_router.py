@@ -76,9 +76,24 @@ def _now_ist_str() -> str:
     return now.strftime("%A, %d %B %Y, %I:%M %p IST (ISO: %Y-%m-%dT%H:%M:%S%z)")
 
 
-def _wrap_system_prompt(system_prompt: str) -> str:
-    """Inject heartbeat + tone + precision rules in front of caller's prompt."""
-    return _EXPERT_SALES_PREFIX.format(ist_now=_now_ist_str()) + "\n" + (system_prompt or "")
+def _wrap_system_prompt(system_prompt: str, file_search: bool = False) -> str:
+    """Inject heartbeat + tone + precision rules in front of caller's prompt.
+
+    When ``file_search`` is True, we add an explicit instruction that the
+    attached File Search store is the PRIMARY source of truth and the
+    model should use the retrieval tool BEFORE answering factual queries.
+    """
+    prefix = _EXPERT_SALES_PREFIX.format(ist_now=_now_ist_str())
+    if file_search:
+        prefix += (
+            "\n[FILE_SEARCH]: Use the attached File Search store as your "
+            "PRIMARY source of truth for prices, RERA numbers, inventory, "
+            "service details, business hours and contacts. ALWAYS retrieve "
+            "before answering factual questions. Numbers must be reproduced "
+            "verbatim. For general location/landmark info you may use your "
+            "internal knowledge.\n"
+        )
+    return prefix + "\n" + (system_prompt or "")
 
 
 def classify_complexity(message: str, context: Dict) -> str:
@@ -119,28 +134,47 @@ class LLMRouter:
         force_model: Optional[str] = None,
         chat_history: Optional[List[Dict[str, str]]] = None,
         temperature: Optional[float] = None,
+        vector_store_id: Optional[str] = None,
+        business_category: str = "general",
+        tenant_id: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Generate AI response with smart routing + heartbeat + precision."""
+        """Generate AI response with smart routing + heartbeat + precision.
+
+        When ``vector_store_id`` is supplied, Gemini's native File Search
+        tool is attached and the manual knowledge prefix is suppressed —
+        the model retrieves grounded facts server-side instead of reading
+        them from a prompt prefix.
+        """
         ctx = context or {}
         history = chat_history or []
         complexity = force_model or classify_complexity(user_message, ctx)
-        model_choice = "gemini" if complexity == "simple" else "openai"
+        # Force Gemini when File Search is requested (only Gemini supports it)
+        if vector_store_id:
+            model_choice = "gemini"
+        else:
+            model_choice = "gemini" if complexity == "simple" else "openai"
 
         # 1️⃣ Inject Expert-Sales prefix + IST heartbeat
-        wrapped_system = _wrap_system_prompt(system_prompt)
+        wrapped_system = _wrap_system_prompt(system_prompt, file_search=bool(vector_store_id))
         temp = self.DEFAULT_TEMP if temperature is None else float(temperature)
 
         start = time.time()
         try:
             if model_choice == "gemini" and self._gemini_client:
-                result = await self._call_gemini(wrapped_system, user_message, history, temp)
+                result = await self._call_gemini(
+                    wrapped_system, user_message, history, temp,
+                    vector_store_id=vector_store_id,
+                )
                 self._request_count["gemini"] += 1
             elif self._openai_client:
                 result = await self._call_openai(wrapped_system, user_message, history, temp)
                 self._request_count["openai"] += 1
             else:
                 if self._gemini_client:
-                    result = await self._call_gemini(wrapped_system, user_message, history, temp)
+                    result = await self._call_gemini(
+                        wrapped_system, user_message, history, temp,
+                        vector_store_id=vector_store_id,
+                    )
                     model_choice = "gemini"
                     self._request_count["gemini"] += 1
                 elif self._openai_client:
@@ -154,11 +188,16 @@ class LLMRouter:
             self._request_count["errors"] += 1
             try:
                 if model_choice == "gemini" and self._openai_client:
+                    # OpenAI doesn't support Gemini File Search — drop the store
+                    # but keep the heartbeat/precision rules.
                     result = await self._call_openai(wrapped_system, user_message, history, temp)
                     model_choice = "openai"
                     self._request_count["openai"] += 1
                 elif model_choice == "openai" and self._gemini_client:
-                    result = await self._call_gemini(wrapped_system, user_message, history, temp)
+                    result = await self._call_gemini(
+                        wrapped_system, user_message, history, temp,
+                        vector_store_id=vector_store_id,
+                    )
                     model_choice = "gemini"
                     self._request_count["gemini"] += 1
                 else:
@@ -204,13 +243,27 @@ class LLMRouter:
         user_message: str,
         history: List[Dict[str, str]],
         temperature: float,
+        vector_store_id: Optional[str] = None,
     ) -> str:
-        config = types.GenerateContentConfig(
-            system_instruction=system_prompt,
-            thinking_config=types.ThinkingConfig(thinking_budget=0),
-            temperature=temperature,
-            max_output_tokens=self.MAX_OUTPUT,
-        )
+        config_kwargs = {
+            "system_instruction": system_prompt,
+            "thinking_config": types.ThinkingConfig(thinking_budget=0),
+            "temperature": temperature,
+            "max_output_tokens": self.MAX_OUTPUT,
+        }
+        if vector_store_id:
+            try:
+                config_kwargs["tools"] = [
+                    types.Tool(
+                        file_search=types.FileSearch(
+                            file_search_store_names=[vector_store_id]
+                        )
+                    )
+                ]
+                logger.info(f"Gemini File Search ENABLED store={vector_store_id}")
+            except Exception as e:
+                logger.warning(f"Could not attach File Search tool: {e}")
+        config = types.GenerateContentConfig(**config_kwargs)
         contents = []
         for msg in history:
             role = "model" if msg["role"] == "assistant" else "user"

@@ -586,6 +586,21 @@ async def run_crawl(db, tenant_id: str, source_id: str, primary_url: str,
             "status": "ready",
         }}
     )
+
+    # Push fresh content to the tenant's Gemini File Search store (best effort).
+    try:
+        from services import gemini_file_search as gfs
+        if gfs.is_enabled() and page_count > 0:
+            sync_result = await gfs.bulk_sync_tenant_knowledge(db, tenant_id)
+            logger.info(f"Gemini RAG sync after crawl: {sync_result}")
+            summary["gemini_rag_synced"] = sync_result.get("pushed", 0)
+            await db.website_sync_logs.update_one(
+                {"id": sync_id},
+                {"$set": {"gemini_rag_synced": sync_result.get("pushed", 0)}},
+            )
+    except Exception as e:
+        logger.warning(f"Gemini RAG bulk_sync failed (non-blocking): {e}")
+
     return summary
 
 

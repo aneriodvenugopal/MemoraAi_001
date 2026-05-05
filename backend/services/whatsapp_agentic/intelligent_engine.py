@@ -192,13 +192,31 @@ class IntelligentReplyEngine:
                 conversation.get("id"), phone, tenant_id
             )
 
+            # If a Gemini File Search store is configured for this tenant,
+            # let the model retrieve facts server-side. We then drop the
+            # large `content_block` from the prompt to keep token cost low
+            # and let the FileSearch tool win on factual accuracy.
+            from services import gemini_file_search as gfs
+            vector_store_id = await gfs.get_tenant_store(self.db, tenant_id)
+            if vector_store_id:
+                content_block_for_prompt = (
+                    "(Use the attached File Search store as the primary source "
+                    "of factual data.)"
+                )
+                if content_sources:
+                    content_sources.append("file_search")
+                else:
+                    content_sources = ["file_search"]
+            else:
+                content_block_for_prompt = content_block
+
             system_prompt = SYSTEM_PROMPT.format(
                 business_role=business_role,
                 business_name=business_name,
                 business_category=business_category,
                 language_detected=language,
                 sentiment=sentiment,
-                business_content=content_block or "(no business data uploaded yet)",
+                business_content=content_block_for_prompt or "(no business data uploaded yet)",
                 customer_memory=memory_block or "(first interaction with this customer)",
                 recent_history=history_block or "(no prior messages)",
             )
@@ -208,6 +226,9 @@ class IntelligentReplyEngine:
                 user_message=message,
                 chat_history=recent_messages,
                 context={"tenant_id": tenant_id, "phone": phone},
+                vector_store_id=vector_store_id,
+                business_category=category_slug,
+                tenant_id=tenant_id,
             )
 
             response_text = (

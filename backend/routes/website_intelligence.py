@@ -387,3 +387,46 @@ async def test_search(
     tid = _tid(current_user)
     hits = await website_crawler.search_chunks(db, tid, payload.query, payload.k)
     return {"query": payload.query, "hits": hits}
+
+
+# ───────── Gemini Managed RAG (File Search) ─────────
+@router.get("/rag/status")
+async def rag_status(request: Request, current_user: dict = Depends(get_current_user)):
+    db = get_db(request)
+    tid = _tid(current_user)
+    from services import gemini_file_search as gfs
+    t = await db.tenants.find_one(
+        {"id": tid},
+        {"_id": 0, "gemini_file_search_store": 1, "gemini_store_synced_at": 1,
+         "gemini_store_doc_count": 1},
+    ) or {}
+    return {
+        "enabled": gfs.is_enabled(),
+        "store_name": t.get("gemini_file_search_store"),
+        "last_synced_at": t.get("gemini_store_synced_at"),
+        "doc_count": t.get("gemini_store_doc_count", 0),
+    }
+
+
+@router.post("/rag/sync")
+async def rag_sync(
+    request: Request,
+    background: BackgroundTasks,
+    current_user: dict = Depends(get_current_user),
+):
+    """Manually push (or re-push) all tenant knowledge to the Gemini store."""
+    db = get_db(request)
+    tid = _tid(current_user)
+    from services import gemini_file_search as gfs
+    if not gfs.is_enabled():
+        raise HTTPException(status_code=400, detail="Gemini File Search is disabled")
+
+    async def _go():
+        try:
+            r = await gfs.bulk_sync_tenant_knowledge(db, tid)
+            logger.info(f"manual RAG sync done: {r}")
+        except Exception as e:
+            logger.exception(f"manual RAG sync failed: {e}")
+
+    background.add_task(_go)
+    return {"status": "queued"}
