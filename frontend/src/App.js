@@ -272,6 +272,14 @@ function ConditionalAssistant() {
 }
 
 function App() {
+  // Refresh favicons + branding version on app load so admin uploads
+  // reflect across browser tabs without hard refresh.
+  React.useEffect(() => {
+    import("./utils/branding").then(({ fetchBrandingVersion, refreshFavicons }) => {
+      fetchBrandingVersion().then(() => refreshFavicons());
+    });
+  }, []);
+
   return (
     <HelmetProvider>
     <AuthProvider>

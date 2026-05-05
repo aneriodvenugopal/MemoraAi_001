@@ -1,15 +1,31 @@
 """
-LLM Router - Cost-optimized dual-LLM routing for WhatsApp AI
-Primary: Gemini 2.5 Flash-Lite (cheapest, fastest)
-Fallback: GPT-4o-mini (complex reasoning, emotional intelligence)
+LLM Router — cost-optimized dual-LLM routing for the MemoraAI WhatsApp brain.
 
-Supports full conversation history for multi-turn context.
+Primary  : Gemini 2.5 Flash-Lite (cheapest, fastest)
+Fallback : GPT-4o-mini (complex reasoning, emotional intelligence)
+
+This file implements the "Expert Sales Manager" upgrade plan:
+  1. System Heartbeat   — every request carries `[CURRENT_IST_TIME: ...]` so
+     the model can correctly schedule appointments, mention "tomorrow"
+     accurately, etc.
+  2. Precision Control  — `temperature = 0.1` keeps numbers (₹75.0, RERA
+     numbers) verbatim; no rounding, no creative paraphrasing of facts.
+  3. Sales-Manager Tone — system instruction adds a warm, persuasive,
+     human-like wrapper around every reply.
+  4. Hybrid Knowledge   — explicit policy: factual data (prices, project
+     details, services) MUST come from provided files / business content,
+     while general location/landmark knowledge MAY use the model's own.
+  5. Cross-language     — preserves caller's language style (Telugu / English
+     / Hinglish / mixed).
 """
 
 import os
 import logging
 import time
+from datetime import datetime
 from typing import Optional, Dict, Any, List
+
+import pytz
 from google import genai
 from google.genai import types
 from openai import AsyncOpenAI
@@ -25,6 +41,45 @@ COMPLEX_KEYWORDS = [
     "vastu", "feng shui", "investment advice", "roi",
 ]
 
+_IST = pytz.timezone("Asia/Kolkata")
+
+# Behavioural rules pre-pended to every system_prompt (any caller).
+# Kept short so it doesn't blow up token count, but explicit enough that
+# the model can't ignore it.
+_EXPERT_SALES_PREFIX = """\
+[CURRENT_IST_TIME: {ist_now}]
+[ROLE]: You are an expert Sales Manager and Business Advisor — warm, persuasive,
+human-like, and genuinely helpful. Speak naturally, not robotically.
+[PRECISION]: Numbers (prices like 75.0, RERA numbers, phone numbers, dates)
+must be REPRODUCED VERBATIM from the supplied data. Never round, never
+paraphrase, never invent. If a number is not in the data, say so clearly.
+[KNOWLEDGE POLICY]:
+  • For PROJECT / PRODUCT / SERVICE / PRICING / INVENTORY / RERA details:
+    use ONLY the facts in the supplied business data. If missing, say
+    "I will check this with the team and confirm."
+  • For GENERAL location / landmarks / city highlights / well-known facts:
+    you MAY use your own knowledge as a local advisor would.
+[TIME AWARENESS]:
+  • The current date/time above is the source of truth.
+  • If the customer asks about "tomorrow", "next week", a specific date like
+    "May 10, 2026" — calculate from CURRENT_IST_TIME above. Never use stale
+    dates or training cut-offs.
+[STYLE]: Reply in the same language style the customer uses (English /
+Telugu / Telugu-English / Hinglish / Hindi / mixed). 1–4 short WhatsApp
+lines. *bold* the key info.
+"""
+
+
+def _now_ist_str() -> str:
+    now = datetime.now(_IST)
+    # Human-friendly + ISO so the model can both read and reason
+    return now.strftime("%A, %d %B %Y, %I:%M %p IST (ISO: %Y-%m-%dT%H:%M:%S%z)")
+
+
+def _wrap_system_prompt(system_prompt: str) -> str:
+    """Inject heartbeat + tone + precision rules in front of caller's prompt."""
+    return _EXPERT_SALES_PREFIX.format(ist_now=_now_ist_str()) + "\n" + (system_prompt or "")
+
 
 def classify_complexity(message: str, context: Dict) -> str:
     msg_lower = message.lower()
@@ -39,9 +94,11 @@ def classify_complexity(message: str, context: Dict) -> str:
 
 
 class LLMRouter:
-    """
-    Cost-optimized LLM router with full conversation history support.
-    """
+    """Cost-optimized LLM router with full conversation history support."""
+
+    # Lower temperature → factual precision (won't reword numbers/RERA codes).
+    DEFAULT_TEMP = 0.1
+    MAX_OUTPUT = 500
 
     def __init__(self):
         self.gemini_key = os.environ.get("GEMINI_API_KEY")
@@ -61,38 +118,33 @@ class LLMRouter:
         context: Optional[Dict] = None,
         force_model: Optional[str] = None,
         chat_history: Optional[List[Dict[str, str]]] = None,
+        temperature: Optional[float] = None,
     ) -> Dict[str, Any]:
-        """
-        Generate AI response with smart routing and conversation history.
-
-        Args:
-            system_prompt: System instructions
-            user_message: Current user message
-            context: Conversation context for complexity classification
-            force_model: Force 'gemini' or 'openai'
-            chat_history: List of {"role": "user"|"assistant", "content": "..."}
-        """
+        """Generate AI response with smart routing + heartbeat + precision."""
         ctx = context or {}
         history = chat_history or []
         complexity = force_model or classify_complexity(user_message, ctx)
         model_choice = "gemini" if complexity == "simple" else "openai"
 
-        start = time.time()
+        # 1️⃣ Inject Expert-Sales prefix + IST heartbeat
+        wrapped_system = _wrap_system_prompt(system_prompt)
+        temp = self.DEFAULT_TEMP if temperature is None else float(temperature)
 
+        start = time.time()
         try:
             if model_choice == "gemini" and self._gemini_client:
-                result = await self._call_gemini(system_prompt, user_message, history)
+                result = await self._call_gemini(wrapped_system, user_message, history, temp)
                 self._request_count["gemini"] += 1
             elif self._openai_client:
-                result = await self._call_openai(system_prompt, user_message, history)
+                result = await self._call_openai(wrapped_system, user_message, history, temp)
                 self._request_count["openai"] += 1
             else:
                 if self._gemini_client:
-                    result = await self._call_gemini(system_prompt, user_message, history)
+                    result = await self._call_gemini(wrapped_system, user_message, history, temp)
                     model_choice = "gemini"
                     self._request_count["gemini"] += 1
                 elif self._openai_client:
-                    result = await self._call_openai(system_prompt, user_message, history)
+                    result = await self._call_openai(wrapped_system, user_message, history, temp)
                     model_choice = "openai"
                     self._request_count["openai"] += 1
                 else:
@@ -102,11 +154,11 @@ class LLMRouter:
             self._request_count["errors"] += 1
             try:
                 if model_choice == "gemini" and self._openai_client:
-                    result = await self._call_openai(system_prompt, user_message, history)
+                    result = await self._call_openai(wrapped_system, user_message, history, temp)
                     model_choice = "openai"
                     self._request_count["openai"] += 1
                 elif model_choice == "openai" and self._gemini_client:
-                    result = await self._call_gemini(system_prompt, user_message, history)
+                    result = await self._call_gemini(wrapped_system, user_message, history, temp)
                     model_choice = "gemini"
                     self._request_count["gemini"] += 1
                 else:
@@ -115,7 +167,9 @@ class LLMRouter:
                 logger.error(f"Both LLMs failed: {fallback_error}")
                 return {
                     "text": "",
+                    "response": "",
                     "model": "none",
+                    "model_used": "none",
                     "error": str(fallback_error),
                     "cost_estimate": 0,
                     "latency_ms": int((time.time() - start) * 1000),
@@ -123,43 +177,45 @@ class LLMRouter:
 
         latency = int((time.time() - start) * 1000)
 
-        # Estimate cost
         history_tokens = sum(len(m.get("content", "")) for m in history) // 4
-        input_tokens = (len(system_prompt + user_message) // 4) + history_tokens
+        input_tokens = (len(wrapped_system + user_message) // 4) + history_tokens
         output_tokens = len(result) // 4
         if model_choice == "gemini":
             cost = (input_tokens * 0.10 + output_tokens * 0.40) / 1_000_000
         else:
             cost = (input_tokens * 0.15 + output_tokens * 0.60) / 1_000_000
 
-        logger.info(f"LLM [{model_choice}] latency={latency}ms cost~${cost:.6f} history_msgs={len(history)}")
+        logger.info(
+            f"LLM [{model_choice}] temp={temp} latency={latency}ms cost~${cost:.6f} history_msgs={len(history)}"
+        )
 
         return {
             "text": result,
+            "response": result,
             "model": model_choice,
+            "model_used": model_choice,
             "cost_estimate": cost,
             "latency_ms": latency,
         }
 
     async def _call_gemini(
-        self, system_prompt: str, user_message: str, history: List[Dict[str, str]]
+        self,
+        system_prompt: str,
+        user_message: str,
+        history: List[Dict[str, str]],
+        temperature: float,
     ) -> str:
-        """Call Gemini with full conversation history."""
         config = types.GenerateContentConfig(
             system_instruction=system_prompt,
             thinking_config=types.ThinkingConfig(thinking_budget=0),
-            temperature=0.7,
-            max_output_tokens=500,
+            temperature=temperature,
+            max_output_tokens=self.MAX_OUTPUT,
         )
-
-        # Build multi-turn contents
         contents = []
         for msg in history:
             role = "model" if msg["role"] == "assistant" else "user"
             contents.append(types.Content(role=role, parts=[types.Part(text=msg["content"])]))
-        # Add current message
         contents.append(types.Content(role="user", parts=[types.Part(text=user_message)]))
-
         response = await self._gemini_client.aio.models.generate_content(
             model="gemini-2.5-flash-lite",
             contents=contents,
@@ -168,19 +224,21 @@ class LLMRouter:
         return response.text or ""
 
     async def _call_openai(
-        self, system_prompt: str, user_message: str, history: List[Dict[str, str]]
+        self,
+        system_prompt: str,
+        user_message: str,
+        history: List[Dict[str, str]],
+        temperature: float,
     ) -> str:
-        """Call GPT-4o-mini with full conversation history."""
         messages = [{"role": "system", "content": system_prompt}]
         for msg in history:
             messages.append({"role": msg["role"], "content": msg["content"]})
         messages.append({"role": "user", "content": user_message})
-
         response = await self._openai_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,
-            max_tokens=500,
-            temperature=0.7,
+            max_tokens=self.MAX_OUTPUT,
+            temperature=temperature,
         )
         return response.choices[0].message.content or ""
 

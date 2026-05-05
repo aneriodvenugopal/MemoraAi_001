@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { logoUrl, fetchBrandingVersion } from '../utils/branding';
 import {
   ShieldCheck, LayoutDashboard, Building, Briefcase, History,
   BarChart3, Settings, LogOut, Menu, X, ArrowRightLeft, Sparkles,
@@ -97,7 +98,7 @@ export default function SaaSAdminLayout({ children, pageTitle, pageSubtitle, hea
         <div className="p-5 flex items-center justify-between border-b border-white/5">
           <div className="flex items-center gap-2.5">
             <div className="w-12 h-10 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/memoraai-logo.png" alt="MemoraAI" className="h-7 w-auto object-contain" />
+              <img src={logoUrl()} alt="MemoraAI" className="h-7 w-auto object-contain" />
             </div>
             {!collapsed && (
               <div>

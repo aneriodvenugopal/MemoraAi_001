@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { bumpBrandingVersion, logoUrl, refreshFavicons } from "../utils/branding";
 import {
   Settings, Save, Loader2, ShieldCheck, MessageSquare, KeyRound, Brain, Globe,
   CheckCircle2, XCircle, AlertCircle, IndianRupee, Copy, Image as ImageIcon, Upload, RefreshCw
@@ -293,8 +294,12 @@ function LogoUploader({ token, onFlash }) {
       });
       const d = await r.json();
       if (!r.ok) throw new Error(d.detail || "Upload failed");
-      onFlash("success", `Logo updated (${d.logo_size_kb} KB) — refresh other tabs to see changes`);
-      setCacheBust(Date.now());
+      // Bump global branding version → every <img> across the app re-renders
+      // with the new ?v=<version> query, bypassing browser/CDN cache.
+      bumpBrandingVersion(d.version);
+      refreshFavicons(d.version);
+      onFlash("success", `Logo updated (${d.logo_size_kb} KB) — refreshing across the app`);
+      setCacheBust(d.version || Date.now());
       setPreview(null);
       if (fileRef.current) fileRef.current.value = "";
     } catch (e) {
@@ -316,12 +321,12 @@ function LogoUploader({ token, onFlash }) {
           <p className="text-[11px] font-semibold text-gray-600 mb-1.5">Current logo</p>
           <div className="rounded-xl border border-gray-200 bg-slate-900 p-4 flex items-center justify-center min-h-[120px]" data-testid="current-logo-preview">
             <img
-              src={`/memoraai-logo.png?v=${cacheBust}`}
+              src={logoUrl(cacheBust)}
               alt="Current MemoraAI logo"
               className="max-h-20 w-auto object-contain"
             />
           </div>
-          <p className="text-[10px] text-gray-400 mt-1">Path: <code className="bg-gray-100 px-1 rounded">/memoraai-logo.png</code></p>
+          <p className="text-[10px] text-gray-400 mt-1">Path: <code className="bg-gray-100 px-1 rounded">/api/branding/logo</code> (auto cache-busted)</p>
         </div>
 
         {/* Upload zone */}

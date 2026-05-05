@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { logoUrl, fetchBrandingVersion, refreshFavicons } from '../utils/branding';
 import {
   Brain, MessageSquare, Users, UserPlus, Megaphone, Workflow,
   Calendar, BarChart3, UserCog, Settings, Plug, Headphones,
@@ -49,7 +50,7 @@ export default function BusinessAdminLayout({ children, pageTitle, pageSubtitle,
       <div className="px-5 pt-6 pb-5 border-b border-white/5">
         <div className="flex items-center gap-3">
           <div className="w-12 h-10 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-            <img src="/memoraai-logo.png" alt="MemoraAI" className="h-7 w-auto object-contain" />
+            <img src={logoUrl()} alt="MemoraAI" className="h-7 w-auto object-contain" />
           </div>
           <div>
             <p className="font-bold text-white text-base leading-tight">Memora<span className="text-sky-400">AI</span></p>
