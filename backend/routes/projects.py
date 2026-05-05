@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, Depends
 from models.project import Project, ProjectCreate, ProjectUpdate
 from utils.helpers import serialize_doc, deserialize_doc
 from services.audit_log_service import AuditLogService
+from services import rag_autosync
 from middleware.auth import get_current_user
 from middleware.usage_limits import check_project_limit
 from typing import List, Optional
@@ -16,6 +17,7 @@ def get_db(request: Request):
 async def create_project(
     project_create: ProjectCreate, 
     request: Request,
+    background: BackgroundTasks,
     user: dict = Depends(check_project_limit)  # Enforce project limit
 ):
     """Create a new project"""
@@ -45,6 +47,10 @@ async def create_project(
         ip_address=request.client.host
     )
     
+    # 🔄 Auto-sync to Gemini File Search (non-blocking)
+    background.add_task(
+        rag_autosync.sync_project, db, project.tenant_id, project.id
+    )
     return project
 
 @router.get("/", response_model=None)
@@ -171,7 +177,7 @@ async def get_project_stats(project_id: str, request: Request):
     }
 
 @router.put("/{project_id}", response_model=Project)
-async def update_project(project_id: str, project_update: ProjectUpdate, request: Request):
+async def update_project(project_id: str, project_update: ProjectUpdate, request: Request, background: BackgroundTasks):
     """Update project"""
     db = get_db(request)
     user = await get_current_user(request)
@@ -209,10 +215,14 @@ async def update_project(project_id: str, project_update: ProjectUpdate, request
     project_doc = await db.projects.find_one({'id': project_id}, {"_id": 0})
     project_doc = deserialize_doc(project_doc)
     
+    # 🔄 Auto-sync to Gemini File Search (non-blocking)
+    background.add_task(
+        rag_autosync.sync_project, db, existing.get('tenant_id'), project_id
+    )
     return Project(**project_doc)
 
 @router.delete("/{project_id}")
-async def delete_project(project_id: str, request: Request):
+async def delete_project(project_id: str, request: Request, background: BackgroundTasks):
     """Soft delete project"""
     db = get_db(request)
     user = await get_current_user(request)
@@ -241,4 +251,9 @@ async def delete_project(project_id: str, request: Request):
         ip_address=request.client.host
     )
     
+    # 🔄 Remove from Gemini File Search (non-blocking)
+    background.add_task(
+        rag_autosync.delete_doc, db, existing.get('tenant_id'),
+        rag_autosync.doc_id_project(project_id),
+    )
     return {"message": "Project deleted successfully"}

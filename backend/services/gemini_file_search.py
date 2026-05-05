@@ -190,9 +190,18 @@ async def delete_doc(store_name: str, doc_id: str) -> bool:
         for d in docs:
             md = {m.key: getattr(m, "string_value", "") for m in (d.custom_metadata or [])}
             if md.get("doc_id") == doc_id:
-                await asyncio.to_thread(
-                    client.file_search_stores.documents.delete, name=d.name
-                )
+                # `config={"force": True}` recursively removes the doc + chunks;
+                # without it the API returns 400 FAILED_PRECONDITION on
+                # non-empty docs. Falls back to plain delete on older SDKs.
+                try:
+                    await asyncio.to_thread(
+                        client.file_search_stores.documents.delete,
+                        name=d.name, config={"force": True},
+                    )
+                except TypeError:
+                    await asyncio.to_thread(
+                        client.file_search_stores.documents.delete, name=d.name
+                    )
         return True
     except Exception as e:
         logger.warning(f"delete_doc failed: {e}")
@@ -254,6 +263,55 @@ async def bulk_sync_tenant_knowledge(db, tenant_id: str) -> Dict[str, Any]:
             text=body[:60000],
             metadata={"source": "website", "url": p.get("url", ""),
                       "page_type": p.get("type", "other")},
+        )
+        if ok:
+            pushed += 1
+
+    # Projects (RERA, location, base price, status)
+    from . import rag_autosync as _rag  # local import avoids cycle
+    async for proj in db.projects.find(
+        {"tenant_id": tenant_id, "deleted_at": None},
+        {"_id": 0},
+    ):
+        text = _rag._format_project_text(proj)
+        if len(text) < 20:
+            skipped += 1
+            continue
+        ok = await upload_text_doc(
+            store_name=store_name,
+            doc_id=_rag.doc_id_project(proj.get("id", "")),
+            title=f"Project: {proj.get('name','')}",
+            text=text,
+            metadata={"source": "projects",
+                      "rera": proj.get("rera_number", "")},
+        )
+        if ok:
+            pushed += 1
+
+    # Properties (per-plot price, area, RERA inherited from project)
+    project_cache: Dict[str, Dict[str, Any]] = {}
+    async for prop in db.properties.find(
+        {"tenant_id": tenant_id, "deleted_at": None},
+        {"_id": 0},
+    ):
+        pid = prop.get("project_id")
+        if pid and pid not in project_cache:
+            project_cache[pid] = await db.projects.find_one(
+                {"id": pid}, {"_id": 0}
+            ) or {}
+        proj = project_cache.get(pid, {})
+        text = _rag._format_property_text(prop, proj)
+        if len(text) < 20:
+            skipped += 1
+            continue
+        ok = await upload_text_doc(
+            store_name=store_name,
+            doc_id=_rag.doc_id_property(prop.get("id", "")),
+            title=f"{proj.get('name','')} - {prop.get('property_number','')}",
+            text=text,
+            metadata={"source": "properties",
+                      "project_id": pid or "",
+                      "rera": proj.get("rera_number", "")},
         )
         if ok:
             pushed += 1

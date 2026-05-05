@@ -113,12 +113,21 @@ def _wrap_system_prompt(system_prompt: str, file_search: bool = False) -> str:
     prefix += _EXPERT_SALES_PREFIX.format(ist_now=_now_ist_str())
     if file_search:
         prefix += (
-            "\n[FILE_SEARCH]: Use the attached File Search store as your "
-            "PRIMARY source of truth for prices, RERA numbers, inventory, "
-            "service details, business hours and contacts. ALWAYS retrieve "
-            "before answering factual questions. Numbers must be reproduced "
-            "verbatim. For general location/landmark info you may use your "
-            "internal knowledge.\n"
+            "\n[FILE_SEARCH — PRIMARY KNOWLEDGE SOURCE]\n"
+            "Use the File Search tool as the PRIMARY source for ALL business "
+            "facts. ALWAYS retrieve before answering — never guess.\n"
+            "Search the store for: exact project name, RERA number, prices, "
+            "availability, plot/unit details, area, location, amenities, "
+            "service rates, business hours, contacts, FAQ answers.\n"
+            "Return numbers and codes EXACTLY as stored — copy them character-"
+            "for-character from the retrieved document. NEVER round, "
+            "abbreviate, paraphrase, fabricate, or substitute placeholder "
+            "values for prices, RERA numbers, phone numbers, plot/flat IDs, "
+            "or addresses. If you cannot find the EXACT value in the store, "
+            "DO NOT invent one — instead reply: \"I'll check with the team "
+            "and confirm shortly.\"\n"
+            "For general location/landmark/city info you MAY use your own "
+            "knowledge as a local advisor would.\n"
         )
     return prefix + "\n" + (system_prompt or "")
 

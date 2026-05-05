@@ -1,6 +1,7 @@
 """MemoraAI Content Library API - Media management for WhatsApp sharing"""
-from fastapi import APIRouter, HTTPException, Request, UploadFile, File, Form
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, UploadFile, File, Form
 from middleware.auth import get_current_user
+from services import rag_autosync
 from datetime import datetime, timezone
 import uuid
 import logging
@@ -32,7 +33,7 @@ async def list_content(request: Request, content_type: str = None, page: int = 1
 
 
 @router.post("")
-async def create_content(request: Request):
+async def create_content(request: Request, background: BackgroundTasks):
     """Create content library item"""
     user = await get_current_user(request)
     db = get_db(request)
@@ -60,11 +61,13 @@ async def create_content(request: Request):
     }
     await db.memoraai_content.insert_one(item)
     item.pop("_id", None)
+    # 🔄 Auto-sync to Gemini File Search (non-blocking)
+    background.add_task(rag_autosync.sync_content, db, tenant_id, item["id"])
     return {"message": "Content created", "item": item}
 
 
 @router.put("/{item_id}")
-async def update_content(item_id: str, request: Request):
+async def update_content(item_id: str, request: Request, background: BackgroundTasks):
     """Update content item"""
     user = await get_current_user(request)
     db = get_db(request)
@@ -80,11 +83,13 @@ async def update_content(item_id: str, request: Request):
     if result.modified_count == 0:
         raise HTTPException(status_code=404, detail="Content not found")
     updated = await db.memoraai_content.find_one({"id": item_id}, {"_id": 0})
+    # 🔄 Auto-sync to Gemini File Search (non-blocking)
+    background.add_task(rag_autosync.sync_content, db, tenant_id, item_id)
     return {"message": "Content updated", "item": updated}
 
 
 @router.delete("/{item_id}")
-async def delete_content(item_id: str, request: Request):
+async def delete_content(item_id: str, request: Request, background: BackgroundTasks):
     """Soft-delete content"""
     user = await get_current_user(request)
     db = get_db(request)
@@ -95,6 +100,10 @@ async def delete_content(item_id: str, request: Request):
     )
     if result.modified_count == 0:
         raise HTTPException(status_code=404, detail="Content not found")
+    # 🔄 Remove from Gemini File Search (non-blocking)
+    background.add_task(
+        rag_autosync.delete_doc, db, tenant_id, rag_autosync.doc_id_content(item_id)
+    )
     return {"message": "Content deleted"}
 
 

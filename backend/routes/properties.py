@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, Depends
 from models.property import Property, PropertyCreate, PropertyUpdate, PropertyBlock, PropertyBook
 from utils.helpers import serialize_doc, deserialize_doc
 from services.audit_log_service import AuditLogService
+from services import rag_autosync
 from middleware.auth import get_current_user
 from middleware.usage_limits import check_property_limit
 from typing import List, Optional
@@ -16,6 +17,7 @@ def get_db(request: Request):
 async def create_property(
     property_create: PropertyCreate, 
     request: Request,
+    background: BackgroundTasks,
     user: dict = Depends(check_property_limit)  # Enforce property limit
 ):
     """Create a new property"""
@@ -64,6 +66,10 @@ async def create_property(
         ip_address=request.client.host
     )
     
+    # 🔄 Auto-sync to Gemini File Search (non-blocking)
+    background.add_task(
+        rag_autosync.sync_property, db, property_create.tenant_id, property_obj.id
+    )
     return property_obj
 
 @router.get("/", response_model=List[Property])
@@ -119,7 +125,7 @@ async def get_property(property_id: str, request: Request):
     return Property(**property_doc)
 
 @router.put("/{property_id}", response_model=Property)
-async def update_property(property_id: str, property_update: PropertyUpdate, request: Request):
+async def update_property(property_id: str, property_update: PropertyUpdate, request: Request, background: BackgroundTasks):
     """Update property"""
     db = get_db(request)
     user = await get_current_user(request)
@@ -170,6 +176,10 @@ async def update_property(property_id: str, property_update: PropertyUpdate, req
     # Skip deserialization since Pydantic model expects string datetime fields
     # property_doc = deserialize_doc(property_doc)
     
+    # 🔄 Auto-sync to Gemini File Search (non-blocking)
+    background.add_task(
+        rag_autosync.sync_property, db, existing.get('tenant_id'), property_id
+    )
     return Property(**property_doc)
 
 @router.post("/block")
@@ -256,7 +266,7 @@ async def book_property(property_book: PropertyBook, request: Request):
     return {"message": "Property booked successfully"}
 
 @router.delete("/{property_id}")
-async def delete_property(property_id: str, request: Request):
+async def delete_property(property_id: str, request: Request, background: BackgroundTasks):
     """Soft delete property"""
     db = get_db(request)
     user = await get_current_user(request)
@@ -288,6 +298,11 @@ async def delete_property(property_id: str, request: Request):
         ip_address=request.client.host
     )
     
+    # 🔄 Remove from Gemini File Search (non-blocking)
+    background.add_task(
+        rag_autosync.delete_doc, db, existing.get('tenant_id'),
+        rag_autosync.doc_id_property(property_id),
+    )
     return {"message": "Property deleted successfully"}
 
 # Helper function to update project stats

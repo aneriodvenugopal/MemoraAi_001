@@ -19,6 +19,20 @@ A multi-category WhatsApp Business automation platform with AI memory, where 100
 5. **Verify endpoint** (`GET /api/whatsapp/webhook`): accepts platform-wide token (env + platform_settings) AND any tenant's `waba_configs.verify_token` — so each onboarded business can use their own Meta app.
 
 ## Implemented (Apr 2026)
+
+### Feb 26 — RERA & Price Retrieval Fix (Auto-Sync to Gemini RAG)
+- Fixed cases where AI replied "I don't have the information" for RERA / project / plot questions even when data existed in DB.
+- New `services/rag_autosync.py` with deterministic per-doc helpers (`sync_content`, `sync_project`, `sync_property`, `delete_doc`) — delete-then-upload for true upsert semantics.
+- Hooked into CRUD endpoints via `BackgroundTasks` (zero added latency on the user-facing API):
+    - `routes/memoraai_content.py` create/update/delete
+    - `routes/projects.py` create/update/delete
+    - `routes/properties.py` create/update/delete
+- Extended `bulk_sync_tenant_knowledge` to also push `projects` and `properties` (project name, RERA, location, status, base price, plot/unit number, area, price, price/sqft, survey/registration numbers).
+- Fixed `delete_doc` 400 FAILED_PRECONDITION by passing `config={"force": True}` to the Gemini SDK.
+- Strengthened File Search instruction in `llm_router.py`: "Return numbers and codes EXACTLY as stored — copy character-for-character. NEVER fabricate. If not found, reply 'I'll check with the team and confirm shortly.'" Removed prior placeholder examples that the LLM was hallucinating as real data.
+- New UI card on `/website-intelligence`: **Gemini Managed RAG · File Search** with Status / Store / Docs synced / Last sync + a one-click "Sync to Gemini" button (`POST /api/website-intel/rag/sync`, polls `/rag/status` until `last_synced_at` advances).
+- Verified end-to-end via HTTP: created project with unique RERA → AI returned that exact RERA verbatim within ~12 seconds of the create call.
+
 ### Apr 26 — Logo, Webhook Card, Domain Verification
 - Replaced text-based brand with `MemoraLogo` / `MemoraAILogo` PNG.
 - Logo upload UI + endpoint at SaaS Admin → Platform Settings.

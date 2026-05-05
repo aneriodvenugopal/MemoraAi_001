@@ -61,6 +61,42 @@ export default function WebsiteIntelligence() {
   const [testQ, setTestQ] = useState("");
   const [testHits, setTestHits] = useState([]);
 
+  // Gemini RAG status
+  const [rag, setRag] = useState({ enabled: false, store_name: null, last_synced_at: null, doc_count: 0 });
+  const [ragSyncing, setRagSyncing] = useState(false);
+
+  const refreshRag = useCallback(async () => {
+    try {
+      const r = await fetch(`${API}/website-intel/rag/status`, { headers });
+      if (!r.ok) return;
+      const d = await r.json();
+      setRag(d || {});
+    } catch (e) { /* ignore */ }
+  }, [headers]);
+
+  const triggerRagSync = async () => {
+    setRagSyncing(true);
+    try {
+      const r = await fetch(`${API}/website-intel/rag/sync`, { method: "POST", headers });
+      if (!r.ok) {
+        const d = await r.json().catch(() => ({}));
+        alert(d.detail || "Sync request failed");
+      } else {
+        // Poll status until last_synced_at changes
+        for (let i = 0; i < 30; i++) {
+          await new Promise(r => setTimeout(r, 2000));
+          const sr = await fetch(`${API}/website-intel/rag/status`, { headers });
+          const sd = await sr.json();
+          if (sd?.last_synced_at && sd.last_synced_at !== rag.last_synced_at) {
+            setRag(sd);
+            break;
+          }
+        }
+      }
+    } catch (e) { alert(e.message); }
+    setRagSyncing(false);
+  };
+
   const refresh = useCallback(async () => {
     try {
       const [s, st, str] = await Promise.all([
@@ -95,6 +131,7 @@ export default function WebsiteIntelligence() {
 
   useEffect(() => { refresh(); }, [refresh]);
   useEffect(() => { refreshPages(); }, [refreshPages]);
+  useEffect(() => { refreshRag(); }, [refreshRag]);
 
   // poll while crawling
   useEffect(() => {
@@ -281,6 +318,49 @@ export default function WebsiteIntelligence() {
           <StatCard icon={AlertCircle} label="Failed pages" value={last.failed_pages || 0} accent="amber" />
           <StatCard icon={Brain} label="Last sync" value={last.last_sync_status || "—"} accent="violet" small />
         </div>
+
+        {/* 5b. GEMINI MANAGED RAG (FILE SEARCH) */}
+        <Card icon={Brain} title="Gemini Managed RAG · File Search" testid="rag-status-card">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+              <div data-testid="rag-enabled">
+                <p className="text-gray-500">Status</p>
+                <p className={`font-semibold ${rag.enabled ? "text-emerald-600" : "text-gray-400"}`}>
+                  {rag.enabled ? "Active" : "Disabled"}
+                </p>
+              </div>
+              <div data-testid="rag-store-name">
+                <p className="text-gray-500">Store</p>
+                <p className="font-mono text-[11px] truncate" title={rag.store_name || ""}>
+                  {rag.store_name ? rag.store_name.split("/").pop() : "—"}
+                </p>
+              </div>
+              <div data-testid="rag-doc-count">
+                <p className="text-gray-500">Docs synced</p>
+                <p className="font-semibold">{rag.doc_count || 0}</p>
+              </div>
+              <div data-testid="rag-last-synced">
+                <p className="text-gray-500">Last sync</p>
+                <p className="font-medium">
+                  {rag.last_synced_at ? new Date(rag.last_synced_at).toLocaleString() : "Never"}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={triggerRagSync}
+              disabled={!rag.enabled || ragSyncing}
+              className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-semibold disabled:opacity-50 inline-flex items-center gap-1.5 self-start sm:self-auto"
+              data-testid="rag-sync-now-btn"
+            >
+              {ragSyncing
+                ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Syncing…</>
+                : <><Zap className="w-3.5 h-3.5" /> Sync to Gemini</>}
+            </button>
+          </div>
+          <p className="text-[11px] text-gray-500 mt-3">
+            Pushes website pages, projects, properties and uploaded content into Gemini File Search so the AI can retrieve exact prices, RERA numbers and inventory in real time.
+          </p>
+        </Card>
 
         {/* 4. STRUCTURED DATA */}
         {(structured?.services?.length || structured?.faqs?.length || structured?.products?.length || structured?.business) ? (
