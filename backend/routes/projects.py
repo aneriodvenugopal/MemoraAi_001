@@ -213,7 +213,8 @@ async def update_project(project_id: str, project_update: ProjectUpdate, request
     
     # Get updated project
     project_doc = await db.projects.find_one({'id': project_id}, {"_id": 0})
-    project_doc = deserialize_doc(project_doc)
+    # Skip deserialize_doc — Project model expects ISO string datetimes
+    # (matches get_project which already does this).
     
     # 🔄 Auto-sync to Gemini File Search (non-blocking)
     background.add_task(

@@ -20,6 +20,22 @@ A multi-category WhatsApp Business automation platform with AI memory, where 100
 
 ## Implemented (Apr 2026)
 
+### Feb 26 — Multi-Format Indexing + Category-Aware RAG
+- **Multi-format ingestion** (`services/file_ingestion.py`): downloads `memoraai_content` URLs and converts to text/native upload:
+    - **PDF** → uploaded NATIVELY to Gemini File Search (server-side parsing, full fidelity).
+    - **DOCX / XLSX / CSV / TXT / HTML / MD / JSON / XML** → text extraction via `python-docx` / `openpyxl` / stdlib.
+    - **Images** (PNG/JPG/WEBP/GIF/BMP) → OCR via Gemini Vision (`gemini-2.5-flash`, temp=0).
+    - **Audio/Video** → skipped (P2 backlog: needs Whisper).
+- **Rich custom_metadata** on every doc — `tenant_id`, `business_category`, `business_name`, `content_type` (project|property|brochure|website_page|document|faq|image), `source` (projects|properties|memoraai_content|website), `project_id`, `project_type`, `rera`, `tags`, `category_slug`, `url`. Used by Gemini at retrieval time and by the LLM router for context-aware prioritization.
+- **Category-aware system prompt** in `llm_router.py` — `_CATEGORY_RETRIEVAL_HINTS` dict for real_estate / astrology / hospitals / clinics / luxury_boutique / education / saloon / spa / restaurant / law / ca / software / ecommerce. Injected when File Search is active. Plus a `[CONTEXT-AWARE RETRIEVAL]` block telling the model to prefer chunks whose `business_category` and `project_id` match the active tenant/lead.
+- **Project context resolver** (`intelligent_engine._resolve_project_context`) — uses `lead.captured_fields.project_id` first; falls back to scanning the last 6 turns + current message for any project name match. Result is passed to `llm_router.generate(project_id=…, project_type=…)`.
+- **Backend `/rag/status`** now returns full breakdown:  
+  `{enabled, store_name, last_synced_at, doc_count, business_category, breakdown:{total, by_source, by_category, by_content_type, by_project}}` via new `gemini_file_search.store_breakdown()`.
+- **UI** — Gemini Managed RAG card shows three breakdown groups (By Source, By Business Category, By Content Type) as colored chips, plus tenant category footer + **Re-index All** button.
+- **Bug fixed**: `routes/projects.py` PUT handler called `deserialize_doc()` on response — incompatible with Pydantic Project model's string datetime fields → 500 → BackgroundTasks never fired. Removed the call. Confirmed `RAG autosync OK` logs after both create and update.
+- **Backend regression**: `/app/backend/tests/test_rag_autosync_breakdown.py` — 13/13 pass after fix.
+
+
 ### Feb 26 — RERA & Price Retrieval Fix (Auto-Sync to Gemini RAG)
 - Fixed cases where AI replied "I don't have the information" for RERA / project / plot questions even when data existed in DB.
 - New `services/rag_autosync.py` with deterministic per-doc helpers (`sync_content`, `sync_project`, `sync_property`, `delete_doc`) — delete-then-upload for true upsert semantics.
