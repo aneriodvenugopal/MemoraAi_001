@@ -25,6 +25,12 @@ A multi-category WhatsApp Business automation platform with AI memory, where 100
 - Webhook Configuration card on `/waba-setup` showing absolute callback URL (https://memoraai.in/api/whatsapp/webhook) + verify token + copy buttons.
 - Updated FB domain verification meta-tag.
 
+### Feb 26 — Date Hallucination Fix (Strong Heartbeat × 2)
+- Defeated Gemini's "June 11, 2024" date hallucination caused by training cutoff + File Search retrieval bias + chat-history contamination.
+- New `_strong_heartbeat()` helper in `/app/backend/services/whatsapp_agentic/llm_router.py` emits an ALL-CAPS `[CRITICAL SYSTEM TIME OVERRIDE]` block with live IST date + time and absolute rules.
+- Injected **TWICE** per request: (1) prepended at the very top of the system instruction (above the Expert Sales prefix), (2) prepended to the live user message inside `contents` (Gemini) / `messages` (OpenAI). Second injection overrides anything File Search retrieves or stale chat history echoes.
+- Verified: "today's date" → `Tuesday, May 05, 2026`; "next Monday" → `May 12, 2026`; even with poisoned history claiming "June 11, 2024", model now answers `May 05, 2026`.
+
 ### Apr 27 — Multi-Tenant WhatsApp Webhook Refactor
 - `MetaWhatsAppClient` is now per-call tenant-aware: `_resolve_creds(tenant_id)` loads from `waba_configs` (with 30s LRU cache, invalidated on save).
 - `identify_tenant()` now resolves via mapping → waba_configs (auto-heal) → strict single-tenant conversation match.

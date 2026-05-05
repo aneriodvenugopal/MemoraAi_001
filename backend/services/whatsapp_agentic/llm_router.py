@@ -76,6 +76,31 @@ def _now_ist_str() -> str:
     return now.strftime("%A, %d %B %Y, %I:%M %p IST (ISO: %Y-%m-%dT%H:%M:%S%z)")
 
 
+def _strong_heartbeat() -> str:
+    """Hard time-override directive to defeat training-cutoff hallucinations.
+
+    Gemini's File Search retrieval and chat-history echoing can drown out a
+    soft heartbeat. This block is intentionally loud, ALL-CAPS, and is
+    injected TWICE: once at the very top of the system instruction, and
+    once again right before the live user message inside ``contents``.
+    """
+    tz = pytz.timezone('Asia/Kolkata')
+    now = datetime.now(tz)
+    return (
+        "\n[CRITICAL SYSTEM TIME OVERRIDE - HIGHEST PRIORITY - NEVER IGNORE THIS]\n"
+        f"TODAY IS: {now.strftime('%A, %B %d, %Y')}\n"
+        f"CURRENT TIME: {now.strftime('%I:%M %p IST')}\n\n"
+        "ABSOLUTE RULES (Must follow every single time):\n"
+        "- This is the ONLY valid current date and time. Ignore all previous "
+        "training data and old dates.\n"
+        "- When user asks \"today\", \"today date\", \"current date\", \"now\", "
+        "\"date today\", \"What is today's date?\" → reply with EXACTLY the above date.\n"
+        "- Calculate relative dates (tomorrow, next week, May 10 2026, etc.) "
+        "ONLY from this timestamp.\n"
+        "- Even when using File Search tool, respect this time directive first.\n"
+    )
+
+
 def _wrap_system_prompt(system_prompt: str, file_search: bool = False) -> str:
     """Inject heartbeat + tone + precision rules in front of caller's prompt.
 
@@ -83,7 +108,9 @@ def _wrap_system_prompt(system_prompt: str, file_search: bool = False) -> str:
     attached File Search store is the PRIMARY source of truth and the
     model should use the retrieval tool BEFORE answering factual queries.
     """
-    prefix = _EXPERT_SALES_PREFIX.format(ist_now=_now_ist_str())
+    # 🔥 Strong heartbeat at the absolute top — beats training-cutoff bias.
+    prefix = _strong_heartbeat() + "\n"
+    prefix += _EXPERT_SALES_PREFIX.format(ist_now=_now_ist_str())
     if file_search:
         prefix += (
             "\n[FILE_SEARCH]: Use the attached File Search store as your "
@@ -268,7 +295,12 @@ class LLMRouter:
         for msg in history:
             role = "model" if msg["role"] == "assistant" else "user"
             contents.append(types.Content(role=role, parts=[types.Part(text=msg["content"])]))
-        contents.append(types.Content(role="user", parts=[types.Part(text=user_message)]))
+        # 🔥 Second heartbeat injection — placed RIGHT BEFORE the live user
+        # message to override any stale dates surfaced by File Search docs
+        # or chat history contamination.
+        heartbeat_now = _strong_heartbeat()
+        fused_user_text = f"{heartbeat_now}\n\n[USER_MESSAGE]:\n{user_message}"
+        contents.append(types.Content(role="user", parts=[types.Part(text=fused_user_text)]))
         response = await self._gemini_client.aio.models.generate_content(
             model="gemini-2.5-flash-lite",
             contents=contents,
@@ -286,7 +318,10 @@ class LLMRouter:
         messages = [{"role": "system", "content": system_prompt}]
         for msg in history:
             messages.append({"role": msg["role"], "content": msg["content"]})
-        messages.append({"role": "user", "content": user_message})
+        # 🔥 Second heartbeat injection — right before live user message.
+        heartbeat_now = _strong_heartbeat()
+        fused_user_text = f"{heartbeat_now}\n\n[USER_MESSAGE]:\n{user_message}"
+        messages.append({"role": "user", "content": fused_user_text})
         response = await self._openai_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,
