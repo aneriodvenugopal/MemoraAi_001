@@ -62,7 +62,7 @@ export default function WebsiteIntelligence() {
   const [testHits, setTestHits] = useState([]);
 
   // Gemini RAG status
-  const [rag, setRag] = useState({ enabled: false, store_name: null, last_synced_at: null, doc_count: 0 });
+  const [rag, setRag] = useState({ enabled: false, store_name: null, last_synced_at: null, doc_count: 0, breakdown: {}, business_category: "general" });
   const [ragSyncing, setRagSyncing] = useState(false);
 
   const refreshRag = useCallback(async () => {
@@ -354,11 +354,56 @@ export default function WebsiteIntelligence() {
             >
               {ragSyncing
                 ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Syncing…</>
-                : <><Zap className="w-3.5 h-3.5" /> Sync to Gemini</>}
+                : <><Zap className="w-3.5 h-3.5" /> Re-index All</>}
             </button>
           </div>
+
+          {/* Breakdown chips */}
+          {rag.breakdown && rag.breakdown.total ? (
+            <div className="mt-4 grid sm:grid-cols-3 gap-3" data-testid="rag-breakdown">
+              <BreakdownGroup
+                label="By Source"
+                data={rag.breakdown.by_source}
+                colorMap={{
+                  projects: "bg-sky-100 text-sky-700",
+                  properties: "bg-emerald-100 text-emerald-700",
+                  memoraai_content: "bg-amber-100 text-amber-700",
+                  website: "bg-violet-100 text-violet-700",
+                }}
+              />
+              <BreakdownGroup
+                label="By Business Category"
+                data={rag.breakdown.by_category}
+                colorMap={{
+                  real_estate: "bg-blue-100 text-blue-700",
+                  astrology: "bg-fuchsia-100 text-fuchsia-700",
+                  hospitals: "bg-rose-100 text-rose-700",
+                  clinics: "bg-pink-100 text-pink-700",
+                  education: "bg-indigo-100 text-indigo-700",
+                  saloon: "bg-orange-100 text-orange-700",
+                  spa: "bg-teal-100 text-teal-700",
+                  restaurant: "bg-yellow-100 text-yellow-700",
+                  general: "bg-slate-100 text-slate-700",
+                }}
+              />
+              <BreakdownGroup
+                label="By Content Type"
+                data={rag.breakdown.by_content_type}
+                colorMap={{
+                  project: "bg-sky-100 text-sky-700",
+                  property: "bg-emerald-100 text-emerald-700",
+                  brochure: "bg-amber-100 text-amber-700",
+                  document: "bg-slate-100 text-slate-700",
+                  faq: "bg-pink-100 text-pink-700",
+                  website_page: "bg-violet-100 text-violet-700",
+                }}
+              />
+            </div>
+          ) : null}
+
           <p className="text-[11px] text-gray-500 mt-3">
-            Pushes website pages, projects, properties and uploaded content into Gemini File Search so the AI can retrieve exact prices, RERA numbers and inventory in real time.
+            Pushes website pages, projects, properties and uploaded content (PDF, DOCX, XLSX, CSV, images via OCR) into Gemini File Search so the AI can retrieve exact prices, RERA numbers and inventory in real time.
+            {rag.business_category ? <> &nbsp;·&nbsp; Tenant category: <span className="font-mono">{rag.business_category}</span></> : null}
           </p>
         </Card>
 
@@ -640,6 +685,31 @@ function Mini({ title, children }) {
     <div className="rounded-lg border border-gray-200 p-3">
       <p className="text-[11px] font-semibold text-gray-700 uppercase tracking-wide mb-1.5">{title}</p>
       {children}
+    </div>
+  );
+}
+
+function BreakdownGroup({ label, data, colorMap = {} }) {
+  const entries = Object.entries(data || {}).sort((a, b) => b[1] - a[1]);
+  return (
+    <div className="rounded-lg border border-gray-200 p-3">
+      <p className="text-[11px] font-semibold text-gray-700 uppercase tracking-wide mb-2">{label}</p>
+      {entries.length === 0 ? (
+        <p className="text-[11px] text-gray-400 italic">No data</p>
+      ) : (
+        <div className="flex flex-wrap gap-1.5">
+          {entries.map(([k, v]) => (
+            <span
+              key={k}
+              className={`text-[11px] px-2 py-0.5 rounded-full border border-transparent ${colorMap[k] || "bg-slate-100 text-slate-700"}`}
+              data-testid={`rag-chip-${k}`}
+            >
+              <span className="font-medium">{k.replace(/_/g, " ")}</span>
+              <span className="ml-1 font-bold">{v}</span>
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

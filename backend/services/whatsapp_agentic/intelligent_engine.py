@@ -210,6 +210,12 @@ class IntelligentReplyEngine:
             else:
                 content_block_for_prompt = content_block
 
+            # Resolve the most likely "active project" the customer is asking
+            # about. We look at their lead's captured_fields first (UI-set
+            # context), then scan the last 6 messages for a project name match.
+            captured_project = await self._resolve_project_context(
+                tenant_id, lead_id, phone, message, recent_messages,
+            )
             system_prompt = SYSTEM_PROMPT.format(
                 business_role=business_role,
                 business_name=business_name,
@@ -229,6 +235,8 @@ class IntelligentReplyEngine:
                 vector_store_id=vector_store_id,
                 business_category=category_slug,
                 tenant_id=tenant_id,
+                project_id=(captured_project.get("id") if captured_project else None),
+                project_type=(captured_project.get("project_type") if captured_project else None),
             )
 
             response_text = (
@@ -516,6 +524,55 @@ class IntelligentReplyEngine:
         if memory_used:
             return "memory"
         return "general"
+
+    async def _resolve_project_context(
+        self,
+        tenant_id: str,
+        lead_id: Optional[str],
+        phone: str,
+        message: str,
+        recent_messages: List[Dict[str, str]],
+    ) -> Optional[Dict[str, Any]]:
+        """Best-effort: find the project the customer is currently discussing.
+
+        Order of resolution:
+          1. lead.captured_fields.project_id (set by UI / staff).
+          2. A project whose name appears verbatim in the latest user message
+             or in the last 6 turns of conversation.
+        Returns the project document or None.
+        """
+        try:
+            lead = await self.db.memoraai_leads.find_one(
+                {"tenant_id": tenant_id,
+                 "$or": [{"id": lead_id}, {"phone": phone}]},
+                {"_id": 0, "captured_fields": 1},
+            ) or {}
+            cap = (lead.get("captured_fields") or {})
+            pid = cap.get("project_id")
+            if pid:
+                p = await self.db.projects.find_one(
+                    {"id": pid, "tenant_id": tenant_id, "deleted_at": None},
+                    {"_id": 0},
+                )
+                if p:
+                    return p
+
+            scan_text = (message + "\n" + "\n".join(
+                m.get("content", "") for m in recent_messages[-6:]
+            )).lower()
+            if not scan_text.strip():
+                return None
+            cursor = self.db.projects.find(
+                {"tenant_id": tenant_id, "deleted_at": None},
+                {"_id": 0, "id": 1, "name": 1, "project_type": 1},
+            )
+            async for p in cursor:
+                name = (p.get("name") or "").strip().lower()
+                if name and len(name) >= 3 and name in scan_text:
+                    return p
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"_resolve_project_context failed: {e}")
+        return None
 
     def _fallback_reply(self, language: str, sentiment: str, business_name: str) -> str:
         if language in ("telugu", "telugu_english"):

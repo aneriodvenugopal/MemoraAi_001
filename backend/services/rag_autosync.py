@@ -19,6 +19,7 @@ sync hiccup never breaks the user-facing CRUD response.
 """
 from __future__ import annotations
 import logging
+import os
 from typing import Any, Dict, Optional
 
 from . import gemini_file_search as gfs
@@ -162,6 +163,23 @@ def _format_content_text(c: Dict[str, Any]) -> str:
 
 
 # ─────────────────────────────────────────────────────────────────────
+# Tenant context (cached per call for metadata enrichment).
+# ─────────────────────────────────────────────────────────────────────
+async def _tenant_context(db, tenant_id: str) -> Dict[str, str]:
+    """Return {business_category, business_name} for metadata tagging."""
+    t = await db.tenants.find_one(
+        {"id": tenant_id},
+        {"_id": 0, "business_category": 1, "category_slug": 1,
+         "company_name": 1, "name": 1},
+    ) or {}
+    return {
+        "business_category": (t.get("business_category")
+                              or t.get("category_slug") or "general"),
+        "business_name": (t.get("company_name") or t.get("name") or ""),
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────
 # Public sync helpers (background-safe, exception-swallowing).
 # ─────────────────────────────────────────────────────────────────────
 async def _ensure_store(db, tenant_id: str) -> Optional[str]:
@@ -184,14 +202,42 @@ async def _upsert_doc(
         await gfs.delete_doc(store, doc_id)
     except Exception as e:  # noqa: BLE001
         logger.debug(f"rag_autosync: prior delete skipped: {e}")
+    # Enrich every doc with tenant business context.
+    ctx = await _tenant_context(db, tenant_id)
+    full_meta = {"tenant_id": tenant_id, **ctx, **(metadata or {})}
     ok = await gfs.upload_text_doc(
         store_name=store, doc_id=doc_id, title=title, text=text,
-        metadata=metadata or {},
+        metadata=full_meta,
     )
     if ok:
-        logger.info(f"RAG autosync OK tenant={tenant_id} doc={doc_id}")
+        logger.info(f"RAG autosync OK tenant={tenant_id} doc={doc_id} cat={ctx['business_category']}")
     else:
         logger.warning(f"RAG autosync FAIL tenant={tenant_id} doc={doc_id}")
+    return ok
+
+
+async def _upsert_native_file(
+    db, tenant_id: str, doc_id: str, title: str, file_path: str,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> bool:
+    """Upsert a binary file (PDF/DOCX/XLSX) into the store with metadata."""
+    store = await _ensure_store(db, tenant_id)
+    if not store:
+        return False
+    try:
+        await gfs.delete_doc(store, doc_id)
+    except Exception as e:  # noqa: BLE001
+        logger.debug(f"rag_autosync: prior delete skipped: {e}")
+    ctx = await _tenant_context(db, tenant_id)
+    full_meta = {"tenant_id": tenant_id, **ctx, **(metadata or {})}
+    ok = await gfs.upload_native_file(
+        store_name=store, doc_id=doc_id, title=title,
+        file_path=file_path, metadata=full_meta,
+    )
+    if ok:
+        logger.info(
+            f"RAG autosync (native) OK tenant={tenant_id} doc={doc_id} cat={ctx['business_category']}"
+        )
     return ok
 
 
@@ -203,11 +249,56 @@ async def sync_content(db, tenant_id: str, content_id: str) -> bool:
         if not c or c.get("deleted_at") or c.get("is_active") is False:
             await delete_doc(db, tenant_id, doc_id_content(content_id))
             return False
+
+        url = c.get("url") or ""
+        ctype = (c.get("content_type") or "").lower()
+        title = c.get("title") or "Document"
+        meta = {
+            "source": "memoraai_content",
+            "content_type": ctype or "document",
+            "url": url,
+            "tags": ",".join(map(str, c.get("tags") or [])),
+            "category_slug": c.get("category_slug") or "",
+        }
+
+        # 1) If the content has a URL, try to download & native-upload (PDF
+        #    is parsed server-side by Gemini; DOCX/XLSX are extracted to
+        #    text first; images are OCR'd; audio/video are skipped).
+        if url:
+            from . import file_ingestion as fi
+            fetched = await fi.fetch_to_temp(url)
+            if fetched:
+                path, mime, suffix = fetched
+                try:
+                    if fi.is_native_pdf(mime, suffix):
+                        ok = await _upsert_native_file(
+                            db, tenant_id, doc_id_content(content_id),
+                            title, path, meta,
+                        )
+                        if ok:
+                            return True
+                    # For non-PDF binaries, extract → upload as text.
+                    extracted = fi.extract_text(path, mime)
+                    if extracted and len(extracted.strip()) > 30:
+                        # Combine the existing structured header + extracted body.
+                        c2 = dict(c)
+                        c2["extracted_text"] = extracted
+                        text = _format_content_text(c2)
+                        return await _upsert_doc(
+                            db, tenant_id, doc_id_content(content_id),
+                            title, text, meta,
+                        )
+                finally:
+                    try:
+                        os.unlink(path)
+                    except Exception:
+                        pass
+
+        # 2) Fall back to text-only formatting using whatever the row has.
         text = _format_content_text(c)
         return await _upsert_doc(
             db, tenant_id, doc_id_content(content_id),
-            c.get("title") or "Manual content", text,
-            {"source": "memoraai_content", "url": c.get("url", "")},
+            title, text, meta,
         )
     except Exception as e:  # noqa: BLE001
         logger.exception(f"sync_content failed: {e}")
@@ -226,7 +317,11 @@ async def sync_project(db, tenant_id: str, project_id: str) -> bool:
         return await _upsert_doc(
             db, tenant_id, doc_id_project(project_id),
             f"Project: {p.get('name','')}", text,
-            {"source": "projects", "rera": p.get("rera_number", "")},
+            {"source": "projects",
+             "content_type": "project",
+             "rera": p.get("rera_number", ""),
+             "project_id": project_id,
+             "project_type": p.get("project_type", "")},
         )
     except Exception as e:  # noqa: BLE001
         logger.exception(f"sync_project failed: {e}")
@@ -250,7 +345,9 @@ async def sync_property(db, tenant_id: str, property_id: str) -> bool:
             f"{project.get('name','')} - {prop.get('property_number','')}",
             text,
             {"source": "properties",
+             "content_type": "property",
              "project_id": prop.get("project_id", ""),
+             "project_type": project.get("project_type", ""),
              "rera": project.get("rera_number", "")},
         )
     except Exception as e:  # noqa: BLE001

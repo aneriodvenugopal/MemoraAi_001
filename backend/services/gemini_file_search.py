@@ -138,41 +138,77 @@ async def upload_text_doc(
         ) as f:
             f.write(f"# {title}\n\n{text}")
             path = f.name
-
-        meta = {"doc_id": doc_id, "title": title[:120]}
-        if metadata:
-            meta.update({k: str(v)[:200] for k, v in metadata.items() if v is not None})
-
-        op = await asyncio.to_thread(
-            client.file_search_stores.upload_to_file_search_store,
-            file=path,
-            file_search_store_name=store_name,
-            config={
-                "display_name": title[:120] or doc_id,
-                "custom_metadata": [
-                    types.CustomMetadata(key=k, string_value=str(v))
-                    for k, v in meta.items()
-                ],
-            },
+        ok = await _upload_file_to_store(
+            client, store_name, doc_id, title, path, metadata
         )
-        # Wait for indexing (max 30s)
-        for _ in range(30):
-            done = getattr(op, "done", True)
-            if done:
-                break
-            await asyncio.sleep(1)
-            try:
-                op = await asyncio.to_thread(client.operations.get, op)
-            except Exception:
-                break
         try:
             os.unlink(path)
         except Exception:
             pass
-        return True
+        return ok
     except Exception as e:
         logger.warning(f"upload_text_doc failed (store={store_name} doc={doc_id}): {e}")
         return False
+
+
+async def upload_native_file(
+    store_name: str,
+    doc_id: str,
+    title: str,
+    file_path: str,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> bool:
+    """Upload a PDF / DOCX / etc. file directly into a tenant store.
+
+    Gemini File Search parses these formats server-side, so we don't need
+    to extract text first. The caller owns ``file_path`` (we don't delete it).
+    """
+    if not is_enabled() or not file_path or not os.path.exists(file_path):
+        return False
+    client = _get_client()
+    if not client:
+        return False
+    try:
+        return await _upload_file_to_store(
+            client, store_name, doc_id, title, file_path, metadata
+        )
+    except Exception as e:
+        logger.warning(f"upload_native_file failed (store={store_name} doc={doc_id}): {e}")
+        return False
+
+
+async def _upload_file_to_store(
+    client, store_name: str, doc_id: str, title: str,
+    path: str, metadata: Optional[Dict[str, Any]] = None,
+) -> bool:
+    """Internal: upload an arbitrary local file to the given store with metadata."""
+    meta = {"doc_id": doc_id, "title": (title or doc_id)[:120]}
+    if metadata:
+        meta.update({k: str(v)[:200] for k, v in metadata.items() if v is not None})
+    op = await asyncio.to_thread(
+        client.file_search_stores.upload_to_file_search_store,
+        file=path,
+        file_search_store_name=store_name,
+        config={
+            "display_name": (title or doc_id)[:120],
+            "custom_metadata": [
+                types.CustomMetadata(key=k, string_value=str(v))
+                for k, v in meta.items()
+            ],
+        },
+    )
+    # Wait for indexing (max 60s for larger files)
+    for _ in range(60):
+        done = getattr(op, "done", True)
+        if done:
+            break
+        await asyncio.sleep(1)
+        try:
+            op = await asyncio.to_thread(client.operations.get, op)
+        except Exception:
+            break
+    return True
+
 
 
 async def delete_doc(store_name: str, doc_id: str) -> bool:
@@ -226,13 +262,28 @@ async def bulk_sync_tenant_knowledge(db, tenant_id: str) -> Dict[str, Any]:
     if not store_name:
         return {"enabled": False, "error": "no_store"}
 
+    # Tenant-level metadata applied to every doc — drives category-aware
+    # retrieval inside the LLM router.
+    t_doc = await db.tenants.find_one(
+        {"id": tenant_id},
+        {"_id": 0, "business_category": 1, "category_slug": 1,
+         "company_name": 1, "name": 1},
+    ) or {}
+    base_meta = {
+        "tenant_id": tenant_id,
+        "business_category": (t_doc.get("business_category")
+                              or t_doc.get("category_slug") or "general"),
+        "business_name": (t_doc.get("company_name") or t_doc.get("name") or ""),
+    }
+
     pushed = 0
     skipped = 0
 
     async for c in db.memoraai_content.find(
         {"tenant_id": tenant_id, "is_active": {"$ne": False}},
         {"_id": 0, "id": 1, "title": 1, "content": 1, "summary": 1,
-         "extracted_text": 1, "url": 1},
+         "extracted_text": 1, "url": 1, "content_type": 1, "tags": 1,
+         "category_slug": 1},
     ):
         body = (c.get("extracted_text") or c.get("content") or c.get("summary") or "").strip()
         if len(body) < 30:
@@ -243,7 +294,12 @@ async def bulk_sync_tenant_knowledge(db, tenant_id: str) -> Dict[str, Any]:
             doc_id=f"content_{c.get('id')}",
             title=c.get("title") or "Manual content",
             text=body[:60000],
-            metadata={"source": "memoraai_content", "url": c.get("url", "")},
+            metadata={**base_meta,
+                      "source": "memoraai_content",
+                      "content_type": c.get("content_type") or "document",
+                      "url": c.get("url", ""),
+                      "tags": ",".join(map(str, c.get("tags") or [])),
+                      "category_slug": c.get("category_slug") or ""},
         )
         if ok:
             pushed += 1
@@ -261,7 +317,10 @@ async def bulk_sync_tenant_knowledge(db, tenant_id: str) -> Dict[str, Any]:
             doc_id=f"page_{p.get('id')}",
             title=p.get("title") or p.get("url"),
             text=body[:60000],
-            metadata={"source": "website", "url": p.get("url", ""),
+            metadata={**base_meta,
+                      "source": "website",
+                      "content_type": "website_page",
+                      "url": p.get("url", ""),
                       "page_type": p.get("type", "other")},
         )
         if ok:
@@ -282,7 +341,11 @@ async def bulk_sync_tenant_knowledge(db, tenant_id: str) -> Dict[str, Any]:
             doc_id=_rag.doc_id_project(proj.get("id", "")),
             title=f"Project: {proj.get('name','')}",
             text=text,
-            metadata={"source": "projects",
+            metadata={**base_meta,
+                      "source": "projects",
+                      "content_type": "project",
+                      "project_id": proj.get("id", ""),
+                      "project_type": proj.get("project_type", ""),
                       "rera": proj.get("rera_number", "")},
         )
         if ok:
@@ -309,8 +372,11 @@ async def bulk_sync_tenant_knowledge(db, tenant_id: str) -> Dict[str, Any]:
             doc_id=_rag.doc_id_property(prop.get("id", "")),
             title=f"{proj.get('name','')} - {prop.get('property_number','')}",
             text=text,
-            metadata={"source": "properties",
+            metadata={**base_meta,
+                      "source": "properties",
+                      "content_type": "property",
                       "project_id": pid or "",
+                      "project_type": proj.get("project_type", ""),
                       "rera": proj.get("rera_number", "")},
         )
         if ok:
@@ -339,3 +405,49 @@ async def get_tenant_store(db, tenant_id: str) -> Optional[str]:
         {"id": tenant_id}, {"_id": 0, "gemini_file_search_store": 1}
     )
     return (t or {}).get("gemini_file_search_store")
+
+
+
+async def store_breakdown(store_name: str) -> Dict[str, Any]:
+    """List documents in a store and aggregate counts by source / category /
+    content_type / project_id (read from custom_metadata). Best-effort."""
+    if not is_enabled() or not store_name:
+        return {"total": 0, "by_source": {}, "by_category": {},
+                "by_content_type": {}, "by_project": {}}
+    client = _get_client()
+    if not client:
+        return {"total": 0, "by_source": {}, "by_category": {},
+                "by_content_type": {}, "by_project": {}}
+    try:
+        docs = await asyncio.to_thread(
+            client.file_search_stores.documents.list, parent=store_name,
+        )
+    except Exception as e:  # noqa: BLE001
+        logger.warning(f"store_breakdown list failed: {e}")
+        return {"total": 0, "by_source": {}, "by_category": {},
+                "by_content_type": {}, "by_project": {}}
+
+    by_source: Dict[str, int] = {}
+    by_category: Dict[str, int] = {}
+    by_content_type: Dict[str, int] = {}
+    by_project: Dict[str, int] = {}
+    total = 0
+    for d in docs:
+        total += 1
+        md = {m.key: getattr(m, "string_value", "") for m in (d.custom_metadata or [])}
+        s = md.get("source") or "unknown"
+        c = md.get("business_category") or "general"
+        ct = md.get("content_type") or "unknown"
+        pid = md.get("project_id") or ""
+        by_source[s] = by_source.get(s, 0) + 1
+        by_category[c] = by_category.get(c, 0) + 1
+        by_content_type[ct] = by_content_type.get(ct, 0) + 1
+        if pid:
+            by_project[pid] = by_project.get(pid, 0) + 1
+    return {
+        "total": total,
+        "by_source": by_source,
+        "by_category": by_category,
+        "by_content_type": by_content_type,
+        "by_project": by_project,
+    }

@@ -398,13 +398,25 @@ async def rag_status(request: Request, current_user: dict = Depends(get_current_
     t = await db.tenants.find_one(
         {"id": tid},
         {"_id": 0, "gemini_file_search_store": 1, "gemini_store_synced_at": 1,
-         "gemini_store_doc_count": 1},
+         "gemini_store_doc_count": 1, "business_category": 1,
+         "category_slug": 1},
     ) or {}
+    store_name = t.get("gemini_file_search_store")
+    breakdown: dict = {}
+    if gfs.is_enabled() and store_name:
+        try:
+            breakdown = await gfs.store_breakdown(store_name)
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"breakdown failed: {e}")
+            breakdown = {}
     return {
         "enabled": gfs.is_enabled(),
-        "store_name": t.get("gemini_file_search_store"),
+        "store_name": store_name,
         "last_synced_at": t.get("gemini_store_synced_at"),
-        "doc_count": t.get("gemini_store_doc_count", 0),
+        "doc_count": breakdown.get("total", t.get("gemini_store_doc_count", 0)),
+        "business_category": (t.get("business_category")
+                              or t.get("category_slug") or "general"),
+        "breakdown": breakdown,
     }
 
 

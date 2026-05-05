@@ -1,0 +1,40 @@
+{
+  "summary": "Backend regression for RAG autosync + /api/website-intel/rag/status breakdown. 12/13 pytest cases pass against live Gemini File Search. Verified: (1) /rag/status returns full shape (enabled, store_name, last_synced_at, doc_count, business_category, breakdown.{by_source,by_category,by_content_type,by_project,total}); (2) /rag/sync returns {status:queued} 200; (3) project create fires BackgroundTask — log line 'RAG autosync OK tenant=21d7480e-... doc=project_<id> cat=real_estate' confirmed within ~10s, breakdown.by_source.projects and breakdown.by_content_type.project both populated; (4) property create fires BackgroundTask, by_project[<project_id>] populated; (5) memoraai_content text-only path → 'RAG autosync OK ... doc=content_<id>'; (6) memoraai_content with PDF URL (https://www.w3.org/.../dummy.pdf) hits NATIVE upload path — log line 'RAG autosync (native) OK tenant=... doc=content_<id> cat=real_estate' confirmed; (7) DELETE on project/property/content all return 200 and remove the corresponding doc from the Gemini store; (8) llm_router.py has live datetime-based heartbeat (no 'June 11, 2024' constants); (9) breakdown.by_content_type contains both 'project' and 'property' after sync. ONE FAILURE: PUT /api/projects/{id} returns 500 — pydantic ValidationError on response.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "PUT /api/projects/{id}",
+        "issue": "Returns 500 'Internal Server Error'. RCA: routes/projects.py line 216 calls deserialize_doc(project_doc) which converts ISO datetime strings back into datetime objects, but the Project pydantic model declares created_at/updated_at as 'str'. Validation fails with: 'Input should be a valid string ... input_value=datetime.datetime(2026, 5, 5, ...)' for both created_at and updated_at. Side effect: because FastAPI only runs BackgroundTasks AFTER a successful response, the rag_autosync.sync_project BackgroundTask added on lines 218-221 NEVER FIRES on project updates — the AI store is silently stale on every project edit. Fix: remove the 'project_doc = deserialize_doc(project_doc)' call (line 216) — exactly mirrors create_project which works. Note: GET /api/projects/{id} works because get_project does NOT call deserialize_doc (see line 132 comment 'Skip deserialization since Pydantic model expects string datetime fields'). Same bug pattern was already fixed for GET but missed for PUT.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_rag_autosync_breakdown.py",
+    "/app/test_reports/pytest/iteration15_results.xml"
+  ],
+  "action_items": [
+    "Fix /app/backend/routes/projects.py update_project: delete line 216 'project_doc = deserialize_doc(project_doc)'. The Project model expects ISO string datetimes (matching create_project + get_project which both already skip deserialize_doc). After fix, PUT will return 200 AND the rag_autosync.sync_project BackgroundTask will actually execute (currently skipped because handler raises before response).",
+    "(Hardening) Add a smoke test asserting that PUT /api/projects/{id} returns 200 — would have caught this regression. Same applies to any other route still using deserialize_doc on a response that's piped through a Pydantic model with string datetime fields.",
+    "(Observability) /rag/status response shape is great — consider adding a 'last_doc_synced_at' for ops to spot stuck stores. Optional."
+  ],
+  "critical_code_review_comments": [
+    "routes/projects.py:215-222 — deserialize_doc + Project(**doc) is incompatible because Project schema has string created_at/updated_at. Same anti-pattern was already removed from get_project but lingers in update_project. CRITICAL: this also silently breaks the autosync chain on every edit (BackgroundTasks don't run when handler raises).",
+    "services/rag_autosync.py:_upsert_doc — best-effort delete-then-add is correct, but two concurrent updates of the same doc_id can race (both delete, both upload, end up with 2 copies briefly). Acceptable for now; revisit if duplicate citations appear.",
+    "services/gemini_file_search.py:_upload_file_to_store — polls op.done up to 60s with no exit-after-timeout signal; if Gemini index op stalls, the BackgroundTask will hold a thread for 60s. Consider returning early after ~20s and letting indexing complete async — Gemini still indexes, we just don't block.",
+    "services/gemini_file_search.py:store_breakdown — list documents with no pagination. If a tenant has >100 docs the SDK may paginate silently and breakdown.total under-counts. Verify SDK behaviour or add pagination loop.",
+    "routes/website_intelligence.py:rag_status — call to gfs.store_breakdown() runs on every GET. For a tenant with hundreds of docs this is a per-call Gemini round-trip; consider caching for 30-60s on (store_name) key."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_rag_autosync_breakdown.py"
+  ],
+  "success_rate": {"backend": "92% (12/13)", "frontend": "skipped per request"},
+  "test_credentials": "Tenant Admin 8888888888 / admin123 — verified via /api/auth/login (tenant_id=21d7480e-232c-4ab3-9485-dfa251a5e6d9, business_category=real_estate, gemini_file_search_store=fileSearchStores/memora21d7480e232c4ab39485d-hiz9loupkc8y).",
+  "seed_data_creation": "Each test creates a TEST_-prefixed project + property + 2 memoraai_content rows then DELETEs them at end of suite. All cleaned. Live Gemini store has had short-lived test docs added/removed; current breakdown after suite: by_source={projects:N, properties:N, memoraai_content:N} where N reflects pre-existing tenant data. Use UNIQUE RERA / property_number per run (already done via uuid4 hex).",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Regression suite is /app/backend/tests/test_rag_autosync_breakdown.py — re-run with: pytest backend/tests/test_rag_autosync_breakdown.py -v --junitxml=test_reports/pytest/iteration16_results.xml. Tests take ~95s because of mandatory sleeps for Gemini async indexing (15-30s per upload). After main agent fixes the deserialize_doc bug, test_project_update_autosync should turn green and you can also assert that the 'RAG autosync OK doc=project_<id>' log appears AFTER the PUT (currently it does not because the BackgroundTask is skipped). Native PDF upload is confirmed working (log: 'RAG autosync (native) OK ... cat=real_estate'). The /rag/status breakdown shape is fully populated.",
+  "rca of the issue": "PUT /api/projects/{id} 500 RCA: routes/projects.py imports deserialize_doc from utils.helpers and applies it to the freshly fetched project_doc before instantiating the Project pydantic model. deserialize_doc converts ISO-string datetimes (which is what serialize_doc stored at create time) back into Python datetime objects. The Project model in models/project.py declares created_at and updated_at as string-typed fields (consistent with how create_project/get_project return them), so Pydantic raises ValidationError 'Input should be a valid string ... input_type=datetime'. FastAPI converts the raised exception into a 500. CRITICAL SIDE EFFECT: BackgroundTasks added to the BackgroundTasks instance only execute AFTER a successful response is sent. Because the handler raises during response serialization, the rag_autosync.sync_project BackgroundTask added on lines 218-221 is dropped, so the Gemini File Search store gets stale on every project edit until the user does a manual /rag/sync. Repro: POST /api/projects/ → 200; PUT /api/projects/{id} {name:'x'} → 500 + ValidationError in backend.err.log. Mitigation: remove line 216 'project_doc = deserialize_doc(project_doc)' (one-line fix mirroring get_project which already does this correctly with the comment 'Skip deserialization since Pydantic model expects string datetime fields')."
+}

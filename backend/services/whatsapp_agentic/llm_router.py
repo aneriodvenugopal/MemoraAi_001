@@ -101,7 +101,99 @@ def _strong_heartbeat() -> str:
     )
 
 
-def _wrap_system_prompt(system_prompt: str, file_search: bool = False) -> str:
+_CATEGORY_RETRIEVAL_HINTS = {
+    "real_estate": (
+        "This tenant sells/rents REAL ESTATE. When retrieving:\n"
+        "- Prioritize documents tagged content_type=project, content_type=property, "
+        "or source=projects/properties.\n"
+        "- Customers typically ask for: RERA number, project name, plot/unit "
+        "number, area (sqyards/sqft), price (per unit & per sqft), availability "
+        "(available/blocked/booked/sold), location, amenities, completion date, "
+        "brochure links.\n"
+        "- ALWAYS quote prices, RERA numbers and plot IDs character-for-character.\n"
+        "- If multiple plots/units match, list 2–3 with their numbers + prices.\n"
+    ),
+    "astrology": (
+        "This tenant offers ASTROLOGY / SPIRITUAL SERVICES. When retrieving:\n"
+        "- Prioritize documents about consultations, horoscope readings, "
+        "remedies (poojas, gemstones, yantras), service prices and durations, "
+        "JIBAN KUNDALI / Kundali Milan / Numerology / Vastu reports.\n"
+        "- Quote service fees and timing/duration verbatim.\n"
+    ),
+    "hospitals": (
+        "This tenant is a HOSPITAL / MULTI-SPECIALTY CLINIC. When retrieving:\n"
+        "- Prioritize doctor names, departments, OPD timings, consultation "
+        "fees, packages, insurance/cashless tie-ups, emergency contacts.\n"
+        "- Quote fees and timings verbatim. Never invent doctor names.\n"
+    ),
+    "clinics": (
+        "This tenant is a CLINIC. When retrieving:\n"
+        "- Prioritize doctor names, services, appointment slots, fees, "
+        "address, parking, payment options.\n"
+    ),
+    "luxury_boutique": (
+        "This tenant is a LUXURY / FASHION BOUTIQUE. When retrieving:\n"
+        "- Prioritize product names, materials, sizes, prices, designer "
+        "info, store address, appointment booking links.\n"
+    ),
+    "education": (
+        "This tenant is an EDUCATION / COACHING / SCHOOL business. When retrieving:\n"
+        "- Prioritize courses, fees, batch timings, faculty, eligibility, "
+        "syllabus, demo class, fee structure, payment plans.\n"
+    ),
+    "saloon": (
+        "This tenant is a SALON. When retrieving:\n"
+        "- Prioritize service names, durations, prices, stylists, package "
+        "deals, booking slots, address.\n"
+    ),
+    "spa": (
+        "This tenant is a SPA / WELLNESS centre. When retrieving:\n"
+        "- Prioritize therapy names, durations, prices, package combos, "
+        "therapists, booking slots.\n"
+    ),
+    "restaurant": (
+        "This tenant is a RESTAURANT. When retrieving:\n"
+        "- Prioritize menu items, prices, cuisines, timings, reservations, "
+        "delivery options, address.\n"
+    ),
+    "law": (
+        "This tenant is a LAW FIRM. When retrieving:\n"
+        "- Prioritize practice areas, lawyer names, consultation fees, "
+        "office address, available slots.\n"
+    ),
+    "ca": (
+        "This tenant is a CA / TAX firm. When retrieving:\n"
+        "- Prioritize service names (ITR, GST, audit), fees, deadlines, "
+        "documents required.\n"
+    ),
+    "software": (
+        "This tenant is a SOFTWARE / IT services firm. When retrieving:\n"
+        "- Prioritize products, plans, pricing, features, demo links, "
+        "integration partners, contact email.\n"
+    ),
+    "ecommerce": (
+        "This tenant is an ECOMMERCE / RETAIL business. When retrieving:\n"
+        "- Prioritize product names, SKUs, prices, stock availability, "
+        "delivery time, return policy, payment options.\n"
+    ),
+}
+
+
+def _category_hint(category: str) -> str:
+    return _CATEGORY_RETRIEVAL_HINTS.get(
+        (category or "general").lower(),
+        "Prioritize documents whose business_category metadata matches this "
+        "tenant. Use exact prices, codes, dates from retrieved chunks.\n",
+    )
+
+
+def _wrap_system_prompt(
+    system_prompt: str,
+    file_search: bool = False,
+    business_category: str = "general",
+    project_id: Optional[str] = None,
+    project_type: Optional[str] = None,
+) -> str:
     """Inject heartbeat + tone + precision rules in front of caller's prompt.
 
     When ``file_search`` is True, we add an explicit instruction that the
@@ -128,6 +220,15 @@ def _wrap_system_prompt(system_prompt: str, file_search: bool = False) -> str:
             "and confirm shortly.\"\n"
             "For general location/landmark/city info you MAY use your own "
             "knowledge as a local advisor would.\n"
+            "\n[CONTEXT-AWARE RETRIEVAL — multi-business store]\n"
+            "Documents are tagged with custom_metadata: business_category, "
+            "content_type (project|property|website_page|document|brochure|faq|"
+            "image|service|product), source, project_id, project_type, rera, "
+            "tenant_id. When multiple chunks match, prefer those whose "
+            f"business_category equals \"{(business_category or 'general').lower()}\""
+            f"{' and project_id equals ' + project_id if project_id else ''}"
+            f"{' or project_type equals ' + project_type if project_type else ''}.\n"
+            f"\n[CURRENT BUSINESS PROFILE]\n{_category_hint(business_category)}"
         )
     return prefix + "\n" + (system_prompt or "")
 
@@ -173,6 +274,8 @@ class LLMRouter:
         vector_store_id: Optional[str] = None,
         business_category: str = "general",
         tenant_id: Optional[str] = None,
+        project_id: Optional[str] = None,
+        project_type: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Generate AI response with smart routing + heartbeat + precision.
 
@@ -190,8 +293,14 @@ class LLMRouter:
         else:
             model_choice = "gemini" if complexity == "simple" else "openai"
 
-        # 1️⃣ Inject Expert-Sales prefix + IST heartbeat
-        wrapped_system = _wrap_system_prompt(system_prompt, file_search=bool(vector_store_id))
+        # 1️⃣ Inject Expert-Sales prefix + IST heartbeat + category-aware hint
+        wrapped_system = _wrap_system_prompt(
+            system_prompt,
+            file_search=bool(vector_store_id),
+            business_category=business_category,
+            project_id=project_id,
+            project_type=project_type,
+        )
         temp = self.DEFAULT_TEMP if temperature is None else float(temperature)
 
         start = time.time()
