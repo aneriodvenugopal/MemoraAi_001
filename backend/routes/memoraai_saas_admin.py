@@ -1088,12 +1088,11 @@ async def upload_logo(
     remove_dark_bg: bool = Form(True),
 ):
     """
-    Upload a new MemoraAI logo. Replaces:
-      - /app/frontend/public/memoraai-logo.png  (full wordmark)
-      - /app/frontend/public/memoraai-icon.png  (512x512 square mark)
-
-    If `remove_dark_bg` is true, near-black pixels are converted to transparent
-    and the image is auto-cropped tightly around the bright glyph.
+    Upload a new MemoraAI logo. Replaces both:
+      - The static files (/app/frontend/public/memoraai-logo.png, memoraai-icon.png)
+        — used for fast preview locally
+      - The MongoDB `branding_assets` collection (single source of truth that
+        survives production redeploys and is served by /api/branding/logo)
     """
     admin = await get_current_user(request)
     _require_super_admin(admin)
@@ -1111,15 +1110,36 @@ async def upload_logo(
         logger.exception("Logo processing failed")
         raise HTTPException(status_code=400, detail=f"Could not process image: {e}")
 
+    # Local static write (preview / dev fast path)
     _PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
     _LOGO_PATH.write_bytes(logo_bytes)
     _ICON_PATH.write_bytes(icon_bytes)
 
+    # Persist to MongoDB so production survives redeploys + cache busting
+    db = request.app.state.db
+    version = int(datetime.now(timezone.utc).timestamp() * 1000)
+    import base64 as _b64
+    await db.branding_assets.update_one(
+        {"id": "platform"},
+        {"$set": {
+            "id": "platform",
+            "logo_b64": _b64.b64encode(logo_bytes).decode("ascii"),
+            "icon_b64": _b64.b64encode(icon_bytes).decode("ascii"),
+            "logo_size": len(logo_bytes),
+            "icon_size": len(icon_bytes),
+            "version": version,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }},
+        upsert=True,
+    )
+
     return {
         "success": True,
-        "logo_url": "/memoraai-logo.png",
-        "icon_url": "/memoraai-icon.png",
+        "version": version,
+        "logo_url": f"/api/branding/logo?v={version}",
+        "icon_url": f"/api/branding/icon?v={version}",
         "logo_size_kb": round(len(logo_bytes) / 1024, 1),
         "icon_size_kb": round(len(icon_bytes) / 1024, 1),
         "uploaded_at": datetime.now(timezone.utc).isoformat(),
     }
+
